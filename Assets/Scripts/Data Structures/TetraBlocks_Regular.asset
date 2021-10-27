@@ -1,0 +1,138 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68346d0f48797ba43a1fe53e93118b51, type: 3}
+  m_Name: TetraBlocks_Regular
+  m_EditorClassIdentifier: 
+  TetraBlocks:
+  - StateCount: 1
+    GridSize: 2
+    RotationStates:
+    - Blocks:
+      - {x: 0, y: 0}
+      - {x: 1, y: 0}
+      - {x: 0, y: 1}
+      - {x: 1, y: 1}
+    BlockColor: {r: 1, g: 1, b: 0, a: 1}
+  - StateCount: 2
+    GridSize: 3
+    RotationStates:
+    - Blocks:
+      - {x: 0, y: 0}
+      - {x: 1, y: 0}
+      - {x: 1, y: 1}
+      - {x: 2, y: 1}
+    - Blocks:
+      - {x: 1, y: 0}
+      - {x: 0, y: 1}
+      - {x: 1, y: 1}
+      - {x: 0, y: 2}
+    BlockColor: {r: 1, g: 0, b: 1, a: 1}
+  - StateCount: 2
+    GridSize: 3
+    RotationStates:
+    - Blocks:
+      - {x: 1, y: 0}
+      - {x: 0, y: 1}
+      - {x: 1, y: 1}
+      - {x: 2, y: 0}
+    - Blocks:
+      - {x: 1, y: 1}
+      - {x: 2, y: 2}
+      - {x: 2, y: 1}
+      - {x: 1, y: 0}
+    BlockColor: {r: 0, g: 1, b: 0, a: 1}
+  - StateCount: 4
+    GridSize: 3
+    RotationStates:
+    - Blocks:
+      - {x: 0, y: 0}
+      - {x: 0, y: 1}
+      - {x: 1, y: 1}
+      - {x: 2, y: 1}
+    - Blocks:
+      - {x: 1, y: 1}
+      - {x: 0, y: 2}
+      - {x: 1, y: 2}
+      - {x: 1, y: 0}
+    - Blocks:
+      - {x: 0, y: 0}
+      - {x: 1, y: 0}
+      - {x: 2, y: 0}
+      - {x: 2, y: 1}
+    - Blocks:
+      - {x: 1, y: 1}
+      - {x: 1, y: 2}
+      - {x: 2, y: 0}
+      - {x: 1, y: 0}
+    BlockColor: {r: 1, g: 0.5019608, b: 0.2509804, a: 1}
+  - StateCount: 4
+    GridSize: 3
+    RotationStates:
+    - Blocks:
+      - {x: 0, y: 1}
+      - {x: 1, y: 1}
+      - {x: 2, y: 1}
+      - {x: 2, y: 0}
+    - Blocks:
+      - {x: 0, y: 0}
+      - {x: 1, y: 0}
+      - {x: 1, y: 1}
+      - {x: 1, y: 2}
+    - Blocks:
+      - {x: 2, y: 0}
+      - {x: 0, y: 0}
+      - {x: 1, y: 0}
+      - {x: 0, y: 1}
+    - Blocks:
+      - {x: 1, y: 1}
+      - {x: 1, y: 2}
+      - {x: 2, y: 2}
+      - {x: 1, y: 0}
+    BlockColor: {r: 0, g: 0, b: 1, a: 1}
+  - StateCount: 4
+    GridSize: 3
+    RotationStates:
+    - Blocks:
+      - {x: 0, y: 1}
+      - {x: 1, y: 1}
+      - {x: 1, y: 0}
+      - {x: 2, y: 1}
+    - Blocks:
+      - {x: 1, y: 0}
+      - {x: 0, y: 1}
+      - {x: 1, y: 1}
+      - {x: 1, y: 2}
+    - Blocks:
+      - {x: 0, y: 0}
+      - {x: 1, y: 0}
+      - {x: 1, y: 1}
+      - {x: 2, y: 0}
+    - Blocks:
+      - {x: 1, y: 0}
+      - {x: 1, y: 1}
+      - {x: 2, y: 1}
+      - {x: 1, y: 2}
+    BlockColor: {r: 0, g: 1, b: 1, a: 1}
+  - StateCount: 2
+    GridSize: 4
+    RotationStates:
+    - Blocks:
+      - {x: 1, y: 2}
+      - {x: 0, y: 2}
+      - {x: 3, y: 2}
+      - {x: 2, y: 2}
+    - Blocks:
+      - {x: 2, y: 0}
+      - {x: 2, y: 1}
+      - {x: 2, y: 2}
+      - {x: 2, y: 3}
+    BlockColor: {r: 1, g: 0, b: 0, a: 1}
