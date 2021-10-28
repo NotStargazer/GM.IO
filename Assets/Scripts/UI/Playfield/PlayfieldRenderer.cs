@@ -90,6 +90,11 @@ namespace GM.Game
             {
                 for (var y = 0; y < _gridSize.y; y++)
                 {
+                    if ((x + y) / 2 % 2 == 1)
+                    {
+                        continue;
+                    }
+
                     float hue;
 
                     if (x + y == 0)
@@ -121,19 +126,11 @@ namespace GM.Game
 
             var borderLength = _gridSize.x + _gridSize.y + 4f;
 
-            var innerUvYCords = new[]
+            var uvYCords = new[]
             {
-                1f / borderLength,
-                (_gridSize.x + 2 - 1) / borderLength,
-                (_gridSize.x + _gridSize.y + 4 - 1) / borderLength,
-                (_gridSize.y + 2 - 1) / borderLength,
-            };
-
-            var outerUvYCords = new[]
-            {
-                0f,
+                0 / borderLength,
                 (_gridSize.x + 2) / borderLength,
-                1f,
+                (_gridSize.x + _gridSize.y + 4) / borderLength,
                 (_gridSize.y + 2) / borderLength,
             };
 
@@ -152,17 +149,17 @@ namespace GM.Game
                 var indent = new Vector3(isRight ? 1f : -1f, isUpper ? 1f : -1f);
 
                 verts[outerVert] = new Vector3(innerX, innerY, -0.5f) + indent;
-                uvs[outerVert] = new Vector2(0f, outerUvYCords[outerVert]);
+                uvs[outerVert] = new Vector2(0f, uvYCords[outerVert]);
                 verts[innerVert] = new Vector3(innerX, innerY, -0.5f);
-                uvs[innerVert] = new Vector2(0.25f, innerUvYCords[outerVert]);
+                uvs[innerVert] = new Vector2(0.25f, uvYCords[outerVert]);
                 verts[outerBackVert] = new Vector3(innerX, innerY, 0.5f) + indent;
-                uvs[outerBackVert] = new Vector2(0.75f, outerUvYCords[outerVert]);
+                uvs[outerBackVert] = new Vector2(0.75f, uvYCords[outerVert]);
                 verts[innerBackVert] = new Vector3(innerX, innerY, 0.5f);
-                uvs[innerBackVert] = new Vector2(0.5f, innerUvYCords[outerVert]);
+                uvs[innerBackVert] = new Vector2(0.5f, uvYCords[outerVert]);
 
                 //UV Verts
                 verts[uvLoopVerts] = new Vector3(innerX, innerY, -0.5f) + indent;
-                uvs[uvLoopVerts] = new Vector2(1f, outerUvYCords[outerVert]);
+                uvs[uvLoopVerts] = new Vector2(1f, uvYCords[outerVert]);
             }
 
             _verts = verts.ToArray();
