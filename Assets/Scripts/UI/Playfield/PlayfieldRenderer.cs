@@ -42,7 +42,7 @@ namespace GM.Game
         private Vector4[] _colors;
         private Vector4[] _textureST;
 
-        public Block[] Blocks
+        public Block?[,] Blocks
         {
             set
             {
@@ -51,13 +51,21 @@ namespace GM.Game
                 _colors = new Vector4[value.Length];
                 _textureST = new Vector4[value.Length];
 
-                for (var index = 0; index < value.Length; index++)
+                for (var y = 0; y < _gridSize.y; y++)
                 {
-                    var block = value[index];
-                    var position = _basePosition + new Vector3(block.Position.x, block.Position.y);
-                    _transforms[index].SetTRS(position, _baseRotation, Vector3.one);
-                    _colors[index] = block.Color.linear;
-                    _textureST[index] = block.TextureST;
+                    for (var x = 0; x < _gridSize.x; x++)
+                    {
+                        var val = value[x, y];
+
+                        if (val.HasValue)
+                        {
+                            var block = val.Value;
+                            var position = _basePosition + new Vector3(block.Position.x, block.Position.y);
+                            _transforms[y * 10 + x].SetTRS(position, _baseRotation, Vector3.one);
+                            _colors[y * 10 + x] = block.Color.linear;
+                            _textureST[y * 10 + x] = block.TextureST;
+                        }
+                    }
                 }
 
                 _properties.SetVectorArray(INSTANCE_COLORS, _colors);
@@ -84,14 +92,15 @@ namespace GM.Game
 
             //Debug Blocks
             _properties = new MaterialPropertyBlock();
-            var blockList = new List<Block>();
+            var blockList = new Block?[_gridSize.x, _gridSize.y];
 
-            for (var x = 0; x < _gridSize.x; x++)
+            for (var y = 0; y < _gridSize.y; y++)
             {
-                for (var y = 0; y < _gridSize.y; y++)
+                for (var x = 0; x < _gridSize.x; x++)
                 {
                     if ((x + y) / 2 % 2 == 1)
                     {
+                        blockList[x, y] = null;
                         continue;
                     }
 
@@ -105,16 +114,17 @@ namespace GM.Game
                     {
                         hue = (x + y) / (float)(_gridSize.x + _gridSize.y);
                     }
-                    blockList.Add(new Block
+
+                    blockList[x, y] = new Block
                     {
                         Color = Color.HSVToRGB(hue, 1, 1),
                         Position = new Vector2Int(x, y),
                         TextureST = new Vector4(0.5f, 1f, 1f, 1f)
-                    });
+                    };
                 }
             }
 
-            Blocks = blockList.ToArray();
+            Blocks = blockList;
 
             //Define Verts & UVs
             const int halfVertCount = BORDER_VERT_COUNT / 2;
