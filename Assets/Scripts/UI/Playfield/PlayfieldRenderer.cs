@@ -14,6 +14,7 @@ namespace GM.Game
     {
         private static readonly int INSTANCE_COLORS = Shader.PropertyToID("_Colors");
         private static readonly int INSTANCE_ST = Shader.PropertyToID("_MainTex_ST");
+        private static readonly int INSTANCE_OUTLINEL = Shader.PropertyToID("_OutlinesL");
 
         private const int BORDER_VERT_COUNT = 16;
 
@@ -38,18 +39,20 @@ namespace GM.Game
         private MaterialPropertyBlock _properties;
 
         private int _blockCount;
-        private Matrix4x4[] _transforms;
-        private Vector4[] _colors;
-        private Vector4[] _textureST;
+        private List<Matrix4x4> _transforms;
+        private List<Vector4> _colors;
+        private List<Vector4> _textureST;
+        private List<Vector4> _outline;
 
         public Block?[,] Blocks
         {
             set
             {
                 _blockCount = value.Length;
-                _transforms = new Matrix4x4[value.Length];
-                _colors = new Vector4[value.Length];
-                _textureST = new Vector4[value.Length];
+                _transforms = new List<Matrix4x4>(_blockCount);
+                _colors = new List<Vector4>(_blockCount);
+                _textureST = new List<Vector4>(_blockCount);
+                _outline = new List<Vector4>(_blockCount);
 
                 for (var y = 0; y < _gridSize.y; y++)
                 {
@@ -61,15 +64,24 @@ namespace GM.Game
                         {
                             var block = val.Value;
                             var position = _basePosition + new Vector3(block.Position.x, block.Position.y);
-                            _transforms[y * 10 + x].SetTRS(position, _baseRotation, Vector3.one);
-                            _colors[y * 10 + x] = block.Color.linear;
-                            _textureST[y * 10 + x] = block.TextureST;
+                            Matrix4x4 matrix = Matrix4x4.zero;
+                            matrix.SetTRS(position, _baseRotation, Vector3.one);
+                            _transforms.Add(matrix);
+                            _colors.Add(block.Color.linear);
+                            _textureST.Add(block.TextureST);
+                            
+                            _outline.Add(new Vector4(
+                                x: x > 0 && !value[x - 1, y].HasValue ? 1 : 0,
+                                y: x + 1 < _gridSize.x && !value[x + 1, y].HasValue ? 1 : 0,
+                                z: y > 0 && !value[x, y - 1].HasValue ? 1 : 0,
+                                w: y + 1 < _gridSize.y && !value[x, y + 1].HasValue ? 1 : 0));
                         }
                     }
                 }
 
                 _properties.SetVectorArray(INSTANCE_COLORS, _colors);
                 _properties.SetVectorArray(INSTANCE_ST, _textureST);
+                _properties.SetVectorArray(INSTANCE_OUTLINEL, _outline);
             }
         }
 
@@ -225,11 +237,11 @@ namespace GM.Game
                 mesh: _cubeMesh,
                 submeshIndex: 0,
                 material: _blockMaterial,
-                matrices: _transforms,
+                matrices: _transforms.ToArray(),
                 properties: _properties,
                 castShadows: ShadowCastingMode.Off,
                 receiveShadows: false,
-                count: _blockCount,
+                count: _transforms.Count,
                 layer: (int)Layer.Outline);
 
             //Render Blocks
