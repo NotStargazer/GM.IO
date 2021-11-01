@@ -15,6 +15,7 @@ namespace GM.Game
         private static readonly int INSTANCE_COLORS = Shader.PropertyToID("_Colors");
         private static readonly int INSTANCE_ST = Shader.PropertyToID("_MainTex_ST");
         private static readonly int INSTANCE_OUTLINEL = Shader.PropertyToID("_OutlinesL");
+        private static readonly int INSTANCE_OUTLINEC = Shader.PropertyToID("_OutlinesC");
 
         private const int BORDER_VERT_COUNT = 16;
 
@@ -42,7 +43,8 @@ namespace GM.Game
         private List<Matrix4x4> _transforms;
         private List<Vector4> _colors;
         private List<Vector4> _textureST;
-        private List<Vector4> _outline;
+        private List<Vector4> _outlineLines;
+        private List<Vector4> _outlineCorners;
 
         public Block?[,] Blocks
         {
@@ -52,7 +54,8 @@ namespace GM.Game
                 _transforms = new List<Matrix4x4>(_blockCount);
                 _colors = new List<Vector4>(_blockCount);
                 _textureST = new List<Vector4>(_blockCount);
-                _outline = new List<Vector4>(_blockCount);
+                _outlineLines = new List<Vector4>(_blockCount);
+                _outlineCorners = new List<Vector4>(_blockCount);
 
                 for (var y = 0; y < _gridSize.y; y++)
                 {
@@ -69,19 +72,31 @@ namespace GM.Game
                             _transforms.Add(matrix);
                             _colors.Add(block.Color.linear);
                             _textureST.Add(block.TextureST);
-                            
-                            _outline.Add(new Vector4(
-                                x: x > 0 && !value[x - 1, y].HasValue ? 1 : 0,
-                                y: x + 1 < _gridSize.x && !value[x + 1, y].HasValue ? 1 : 0,
-                                z: y > 0 && !value[x, y - 1].HasValue ? 1 : 0,
-                                w: y + 1 < _gridSize.y && !value[x, y + 1].HasValue ? 1 : 0));
+
+                            var xg = x > 0;
+                            var xl = x + 1 < _gridSize.x;
+                            var yg = y > 0;
+                            var yl = y + 1 < _gridSize.y;
+
+                            _outlineLines.Add(new Vector4(
+                                x: xg && !value[x - 1, y].HasValue ? 1 : 0,
+                                y: xl && !value[x + 1, y].HasValue ? 1 : 0,
+                                z: yg && !value[x, y - 1].HasValue ? 1 : 0,
+                                w: yl && !value[x, y + 1].HasValue ? 1 : 0));
+
+                            _outlineCorners.Add(new Vector4(
+                                x: xg && yg && !value[x - 1, y - 1].HasValue ? 1 : 0,
+                                y: xl && yg && !value[x + 1, y - 1].HasValue ? 1 : 0,
+                                z: xg && yl && !value[x - 1, y + 1].HasValue ? 1 : 0,
+                                w: xl && yl && !value[x + 1, y + 1].HasValue ? 1 : 0));
                         }
                     }
                 }
 
                 _properties.SetVectorArray(INSTANCE_COLORS, _colors);
                 _properties.SetVectorArray(INSTANCE_ST, _textureST);
-                _properties.SetVectorArray(INSTANCE_OUTLINEL, _outline);
+                _properties.SetVectorArray(INSTANCE_OUTLINEL, _outlineLines);
+                _properties.SetVectorArray(INSTANCE_OUTLINEC, _outlineCorners);
             }
         }
 

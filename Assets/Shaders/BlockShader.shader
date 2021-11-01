@@ -36,6 +36,7 @@ Shader "Unlit/BlockShader"
 					float2 uv : TEXCOORD0;
 					float2 oluv : OUTLINE;
 					float4 oll : OUTLINELINE;
+					float4 olc : OUTLINECORNER;
 				};
 
 				sampler2D _MainTex;
@@ -58,14 +59,13 @@ Shader "Unlit/BlockShader"
 
 					o.color = _Colors[instanceID];
 					o.oll = _OutlinesL[instanceID];
-					//const float4 olc = _OutlinesC[instanceID];
+					o.olc = _OutlinesC[instanceID];
 
 					return o;
 				}
 
 				fixed4 frag(v2f i) : SV_Target
 				{
-					const float4 olc = _TestValueC;
 					const float2 oluv = float2(i.oluv.x * 2 - 1, i.oluv.y * 2 - 1);
 					const float2 oluvs = sign(oluv);
 
@@ -76,20 +76,33 @@ Shader "Unlit/BlockShader"
 
 					if (abs(oluv.x) > 1 - _OutlineThickness)
 					{
-						xl = i.oll.x * abs((oluvs.x - 1) / 2);
-						xr = i.oll.y * ((oluvs.x + 1) / 2);
+						xl = abs((oluvs.x - 1) / 2);
+						xr = ((oluvs.x + 1) / 2);
 					}
 					if (abs(oluv.y) > 1 - _OutlineThickness)
 					{
-						yd = i.oll.z * abs((oluvs.y - 1) / 2);
-						yu = i.oll.w * ((oluvs.y + 1) / 2);
+						yd = abs((oluvs.y - 1) / 2);
+						yu = ((oluvs.y + 1) / 2);
 					}
+
+					const float bl = i.olc.x * xl * yd;
+					const float br = i.olc.y * xr * yd;
+					const float tl = i.olc.z * xl * yu;
+					const float tr = i.olc.w * xr * yu;
+
+					xl *= i.oll.x;
+					xr *= i.oll.y;
+					yd *= i.oll.z;
+					yu *= i.oll.w;
+
+					float ol = clamp(0, 1, xl + xr + yd + yu);
+					float c = clamp(0, 1, bl + br + tl + tr);
+					ol = max(ol, c);
 
 					fixed4 neo = tex2D(_MainTex, i.uv);
 					neo *= i.color;
-					const float ol = clamp(0, 1, xl + xr + yd + yu);
 
-					neo = fixed4(lerp(neo.r, 1, ol), lerp(neo.g, 1, ol), lerp(neo.b, 1, ol), neo.a);
+					neo = fixed4(lerp(neo.rgb, _OutlineColor.rgb, ol * _OutlineColor.a), neo.a);
 
 					return neo;
 				}
