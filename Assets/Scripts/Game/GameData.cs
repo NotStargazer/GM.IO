@@ -2,12 +2,12 @@ using UnityEngine;
 
 namespace GM.Game
 {
-    public class GameRoot : MonoBehaviour
+    public class GameData : MonoBehaviour
     {
-        private static GameRoot INSTANCE;
+        private static GameData INSTANCE;
         public static bool HasInstance => INSTANCE;
 
-        public static GameRoot GetInstance()
+        public static GameData GetInstance()
         {
             return INSTANCE;
         }
@@ -22,6 +22,9 @@ namespace GM.Game
 
             INSTANCE = this;
         }
+
+        //Game Controllers
+        public Playfield Playfield;
 
         //Game Settings
         public DriverState InitialState;

@@ -6,21 +6,20 @@ namespace GM.Game
 {
     public struct Block
     {
-        public Vector2Int Position;
         public Vector4 TextureST;
         public Color Color;
     }
 
+    public enum Direction
+    {
+        Left,
+        Right,
+        Up,
+        Down
+    }
+
     public class TetraBlock
     {
-        public enum Direction
-        {
-            Left,
-            Right,
-            Up,
-            Down
-        }
-
         private static readonly Dictionary<Direction, Vector2Int> DIRECTIONS = new Dictionary<Direction, Vector2Int>
         {
             {Direction.Left, new Vector2Int(-1, 0)},
@@ -44,7 +43,7 @@ namespace GM.Game
             _color = tetraBlock.BlockColor;
         }
 
-        public void Move(Direction direction, Block[] grid)
+        public void Move(Direction direction, Block?[,] grid)
         {
             _position += DIRECTIONS[direction];
         }
@@ -60,7 +59,6 @@ namespace GM.Game
 
             for (var i = 0; i < 4; i++)
             {
-                blocks[i].Position = _rotationStates[_rotationIndex].Blocks[i];
                 blocks[i].TextureST = _textureST;
                 blocks[i].Color = _color;
             }

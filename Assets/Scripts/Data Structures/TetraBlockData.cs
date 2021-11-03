@@ -13,6 +13,7 @@ namespace GM.Data
     [Serializable]
     public struct BlockData
     {
+        public int ID;
         public int StateCount;
         public int GridSize;
         public List<BlockSublist> RotationStates;

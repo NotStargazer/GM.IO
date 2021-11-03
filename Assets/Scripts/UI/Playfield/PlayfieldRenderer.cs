@@ -20,7 +20,6 @@ namespace GM.Game
         private const int BORDER_VERT_COUNT = 16;
 
         [SerializeField] private Vector2Int _gridSize;
-        [SerializeField] private float _excessHeight;
         [SerializeField] private MeshFilter _filter;
         [SerializeField] private MeshRenderer _renderer;
         [SerializeField] private Material _borderMaterial;
@@ -66,7 +65,7 @@ namespace GM.Game
                         if (val.HasValue)
                         {
                             var block = val.Value;
-                            var position = _basePosition + new Vector3(block.Position.x, block.Position.y);
+                            var position = _basePosition + new Vector3(x, y);
                             Matrix4x4 matrix = Matrix4x4.zero;
                             matrix.SetTRS(position, _baseRotation, Vector3.one);
                             _transforms.Add(matrix);
@@ -100,6 +99,8 @@ namespace GM.Game
             }
         }
 
+        public Block[] FallingBlocks { set; private get; }
+
         private void Awake()
         {
             if (!_borderMaterial)
@@ -116,10 +117,10 @@ namespace GM.Game
             }
 
             _basePosition = transform.position + new Vector3(0.5f, 0.5f);
+            _properties = new MaterialPropertyBlock();
 
             //Debug Blocks
-            _properties = new MaterialPropertyBlock();
-            var blockList = new Block?[_gridSize.x, _gridSize.y];
+            /*var blockList = new Block?[_gridSize.x, _gridSize.y];
 
             for (var y = 0; y < _gridSize.y; y++)
             {
@@ -151,7 +152,7 @@ namespace GM.Game
                 }
             }
 
-            Blocks = blockList;
+            Blocks = blockList;*/
 
             //Define Verts & UVs
             const int halfVertCount = BORDER_VERT_COUNT / 2;
@@ -248,6 +249,12 @@ namespace GM.Game
 
         private void Update()
         {
+            if (_blockCount == 0)
+            {
+                return;
+            }
+
+            //Draw Placed Blocks
             Graphics.DrawMeshInstanced(
                 mesh: _cubeMesh,
                 submeshIndex: 0,
@@ -256,29 +263,10 @@ namespace GM.Game
                 properties: _properties,
                 castShadows: ShadowCastingMode.Off,
                 receiveShadows: false,
-                count: _transforms.Count,
-                layer: (int)Layer.Outline);
+                count: _transforms.Count);
 
-            //Render Blocks
-            //foreach (var block in Blocks)
-            //{
-            //    _properties.SetColor(BASE_COLOR, block.Color);
-            //    _properties.SetTexture(BASE_MAP, block.Texture);
+            //Draw Falling Blocks
 
-            //    Vector3 blockPos = new Vector3(block.Position.x, block.Position.y) + _basePosition;
-
-            //    Graphics.DrawMesh(
-            //        mesh: _cubeMesh,
-            //        position: blockPos,
-            //        rotation: _baseRotation,
-            //        material: _blockMaterial,
-            //        properties: _properties,
-            //        layer: (int)Layer.Outline,
-            //        camera: null,
-            //        submeshIndex: 0,
-            //        castShadows: false
-            //    );
-            //}
 
             /*
             var position = transform.position;

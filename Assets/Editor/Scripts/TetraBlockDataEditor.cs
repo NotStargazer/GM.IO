@@ -17,7 +17,7 @@ namespace GM.Editor
             Undo.RecordObject(data, "TetraBlock Editor");
 
             data.TetraBlocks ??= new List<BlockData>();
-            var tetraBlockMaxIndex = (int)Mathf.Clamp(data.TetraBlocks.Count - 1, 0, data.TetraBlocks.Count - 1);
+            var tetraBlockMaxIndex = Mathf.Clamp(data.TetraBlocks.Count - 1, 0, data.TetraBlocks.Count - 1);
 
             GUILayout.Label($"TetraBlock: {_currentPieceIndex + 1} Total: {data.TetraBlocks.Count}");
             GUILayout.Label($"Rotation State: {_stateIndex + 1}");
@@ -49,6 +49,7 @@ namespace GM.Editor
                 {
                     data.TetraBlocks.Add(new BlockData
                     {
+                        ID = data.TetraBlocks.Count,
                         RotationStates = new List<BlockSublist>(),
                         BlockColor = Color.red,
                         GridSize = 2,

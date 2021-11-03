@@ -52,9 +52,9 @@ namespace GM
         {
             if (!_currentDriverState.HasValue)
             {
-                if (GameRoot.HasInstance)
+                if (GameData.HasInstance)
                 {
-                     _currentDriverState = GameRoot.GetInstance().InitialState;
+                     _currentDriverState = GameData.GetInstance().InitialState;
                      _states[_currentDriverState.Value].OnStateEnter(DriverState.GameStart);
                 }
                 else

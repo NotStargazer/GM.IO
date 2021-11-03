@@ -6,10 +6,11 @@ namespace GM.UI
 {
     public class GameDriver_StatePlaying : IDriverState
     {
+        private Playfield _playfield;
 
         public void OnStateEnter(DriverState from)
         {
-
+            _playfield = GameData.GetInstance().Playfield;
         }
 
         public void OnStateExit(DriverState to)
@@ -18,12 +19,7 @@ namespace GM.UI
 
         public DriverState? OnReceiveInputsWithUI(IUIRoot ui, IInput input)
         {
-            GameRoot gameRoot = GameRoot.GetInstance();
-
-            if (input.ButtonDown(Actions.Move, out float direction))
-            {
-
-            }
+            _playfield.OnReceiveInputs(input);
 
             return null;
         }
