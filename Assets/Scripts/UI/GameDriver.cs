@@ -1,8 +1,7 @@
 using System.Collections.Generic;
-using GM.Game;
-using GM.UI;
+using GM.Data;
 
-namespace GM
+namespace GM.UI
 {
     public enum DriverState
     {
@@ -48,7 +47,7 @@ namespace GM
             //Load initial state
         }
 
-        internal void OnReceiveInputs(IInput input)
+        internal void OnReceiveInputsWithUI(IInput input)
         {
             if (!_currentDriverState.HasValue)
             {

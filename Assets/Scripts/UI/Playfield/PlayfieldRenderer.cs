@@ -1,12 +1,11 @@
+using GM.Game;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using GM.Data;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.Rendering;
 
-namespace GM.Game
+namespace GM.UI
 {
     [RequireComponent(typeof(MeshRenderer))]
     [RequireComponent(typeof(MeshFilter))]
@@ -18,39 +17,38 @@ namespace GM.Game
         private static readonly int INSTANCE_OUTLINEC = Shader.PropertyToID("_OutlinesC");
 
         private const int BORDER_VERT_COUNT = 16;
-
-        [SerializeField] private Vector2Int _gridSize;
+        
         [SerializeField] private MeshFilter _filter;
         [SerializeField] private MeshRenderer _renderer;
-        [SerializeField] private Material _borderMaterial;
-        [SerializeField] private Material _blockMaterial;
         [SerializeField] private Mesh _cubeMesh;
-        [SerializeField] private Texture _normalTexture;
+        [SerializeField] private Material _borderMaterial;
 
+        //Border Properties
         private Mesh _borderMesh;
-
-        private Vector3[] _verts;
-        private Vector2[] _uvs;
-        private int[] _triangleIndices;
+        private Vector2Int _gridSize;
 
         //Block Properties
         private Vector3 _basePosition;
         private readonly Quaternion _baseRotation = new Quaternion(0, 0, 1, 0);
-        private MaterialPropertyBlock _properties;
+        private Material _blockMaterial;
 
+        //Block Instancing
         private int _blockCount;
-        private List<Matrix4x4> _transforms;
+        private List<Matrix4x4> _staticTransforms;
+        private Matrix4x4[] _fallingTransforms;
         private List<Vector4> _colors;
         private List<Vector4> _textureST;
         private List<Vector4> _outlineLines;
         private List<Vector4> _outlineCorners;
+        private MaterialPropertyBlock _staticProperties;
+        private MaterialPropertyBlock _fallingProperties;
 
         public Block?[,] Blocks
         {
             set
             {
                 _blockCount = value.Length;
-                _transforms = new List<Matrix4x4>(_blockCount);
+                _staticTransforms = new List<Matrix4x4>(_blockCount);
                 _colors = new List<Vector4>(_blockCount);
                 _textureST = new List<Vector4>(_blockCount);
                 _outlineLines = new List<Vector4>(_blockCount);
@@ -68,7 +66,7 @@ namespace GM.Game
                             var position = _basePosition + new Vector3(x, y);
                             Matrix4x4 matrix = Matrix4x4.zero;
                             matrix.SetTRS(position, _baseRotation, Vector3.one);
-                            _transforms.Add(matrix);
+                            _staticTransforms.Add(matrix);
                             _colors.Add(block.Color.linear);
                             _textureST.Add(block.TextureST);
 
@@ -92,16 +90,16 @@ namespace GM.Game
                     }
                 }
 
-                _properties.SetVectorArray(INSTANCE_COLORS, _colors);
-                _properties.SetVectorArray(INSTANCE_ST, _textureST);
-                _properties.SetVectorArray(INSTANCE_OUTLINEL, _outlineLines);
-                _properties.SetVectorArray(INSTANCE_OUTLINEC, _outlineCorners);
+                _staticProperties.SetVectorArray(INSTANCE_COLORS, _colors);
+                _staticProperties.SetVectorArray(INSTANCE_ST, _textureST);
+                _staticProperties.SetVectorArray(INSTANCE_OUTLINEL, _outlineLines);
+                _staticProperties.SetVectorArray(INSTANCE_OUTLINEC, _outlineCorners);
             }
         }
 
         public Block[] FallingBlocks { set; private get; }
 
-        private void Awake()
+        public void Initialize()
         {
             if (!_borderMaterial)
             {
@@ -111,48 +109,17 @@ namespace GM.Game
             {
                 throw new ArgumentNullException(nameof(_cubeMesh));
             }
-            if (!_normalTexture)
-            {
-                throw new ArgumentNullException(nameof(_normalTexture));
-            }
 
+            //Initialize Variables
             _basePosition = transform.position + new Vector3(0.5f, 0.5f);
-            _properties = new MaterialPropertyBlock();
+            _staticProperties = new MaterialPropertyBlock();
+            _fallingProperties = new MaterialPropertyBlock();
 
-            //Debug Blocks
-            /*var blockList = new Block?[_gridSize.x, _gridSize.y];
+            var gameData = GameData.GetInstance();
 
-            for (var y = 0; y < _gridSize.y; y++)
-            {
-                for (var x = 0; x < _gridSize.x; x++)
-                {
-                    if ((x + y) / 2 % 2 == 1)
-                    {
-                        blockList[x, y] = null;
-                        continue;
-                    }
-
-                    float hue;
-
-                    if (x + y == 0)
-                    {
-                        hue = 0;
-                    }
-                    else
-                    {
-                        hue = (x + y) / (float)(_gridSize.x + _gridSize.y);
-                    }
-
-                    blockList[x, y] = new Block
-                    {
-                        Color = Color.HSVToRGB(hue, 1, 1),
-                        Position = new Vector2Int(x, y),
-                        TextureST = new Vector4(0.5f, 1f, 1f, 1f)
-                    };
-                }
-            }
-
-            Blocks = blockList;*/
+            _borderMaterial = gameData.BorderMaterial;
+            _blockMaterial = gameData.BlockMaterial;
+            _gridSize = gameData.GridSize;
 
             //Define Verts & UVs
             const int halfVertCount = BORDER_VERT_COUNT / 2;
@@ -200,9 +167,6 @@ namespace GM.Game
                 uvs[uvLoopVerts] = new Vector2(1f, uvYCords[outerVert]);
             }
 
-            _verts = verts.ToArray();
-            _uvs = uvs.ToArray();
-
             //Create Triangles
             var triangles = new List<int>(BORDER_VERT_COUNT * 3);
 
@@ -210,8 +174,6 @@ namespace GM.Game
             AddSquares(ref triangles, quarterVertCount, halfVertCount, quarterVertCount);
             AddSquares(ref triangles, halfVertCount, quarterVertCount, quarterVertCount);
             AddSquares(ref triangles, halfVertCount, halfVertCount, quarterVertCount);
-
-            _triangleIndices = triangles.ToArray();
 
             _borderMesh = new Mesh();
             _borderMesh.SetVertices(verts);
@@ -241,82 +203,82 @@ namespace GM.Game
             }
         }
 
+        public void SetFallingProperties(Block block)
+        {
+            _fallingProperties.SetVectorArray(INSTANCE_COLORS, new Vector4[]
+            {
+                block.Color,
+                block.Color,
+                block.Color,
+                block.Color
+            });
+
+            _fallingProperties.SetVectorArray(INSTANCE_ST, new []
+            {
+                block.TextureST,
+                block.TextureST,
+                block.TextureST,
+                block.TextureST
+            });
+        }
+
+        public void SetFallingPosition(Vector2Int[] positions)
+        {
+            _fallingTransforms = new Matrix4x4[positions.Length];
+
+            for (var i = 0; i < _fallingTransforms.Length; i++)
+            {
+                _fallingTransforms[i].SetTRS(new Vector3(positions[i].x, positions[i].y) + _basePosition, _baseRotation, Vector3.one);
+            }
+        }
+
+        public void RenderBlocks()
+        {
+            if (_blockCount != 0)
+            {
+                Graphics.DrawMeshInstanced(
+                    mesh: _cubeMesh,
+                    submeshIndex: 0,
+                    material: _blockMaterial,
+                    matrices: _staticTransforms.ToArray(),
+                    properties: _staticProperties,
+                    castShadows: ShadowCastingMode.Off,
+                    receiveShadows: false,
+                    count: _staticTransforms.Count);
+            }
+
+            if (_fallingTransforms != null)
+            {
+                Graphics.DrawMeshInstanced(
+                    mesh: _cubeMesh,
+                    submeshIndex: 0,
+                    material: _blockMaterial,
+                    matrices: _fallingTransforms,
+                    properties: _fallingProperties,
+                    castShadows: ShadowCastingMode.Off,
+                    receiveShadows: false,
+                    count: _fallingTransforms.Length);
+            }
+
+        }
+
         private void OnValidate()
         {
             _filter = GetComponent<MeshFilter>();
             _renderer = GetComponent<MeshRenderer>();
         }
 
-        private void Update()
-        {
-            if (_blockCount == 0)
-            {
-                return;
-            }
-
-            //Draw Placed Blocks
-            Graphics.DrawMeshInstanced(
-                mesh: _cubeMesh,
-                submeshIndex: 0,
-                material: _blockMaterial,
-                matrices: _transforms.ToArray(),
-                properties: _properties,
-                castShadows: ShadowCastingMode.Off,
-                receiveShadows: false,
-                count: _transforms.Count);
-
-            //Draw Falling Blocks
-
-
-            /*
-            var position = transform.position;
-
-            foreach (var vert in _verts)
-            {
-                Debug.DrawLine(
-                    new Vector3(0.25f, 0.25f) + vert + position,
-                    new Vector3(-0.25f, -0.25f) + vert + position);
-                Debug.DrawLine(
-                    new Vector3(0.25f, -0.25f) + vert + position,
-                    new Vector3(-0.25f, 0.25f) + vert + position);
-            }
-            for (var index = 0; index < _triangleIndices.Length; index += 3)
-            {
-                var tri1 = _triangleIndices[index];
-                var tri2 = _triangleIndices[index + 1];
-                var tri3 = _triangleIndices[index + 2];
-
-                Debug.DrawLine(_verts[tri1] + position, _verts[tri2] + position);
-                Debug.DrawLine(_verts[tri2] + position, _verts[tri3] + position);
-                Debug.DrawLine(_verts[tri3] + position, _verts[tri1] + position);
-            }
-            */
-        }
-
         private void OnDrawGizmos()
         {
+            var gameData = FindObjectOfType<GameData>();
+            var gridSize = gameData.GridSize;
             var position = transform.position;
-
-            if (Application.IsPlaying(this))
-            {
-                if (_verts == null)
-                {
-                    return;
-                }
-
-                for (int i = 0; i < _verts.Length; i++)
-                {
-                    Handles.Label(position + _verts[i], (_uvs[i].y * (_gridSize.x + _gridSize.y + 4)).ToString(CultureInfo.InvariantCulture));
-                }
-
-                return;
-            }
 
             //Grid
             Gizmos.color = Color.green;
-            for (int x = 0; x < _gridSize.x; x++)
+            for (int x = 0; x < gridSize.x; x++)
             {
-                for (int y = 0; y < _gridSize.y; y++)
+                for (int y = 0; y < gridSize.y; y++)
                 {
                     Gizmos.DrawWireCube(position + new Vector3(x + 0.5f, y + 0.5f), Vector3.one);
                 }
@@ -324,10 +286,8 @@ namespace GM.Game
 
             //Border
             Gizmos.color = Color.red;
-            Gizmos.DrawWireCube(position + new Vector3(_gridSize.x, _gridSize.y) / 2, new Vector3(_gridSize.x, _gridSize.y, 1));
-            Gizmos.DrawWireCube(position + new Vector3(_gridSize.x, _gridSize.y) / 2, new Vector3(_gridSize.x + 2, _gridSize.y + 2, 1));
-
-
+            Gizmos.DrawWireCube(position + new Vector3(gridSize.x, gridSize.y) / 2, new Vector3(gridSize.x, gridSize.y, 1));
+            Gizmos.DrawWireCube(position + new Vector3(gridSize.x, gridSize.y) / 2, new Vector3(gridSize.x + 2, gridSize.y + 2, 1));
         }
     }
 }

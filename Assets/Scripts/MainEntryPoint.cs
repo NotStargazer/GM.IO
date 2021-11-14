@@ -1,7 +1,6 @@
 using System;
 using GM.UI;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace GM
 {
@@ -21,10 +20,10 @@ namespace GM
             return INSTANCE;
         }
 
-        [SerializeField] private InputManager _input;
-        [SerializeField] private UIRoot _uiRoot;
-        
-        private GameDriver _gameDriver;
+        [SerializeField] private InputManager _inputManager;
+        [SerializeField] private UIRoot _uiRootPrefab;
+
+        private UIRoot _uiRootInstance;
 
         private void Awake()
         {
@@ -39,27 +38,28 @@ namespace GM
             DontDestroyOnLoad(gameObject);
 
 
-            if (!_input)
+            if (!_inputManager)
             {
-                throw new ArgumentNullException(nameof(_input));
+                throw new ArgumentNullException(nameof(_inputManager));
             }
 
-            if (!_uiRoot)
+            if (!_uiRootPrefab)
             {
-                throw new ArgumentNullException(nameof(_uiRoot));
+                throw new ArgumentNullException(nameof(_uiRootPrefab));
             }
 
-            var ui = Instantiate(_uiRoot);
-            ui.gameObject.name = "[Game UI Root]";
-            DontDestroyOnLoad(ui.gameObject);
+            _uiRootInstance = Instantiate(_uiRootPrefab);
+            var uiGameObject = _uiRootInstance.gameObject;
+            uiGameObject.name = "[Game UI Root]";
+            DontDestroyOnLoad(uiGameObject);
 
-            _gameDriver = new GameDriver(ui);
+            _uiRootInstance.OnStartForGame();
         }
 
         //Primary Game Loop
         private void Update()
         {
-            _gameDriver.OnReceiveInputs(_input);
+            _uiRootInstance.OnReceiveInputs(_inputManager);
         }
     }
 }

@@ -123,6 +123,52 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &787841994
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 787841996}
+  - component: {fileID: 787841995}
+  m_Layer: 0
+  m_Name: Randomizer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &787841995
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 787841994}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ff874ec63986cf4f8931a3800c33427, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _blockData: {fileID: 11400000, guid: db54600073a449445a05497d949c6836, type: 2}
+  _pieceHistoryCount: 0
+  _pieceRetryCount: 0
+--- !u!4 &787841996
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 787841994}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1702163016}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1318293836
 GameObject:
   m_ObjectHideFlags: 0
@@ -168,14 +214,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31b51839ab6ef9b4baeaae872e41cffb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _gridSize: {x: 10, y: 20}
-  _excessHeight: 10
   _filter: {fileID: 1318293840}
   _renderer: {fileID: 1318293839}
-  _borderMaterial: {fileID: 2100000, guid: 6f63c7fdc3a511149bbd866b727ceba7, type: 2}
-  _blockMaterial: {fileID: 2100000, guid: 59bc668acb869fa4eb757d8d0d8449fa, type: 2}
   _cubeMesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
-  _normalTexture: {fileID: 2800000, guid: 5e80fe4db16ec224f951b4eceab8d525, type: 3}
+  _borderMaterial: {fileID: 2100000, guid: 6f63c7fdc3a511149bbd866b727ceba7, type: 2}
 --- !u!23 &1318293839
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -358,6 +400,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1702163016}
   - component: {fileID: 1702163017}
+  - component: {fileID: 1702163018}
   m_Layer: 0
   m_Name: -- Game Root --
   m_TagString: Untagged
@@ -377,6 +420,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1318293837}
+  - {fileID: 787841996}
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -392,4 +436,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1143b455fe459044e8f559aae39ba184, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  GameLogic: {fileID: 1702163018}
   InitialState: 1
+  GridSize: {x: 10, y: 20}
+  BorderMaterial: {fileID: 2100000, guid: 6f63c7fdc3a511149bbd866b727ceba7, type: 2}
+  BlockMaterial: {fileID: 2100000, guid: 59bc668acb869fa4eb757d8d0d8449fa, type: 2}
+--- !u!114 &1702163018
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1702163015}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 351ca6c90ad17f44f9ea72aec87d99ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _randomizer: {fileID: 787841995}
+  _playfield: {fileID: 1318293838}

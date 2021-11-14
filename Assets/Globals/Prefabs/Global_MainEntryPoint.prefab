@@ -155,5 +155,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f8e7ca50f7f8ff46b54fb4e9ef8331a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _input: {fileID: 7697361153221728441}
-  _uiRoot: {fileID: 1939343474941644860, guid: 2b8b99a7315cc79489e9b7f4e36490f4, type: 3}
+  _inputManager: {fileID: 7697361153221728441}
+  _uiRootPrefab: {fileID: 1939343474941644860, guid: 2b8b99a7315cc79489e9b7f4e36490f4, type: 3}

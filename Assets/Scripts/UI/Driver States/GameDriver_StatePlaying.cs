@@ -1,4 +1,5 @@
 using System;
+using GM.Data;
 using GM.Game;
 using UnityEngine;
 
@@ -6,11 +7,12 @@ namespace GM.UI
 {
     public class GameDriver_StatePlaying : IDriverState
     {
-        private Playfield _playfield;
+        private GameLogic _gameLogic;
 
         public void OnStateEnter(DriverState from)
         {
-            _playfield = GameData.GetInstance().Playfield;
+            _gameLogic = GameData.GetInstance().GameLogic;
+            _gameLogic.Initialize();
         }
 
         public void OnStateExit(DriverState to)
@@ -19,7 +21,7 @@ namespace GM.UI
 
         public DriverState? OnReceiveInputsWithUI(IUIRoot ui, IInput input)
         {
-            _playfield.OnReceiveInputs(input);
+            _gameLogic.LogicUpdate(input);
 
             return null;
         }
