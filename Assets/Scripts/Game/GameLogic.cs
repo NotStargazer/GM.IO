@@ -30,6 +30,8 @@ namespace GM.Game
 
         public void Initialize()
         {
+            var gridSize = GameData.GetInstance().GridSize;
+            _grid = new Block?[gridSize.x, gridSize.y];
             _state = new GameState();
             _playfield.Initialize();
         }
@@ -50,15 +52,24 @@ namespace GM.Game
                 _playfield.SetFallingPosition(_tetraBlock.GetPositions());
             }
 
+            // => Update Main Input Logic
             if (input.ButtonDown(Actions.Move, out float direction))
             {
                 _tetraBlock.Move(direction > 0 ? Direction.Right : Direction.Left, _grid);
                 _playfield.SetFallingPosition(_tetraBlock.GetPositions());
             }
 
+            if (input.ButtonDown(Actions.DropLock))
+            {
+                _tetraBlock.Move(Direction.Down, _grid);
+                _playfield.SetFallingPosition(_tetraBlock.GetPositions());
+            }
+
             _playfield.RenderBlocks();
 
+            // => Return State
             return _state;
+            // <==
         }
 
         private void Awake()

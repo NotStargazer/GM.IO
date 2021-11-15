@@ -26,7 +26,7 @@ namespace GM
 
     public class InputManager : MonoBehaviour, IInput
     {
-        [SerializeField] private PlayerInput _gmInputInput;
+        [SerializeField] private PlayerInput _gmInput;
 
         struct InputRead
         {
@@ -71,7 +71,7 @@ namespace GM
 
             foreach (var value in Enum.GetValues(typeof(Actions)))
             {
-                var action = _gmInputInput.actions.actionMaps[0].actions[(int)value];
+                var action = _gmInput.actions.actionMaps[0].actions[(int)value];
                 _actions.Add((Actions)value, new InputRead(action));
             }
         }

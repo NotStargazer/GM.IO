@@ -36,6 +36,8 @@ namespace GM.Game
         private int _rotationIndex;
         private List<BlockSublist> _rotationStates;
 
+        private Vector2Int _gridSize;
+
         public TetraBlock(BlockData tetraBlock, Vector4 textureST, Vector2Int gridSize)
         {
             _rotationStates = tetraBlock.RotationStates;
@@ -55,16 +57,27 @@ namespace GM.Game
             var xPos = (gridSize.x >> 1) - Mathf.CeilToInt(tetraBlock.GridSize / 2f);
 
             _position = new Vector2Int(xPos, yPos - 1);
+            _gridSize = gridSize;
         }
 
         public void Move(Direction direction, Block?[,] grid)
         {
             _position += DIRECTIONS[direction];
+
+            if (CheckCollisions(grid))
+            {
+                _position -= DIRECTIONS[direction];
+            }
         }
 
-        public void Rotate(int direction, Block[] grid)
+        public void Rotate(int direction, Block?[,] grid)
         {
             _rotationIndex += direction;
+
+            if (CheckCollisions(grid))
+            {
+                _rotationIndex -= direction;
+            }
         }
 
         public Block GetBlock()
@@ -86,6 +99,29 @@ namespace GM.Game
             }
 
             return positions;
+        }
+
+        private bool CheckCollisions(Block?[,] grid)
+        {
+            var positions = GetPositions();
+
+            foreach (var position in positions)
+            {
+                if (
+                    position.x < 0 
+                    || position.x >= _gridSize.x
+                    || position.y < 0)
+                {
+                    return true;
+                }
+
+                if (grid[position.x, position.y].HasValue)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }

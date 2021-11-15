@@ -109,7 +109,7 @@
                     "name": "",
                     "id": "54db8345-168e-469c-be11-466fcbc44b1b",
                     "path": "<Keyboard>/downArrow",
-                    "interactions": "",
+                    "interactions": "Press",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
                     "action": "Drop Lock",
