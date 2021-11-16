@@ -16,10 +16,5 @@ namespace GM.Game
                 new Vector4(0.5f, 1),
                 GameData.GetInstance().GridSize);
         }
-
-        private void Awake()
-        {
-
-        }
     }
 }

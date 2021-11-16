@@ -77,12 +77,12 @@ Shader "Unlit/BlockShader"
 					if (abs(oluv.x) > 1 - _OutlineThickness)
 					{
 						xl = abs((oluvs.x - 1) / 2);
-						xr = ((oluvs.x + 1) / 2);
+						xr = (oluvs.x + 1) / 2;
 					}
 					if (abs(oluv.y) > 1 - _OutlineThickness)
 					{
 						yd = abs((oluvs.y - 1) / 2);
-						yu = ((oluvs.y + 1) / 2);
+						yu = (oluvs.y + 1) / 2;
 					}
 
 					const float bl = i.olc.x * xl * yd;

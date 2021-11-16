@@ -1,7 +1,7 @@
 using GM.Game;
+using GM.Data;
 using System;
 using System.Collections.Generic;
-using GM.Data;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -15,6 +15,7 @@ namespace GM.UI
         private static readonly int INSTANCE_ST = Shader.PropertyToID("_MainTex_ST");
         private static readonly int INSTANCE_OUTLINEL = Shader.PropertyToID("_OutlinesL");
         private static readonly int INSTANCE_OUTLINEC = Shader.PropertyToID("_OutlinesC");
+        private static readonly int BLOCK = Shader.PropertyToID("BLOCK");
 
         private const int BORDER_VERT_COUNT = 16;
         
@@ -34,12 +35,12 @@ namespace GM.UI
 
         //Block Instancing
         private int _blockCount;
-        private List<Matrix4x4> _staticTransforms;
+        private Matrix4x4[] _staticTransforms;
         private Matrix4x4[] _fallingTransforms;
-        private List<Vector4> _colors;
-        private List<Vector4> _textureST;
-        private List<Vector4> _outlineLines;
-        private List<Vector4> _outlineCorners;
+        private Vector4[] _colors;
+        private Vector4[] _textureST;
+        private Vector4[] _outlineLines;
+        private Vector4[] _outlineCorners;
         private MaterialPropertyBlock _staticProperties;
         private MaterialPropertyBlock _fallingProperties;
 
@@ -47,12 +48,14 @@ namespace GM.UI
         {
             set
             {
+                var currentIndex = 0;
+
                 _blockCount = value.Length;
-                _staticTransforms = new List<Matrix4x4>(_blockCount);
-                _colors = new List<Vector4>(_blockCount);
-                _textureST = new List<Vector4>(_blockCount);
-                _outlineLines = new List<Vector4>(_blockCount);
-                _outlineCorners = new List<Vector4>(_blockCount);
+                _staticTransforms = new Matrix4x4[_blockCount];
+                _colors = new Vector4[_blockCount];
+                _textureST = new Vector4[_blockCount];
+                _outlineLines = new Vector4[_blockCount];
+                _outlineCorners = new Vector4[_blockCount];
 
                 for (var y = 0; y < _gridSize.y; y++)
                 {
@@ -66,38 +69,38 @@ namespace GM.UI
                             var position = _basePosition + new Vector3(x, y);
                             Matrix4x4 matrix = Matrix4x4.zero;
                             matrix.SetTRS(position, _baseRotation, Vector3.one);
-                            _staticTransforms.Add(matrix);
-                            _colors.Add(block.Color.linear);
-                            _textureST.Add(block.TextureST);
+                            _staticTransforms[currentIndex] = matrix;
+                            _colors[currentIndex] = block.Color.linear;
+                            _textureST[currentIndex] = block.TextureST;
 
                             var xg = x > 0;
                             var xl = x + 1 < _gridSize.x;
                             var yg = y > 0;
                             var yl = y + 1 < _gridSize.y;
 
-                            _outlineLines.Add(new Vector4(
+                            _outlineLines[currentIndex] = new Vector4(
                                 x: xg && !value[x - 1, y].HasValue ? 1 : 0,
                                 y: xl && !value[x + 1, y].HasValue ? 1 : 0,
                                 z: yg && !value[x, y - 1].HasValue ? 1 : 0,
-                                w: yl && !value[x, y + 1].HasValue ? 1 : 0));
+                                w: yl && !value[x, y + 1].HasValue ? 1 : 0);
 
-                            _outlineCorners.Add(new Vector4(
+                            _outlineCorners[currentIndex] = new Vector4(
                                 x: xg && yg && !value[x - 1, y - 1].HasValue ? 1 : 0,
                                 y: xl && yg && !value[x + 1, y - 1].HasValue ? 1 : 0,
                                 z: xg && yl && !value[x - 1, y + 1].HasValue ? 1 : 0,
-                                w: xl && yl && !value[x + 1, y + 1].HasValue ? 1 : 0));
+                                w: xl && yl && !value[x + 1, y + 1].HasValue ? 1 : 0);
+
+                            currentIndex++;
                         }
                     }
                 }
-
+                
                 _staticProperties.SetVectorArray(INSTANCE_COLORS, _colors);
                 _staticProperties.SetVectorArray(INSTANCE_ST, _textureST);
                 _staticProperties.SetVectorArray(INSTANCE_OUTLINEL, _outlineLines);
                 _staticProperties.SetVectorArray(INSTANCE_OUTLINEC, _outlineCorners);
             }
         }
-
-        public Block[] FallingBlocks { set; private get; }
 
         public void Initialize()
         {
@@ -207,10 +210,10 @@ namespace GM.UI
         {
             _fallingProperties.SetVectorArray(INSTANCE_COLORS, new Vector4[]
             {
-                block.Color,
-                block.Color,
-                block.Color,
-                block.Color
+                block.Color.linear,
+                block.Color.linear,
+                block.Color.linear,
+                block.Color.linear
             });
 
             _fallingProperties.SetVectorArray(INSTANCE_ST, new []
@@ -220,6 +223,9 @@ namespace GM.UI
                 block.TextureST,
                 block.TextureST
             });
+
+            _fallingProperties.SetVectorArray(INSTANCE_OUTLINEL, new Vector4[4]);
+            _fallingProperties.SetVectorArray(INSTANCE_OUTLINEC, new Vector4[4]);
         }
 
         public void SetFallingPosition(Vector2Int[] positions)
@@ -240,11 +246,11 @@ namespace GM.UI
                     mesh: _cubeMesh,
                     submeshIndex: 0,
                     material: _blockMaterial,
-                    matrices: _staticTransforms.ToArray(),
+                    matrices: _staticTransforms,
                     properties: _staticProperties,
                     castShadows: ShadowCastingMode.Off,
                     receiveShadows: false,
-                    count: _staticTransforms.Count);
+                    count: _staticTransforms.Length);
             }
 
             if (_fallingTransforms != null)

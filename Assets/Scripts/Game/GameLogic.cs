@@ -5,6 +5,33 @@ using UnityEngine;
 
 namespace GM.Game
 {
+    public struct Timer
+    {
+        private float _duration;
+        private float _deadline;
+
+        public float Duration
+        {
+            set => _duration = value + Time.time;
+        }
+
+        public bool HasExpired(out float excess)
+        {
+            excess = Mathf.Clamp01(Time.time - _deadline);
+            return Time.time > _deadline;
+        }
+
+        public void Restart()
+        {
+            _deadline = Time.time + _duration;
+        }
+    }
+
+    public struct Timers
+    {
+        public Timer DropTimer;
+    }
+
     /*
      * ==>
      * => Get new TetraBlock
@@ -19,6 +46,7 @@ namespace GM.Game
 
     public class GameLogic : MonoBehaviour
     {
+        private Grid _grid;
         private GameState _state;
 
         [SerializeField] private Randomizer _randomizer;
@@ -26,12 +54,10 @@ namespace GM.Game
 
         [SerializeField] private PlayfieldRenderer _playfield;
 
-        private Block?[,] _grid;
-
         public void Initialize()
         {
             var gridSize = GameData.GetInstance().GridSize;
-            _grid = new Block?[gridSize.x, gridSize.y];
+            _grid = new Grid(gridSize);
             _state = new GameState();
             _playfield.Initialize();
         }
@@ -61,8 +87,15 @@ namespace GM.Game
 
             if (input.ButtonDown(Actions.DropLock))
             {
-                _tetraBlock.Move(Direction.Down, _grid);
-                _playfield.SetFallingPosition(_tetraBlock.GetPositions());
+                if (_tetraBlock.Move(Direction.Down, _grid))
+                {
+                    _grid.LockTetraBlock(ref _tetraBlock);
+                    _playfield.Blocks = _grid.Blocks;
+                }
+                else
+                {
+                    _playfield.SetFallingPosition(_tetraBlock.GetPositions());
+                }
             }
 
             _playfield.RenderBlocks();
