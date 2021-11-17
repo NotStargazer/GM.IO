@@ -56,8 +56,8 @@ namespace GM.Game
 
         public void Initialize()
         {
-            var gridSize = GameData.GetInstance().GridSize;
-            _grid = new Grid(gridSize);
+            var instance = GameData.GetInstance();
+            _grid = new Grid(instance.GridSize, instance.ExcessHeight);
             _state = new GameState();
             _playfield.Initialize();
         }
@@ -79,7 +79,19 @@ namespace GM.Game
             }
 
             // => Update Main Input Logic
-            if (input.ButtonDown(Actions.Move, out float direction))
+            if (input.ButtonDown(Actions.Rotation, out float rotation))
+            {
+                _tetraBlock.Rotate(Mathf.RoundToInt(rotation), _grid);
+
+                //Syncro
+                if (input.ButtonHold(Actions.Move, out float direction))
+                {
+                    _tetraBlock.Move(direction > 0 ? Direction.Right : Direction.Left, _grid);
+                }
+
+                _playfield.SetFallingPosition(_tetraBlock.GetPositions());
+            }
+            else if (input.ButtonDown(Actions.Move, out float direction))
             {
                 _tetraBlock.Move(direction > 0 ? Direction.Right : Direction.Left, _grid);
                 _playfield.SetFallingPosition(_tetraBlock.GetPositions());

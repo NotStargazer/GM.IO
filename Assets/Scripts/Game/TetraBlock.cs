@@ -32,7 +32,9 @@ namespace GM.Game
 
         private Vector4 _textureST;
         private Color _color;
+        private bool _canFloorKick;
 
+        private int _gridSize;
         private int _rotationIndex;
         private List<BlockSublist> _rotationStates;
 
@@ -41,6 +43,8 @@ namespace GM.Game
             _rotationStates = tetraBlock.RotationStates;
             _textureST = textureST;
             _color = tetraBlock.BlockColor;
+            _canFloorKick = tetraBlock.CanFloorKick;
+            _gridSize = tetraBlock.GridSize;
 
             var highestInitial = 0;
             foreach (var position in _rotationStates[0].Blocks)
@@ -61,13 +65,13 @@ namespace GM.Game
         /// Move the piece.
         /// </summary>
         /// <returns>True if piece collides.</returns>
-        public bool Move(Direction direction, Grid grid)
+        public bool Move(Direction direction, Grid grid, int distance = 1)
         {
-            _position += DIRECTIONS[direction];
+            _position += DIRECTIONS[direction] * distance;
 
             if (CheckCollisions(grid))
             {
-                _position -= DIRECTIONS[direction];
+                _position -= DIRECTIONS[direction] * distance;
                 return true;
             }
 
@@ -78,7 +82,11 @@ namespace GM.Game
         {
             _rotationIndex += direction;
 
-            if (CheckCollisions(grid))
+            _rotationIndex = _rotationIndex < 0 
+                ? _rotationStates.Count - 1
+                : _rotationIndex % _rotationStates.Count;
+
+            if (CheckCollisions(grid) && CheckKicks(grid))
             {
                 _rotationIndex -= direction;
             }
@@ -118,6 +126,45 @@ namespace GM.Game
             }
 
             return false;
+        }
+
+        private bool CheckKicks(Grid grid)
+        {
+            if (!Move(Direction.Right, grid))
+            {
+                return false;
+            }
+
+            if (!Move(Direction.Left, grid))
+            {
+                return false;
+            }
+
+            if (_gridSize / 2 > 1)
+            {
+                if (!Move(Direction.Left, grid, _gridSize / 2))
+                {
+                    return false;
+                }
+            }
+
+            if (_canFloorKick)
+            {
+                if (!Move(Direction.Up, grid))
+                {
+                    return false;
+                }
+
+                if (_gridSize / 2 > 1)
+                {
+                    if (!Move(Direction.Up, grid, _gridSize / 2))
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
         }
     }
 }

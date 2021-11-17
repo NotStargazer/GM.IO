@@ -89,7 +89,7 @@ public class @GMIO : IInputActionCollection, IDisposable
                     ""name"": ""Rotate"",
                     ""id"": ""bcbfe699-2b82-4754-8008-ed9f88797483"",
                     ""path"": ""1DAxis"",
-                    ""interactions"": """",
+                    ""interactions"": ""Press"",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Rotate"",

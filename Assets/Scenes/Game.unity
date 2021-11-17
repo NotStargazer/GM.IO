@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0, g: 0.99999905, b: 0.99999905, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -388,7 +388,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
 --- !u!1 &1702163015
 GameObject:
@@ -423,7 +423,7 @@ Transform:
   - {fileID: 787841996}
   - {fileID: 1973095111}
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1702163017
 MonoBehaviour:
@@ -440,6 +440,7 @@ MonoBehaviour:
   GameLogic: {fileID: 1702163018}
   InitialState: 1
   GridSize: {x: 10, y: 20}
+  ExcessHeight: 10
   BorderMaterial: {fileID: 2100000, guid: 6f63c7fdc3a511149bbd866b727ceba7, type: 2}
   BlockMaterial: {fileID: 2100000, guid: 59bc668acb869fa4eb757d8d0d8449fa, type: 2}
 --- !u!114 &1702163018

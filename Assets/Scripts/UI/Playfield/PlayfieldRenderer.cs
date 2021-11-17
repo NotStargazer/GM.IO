@@ -15,7 +15,6 @@ namespace GM.UI
         private static readonly int INSTANCE_ST = Shader.PropertyToID("_MainTex_ST");
         private static readonly int INSTANCE_OUTLINEL = Shader.PropertyToID("_OutlinesL");
         private static readonly int INSTANCE_OUTLINEC = Shader.PropertyToID("_OutlinesC");
-        private static readonly int BLOCK = Shader.PropertyToID("BLOCK");
 
         private const int BORDER_VERT_COUNT = 16;
         
@@ -49,8 +48,8 @@ namespace GM.UI
             set
             {
                 var currentIndex = 0;
-
-                _blockCount = value.Length;
+                
+                _blockCount = _gridSize.x * _gridSize.y;
                 _staticTransforms = new Matrix4x4[_blockCount];
                 _colors = new Vector4[_blockCount];
                 _textureST = new Vector4[_blockCount];
@@ -230,12 +229,19 @@ namespace GM.UI
 
         public void SetFallingPosition(Vector2Int[] positions)
         {
-            _fallingTransforms = new Matrix4x4[positions.Length];
+            var newTransforms = new List<Matrix4x4>();
 
-            for (var i = 0; i < _fallingTransforms.Length; i++)
+            foreach (var position in positions)
             {
-                _fallingTransforms[i].SetTRS(new Vector3(positions[i].x, positions[i].y) + _basePosition, _baseRotation, Vector3.one);
+                if (position.y < _gridSize.y)
+                { 
+                    var matrix = new Matrix4x4();
+                    matrix.SetTRS(new Vector3(position.x, position.y) + _basePosition, _baseRotation, Vector3.one);
+                    newTransforms.Add(matrix);
+                }
             }
+
+            _fallingTransforms = newTransforms.ToArray();
         }
 
         public void RenderBlocks()

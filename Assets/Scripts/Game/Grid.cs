@@ -9,10 +9,10 @@ namespace GM.Game
 
         public Block?[,] Blocks => _grid;
 
-        public Grid(Vector2Int gridSize)
+        public Grid(Vector2Int gridSize, int excess)
         {
             _gridSize = gridSize;
-            _grid = new Block?[gridSize.x, gridSize.y];
+            _grid = new Block?[gridSize.x, gridSize.y + excess];
         }
 
         public bool CheckCollision(Vector2Int position)

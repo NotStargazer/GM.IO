@@ -18,6 +18,7 @@ namespace GM.Data
         public int GridSize;
         public List<BlockSublist> RotationStates;
         public Color BlockColor;
+        public bool CanFloorKick;
     }
 
     [CreateAssetMenu(fileName = "TetraBlock", menuName = "GM/TetraBlock")]
