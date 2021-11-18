@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using GM.Data;
 using UnityEngine;
@@ -36,7 +37,11 @@ namespace GM.Game
 
         private int _gridSize;
         private int _rotationIndex;
+        private int _lowestPoint;
         private List<BlockSublist> _rotationStates;
+
+        public bool Landed { private set; get; }
+        public bool IsAtLowestPoint { private set; get; }
 
         public TetraBlock(BlockData tetraBlock, Vector4 textureST, Vector2Int gridSize)
         {
@@ -46,26 +51,34 @@ namespace GM.Game
             _canFloorKick = tetraBlock.CanFloorKick;
             _gridSize = tetraBlock.GridSize;
 
-            var highestInitial = 0;
+            var highestInitial = int.MinValue;
+            var lowestInitial = int.MaxValue;
             foreach (var position in _rotationStates[0].Blocks)
             {
                 if (position.y > highestInitial)
                 {
                     highestInitial = position.y;
                 }
+
+                if (position.y < lowestInitial)
+                {
+                    lowestInitial = position.y;
+                }
             }
 
-            var yPos = gridSize.y - highestInitial;
+            IsAtLowestPoint = true;
+            var yPos = gridSize.y - highestInitial - 1;
             var xPos = (gridSize.x >> 1) - Mathf.CeilToInt(tetraBlock.GridSize / 2f);
 
-            _position = new Vector2Int(xPos, yPos - 1);
+            _lowestPoint = gridSize.y - _gridSize - lowestInitial;
+            _position = new Vector2Int(xPos, yPos);
         }
 
         /// <summary>
         /// Move the piece.
         /// </summary>
         /// <returns>True if piece collides.</returns>
-        public bool Move(Direction direction, Grid grid, int distance = 1)
+        public bool Move(Direction direction, BlockGrid grid, int distance = 1)
         {
             _position += DIRECTIONS[direction] * distance;
 
@@ -75,11 +88,14 @@ namespace GM.Game
                 return true;
             }
 
+            PerformChecks(grid);
+
             return false;
         }
 
-        public void Rotate(int direction, Grid grid)
+        public void Rotate(int direction, BlockGrid grid)
         {
+            var previousIndex = _rotationIndex;
             _rotationIndex += direction;
 
             _rotationIndex = _rotationIndex < 0 
@@ -88,13 +104,15 @@ namespace GM.Game
 
             if (CheckCollisions(grid) && CheckKicks(grid))
             {
-                _rotationIndex -= direction;
+                _rotationIndex -= previousIndex;
             }
+
+            PerformChecks(grid);
         }
 
         public Block GetBlock()
         {
-            return new Block()
+            return new Block
             {
                 Color = _color,
                 TextureST = _textureST
@@ -113,7 +131,7 @@ namespace GM.Game
             return positions;
         }
 
-        private bool CheckCollisions(Grid grid)
+        private bool CheckCollisions(BlockGrid grid)
         {
             var positions = GetPositions();
 
@@ -128,7 +146,31 @@ namespace GM.Game
             return false;
         }
 
-        private bool CheckKicks(Grid grid)
+        private void PerformChecks(BlockGrid grid)
+        {
+            var positions = GetPositions();
+            var landed = false;
+            var lowestPoint = false;
+
+            foreach (var position in positions)
+            {
+                if (position.y <= _lowestPoint)
+                {
+                    _lowestPoint = position.y;
+                    lowestPoint = true;
+                }
+
+                if (grid.CheckCollision(position + Vector2Int.down))
+                {
+                    landed = true;
+                }
+            }
+
+            Landed = landed;
+            IsAtLowestPoint = lowestPoint;
+        }
+
+        private bool CheckKicks(BlockGrid grid)
         {
             if (!Move(Direction.Right, grid))
             {

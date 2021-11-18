@@ -2,14 +2,14 @@ using UnityEngine;
 
 namespace GM.Game
 {
-    public class Grid
+    public class BlockGrid
     {
         private Vector2Int _gridSize;
         private Block?[,] _grid;
 
         public Block?[,] Blocks => _grid;
 
-        public Grid(Vector2Int gridSize, int excess)
+        public BlockGrid(Vector2Int gridSize, int excess)
         {
             _gridSize = gridSize;
             _grid = new Block?[gridSize.x, gridSize.y + excess];

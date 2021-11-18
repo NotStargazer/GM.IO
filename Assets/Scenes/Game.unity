@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0, g: 0.99999905, b: 0.99999905, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -123,6 +123,49 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &512171447
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 512171449}
+  - component: {fileID: 512171448}
+  m_Layer: 0
+  m_Name: Progression Controller
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &512171448
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 512171447}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 858eb395bd3dde14995044d1645b26e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &512171449
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 512171447}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1702163016}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &787841994
 GameObject:
   m_ObjectHideFlags: 0
@@ -218,6 +261,7 @@ MonoBehaviour:
   _renderer: {fileID: 1318293839}
   _cubeMesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
   _borderMaterial: {fileID: 2100000, guid: 6f63c7fdc3a511149bbd866b727ceba7, type: 2}
+  _blockMaterial: {fileID: 2100000, guid: 59bc668acb869fa4eb757d8d0d8449fa, type: 2}
 --- !u!23 &1318293839
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -421,7 +465,7 @@ Transform:
   m_Children:
   - {fileID: 1318293837}
   - {fileID: 787841996}
-  - {fileID: 1973095111}
+  - {fileID: 512171449}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -441,8 +485,6 @@ MonoBehaviour:
   InitialState: 1
   GridSize: {x: 10, y: 20}
   ExcessHeight: 10
-  BorderMaterial: {fileID: 2100000, guid: 6f63c7fdc3a511149bbd866b727ceba7, type: 2}
-  BlockMaterial: {fileID: 2100000, guid: 59bc668acb869fa4eb757d8d0d8449fa, type: 2}
 --- !u!114 &1702163018
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -457,46 +499,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _randomizer: {fileID: 787841995}
   _playfield: {fileID: 1318293838}
---- !u!1 &1973095110
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1973095111}
-  - component: {fileID: 1973095112}
-  m_Layer: 0
-  m_Name: Progression Controller
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1973095111
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1973095110}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 1702163016}
-  m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1973095112
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1973095110}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 858eb395bd3dde14995044d1645b26e6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  _progression: {fileID: 512171448}

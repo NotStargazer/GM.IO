@@ -42,7 +42,5 @@ namespace GM.Data
         [Header("Playfield Data")]
         public Vector2Int GridSize;
         public int ExcessHeight;
-        public Material BorderMaterial;
-        public Material BlockMaterial;
     }
 }

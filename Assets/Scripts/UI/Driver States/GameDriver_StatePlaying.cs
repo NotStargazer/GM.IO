@@ -12,7 +12,7 @@ namespace GM.UI
         public void OnStateEnter(DriverState from)
         {
             _gameLogic = GameData.GetInstance().GameLogic;
-            _gameLogic.Initialize();
+            _gameLogic.OnGameStart();
         }
 
         public void OnStateExit(DriverState to)

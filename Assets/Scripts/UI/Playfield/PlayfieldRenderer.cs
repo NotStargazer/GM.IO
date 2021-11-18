@@ -22,6 +22,7 @@ namespace GM.UI
         [SerializeField] private MeshRenderer _renderer;
         [SerializeField] private Mesh _cubeMesh;
         [SerializeField] private Material _borderMaterial;
+        [SerializeField] private Material _blockMaterial;
 
         //Border Properties
         private Mesh _borderMesh;
@@ -30,7 +31,6 @@ namespace GM.UI
         //Block Properties
         private Vector3 _basePosition;
         private readonly Quaternion _baseRotation = new Quaternion(0, 0, 1, 0);
-        private Material _blockMaterial;
 
         //Block Instancing
         private int _blockCount;
@@ -118,9 +118,6 @@ namespace GM.UI
             _fallingProperties = new MaterialPropertyBlock();
 
             var gameData = GameData.GetInstance();
-
-            _borderMaterial = gameData.BorderMaterial;
-            _blockMaterial = gameData.BlockMaterial;
             _gridSize = gameData.GridSize;
 
             //Define Verts & UVs
@@ -244,7 +241,12 @@ namespace GM.UI
             _fallingTransforms = newTransforms.ToArray();
         }
 
-        public void RenderBlocks()
+        public void ResetFalling()
+        {
+            _fallingTransforms = null;
+        }
+
+        public void RenderBlocks(bool excluseFalling = false)
         {
             if (_blockCount != 0)
             {
