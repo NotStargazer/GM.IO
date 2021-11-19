@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using GM.Data;
 using UnityEngine;
 
 namespace GM.Game
@@ -8,6 +10,7 @@ namespace GM.Game
         private Block?[,] _grid;
 
         public Block?[,] Blocks => _grid;
+        public Vector2Int Size => _gridSize;
 
         public BlockGrid(Vector2Int gridSize, int excess)
         {
@@ -32,16 +35,73 @@ namespace GM.Game
             return false;
         }
 
-        public void LockTetraBlock(ref TetraBlock tetraBlock)
+        public void LockTetraBlock(ref TetraBlock tetraBlock, ref GameState gameState)
         {
             var block = tetraBlock.GetBlock();
+            var uniqueLines = new List<int>();
 
             foreach (var position in tetraBlock.GetPositions())
             {
                 Blocks[position.x, position.y] = block;
+
+                if (!uniqueLines.Contains(position.y))
+                {
+                    uniqueLines.Add(position.y);
+                }
+            }
+
+            uniqueLines.Sort();
+            uniqueLines.Reverse();
+
+            foreach (var uniqueLine in uniqueLines)
+            {
+                if (CheckLine(uniqueLine))
+                {
+                    gameState.LinesCleared.Add(uniqueLine);
+                    ClearLine(uniqueLine);
+                }
             }
 
             tetraBlock = null;
+        }
+
+        private bool CheckLine(int line)
+        {
+            for (var x = 0; x < _gridSize.x; x++)
+            {
+                if (!Blocks[x, line].HasValue)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        private void ClearLine(int line)
+        {
+            for (var x = 0; x < _gridSize.x; x++)
+            {
+                Blocks[x, line] = null;
+            }
+        }
+
+        public void DropLines(int[] lines)
+        {
+            foreach (var line in lines)
+            {
+                for (var y = line; y < _gridSize.y - 1; y++)
+                {
+                    for (var x = 0; x < _gridSize.x; x++)
+                    {
+                        if (Blocks[x, y + 1].HasValue)
+                        {
+                            Blocks[x, y] = Blocks[x, y + 1];
+                            Blocks[x, y + 1] = null;
+                        }
+                    }
+                }
+            }
         }
     }
 }

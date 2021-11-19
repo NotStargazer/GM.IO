@@ -9,6 +9,7 @@ namespace GM.Game
     {
         private float _duration;
         private float _deadline;
+        private bool _running;
 
         public float Duration
         {
@@ -21,15 +22,32 @@ namespace GM.Game
             return Time.time > _deadline;
         }
 
+        public bool HasStarted()
+        {
+            return _running;
+        }
+
         public void Start(float excess = 0)
         {
+            _running = true;
             _deadline = Time.time + _duration - excess;
+        }
+
+        public void Stop()
+        {
+            _running = false;
         }
 
         public void ExtendThisFrame()
         {
             var remaining = _deadline - Time.time;
             _deadline = Time.time + remaining + Time.deltaTime;
+        }
+
+        public void Extened(float amount)
+        {
+            var remaining = _deadline - Time.time;
+            _deadline = Time.time + remaining + amount;
         }
     }
 
@@ -38,12 +56,14 @@ namespace GM.Game
         public Timer SpawnTimer;
         public Timer DropTimer;
         public Timer LockTimer;
+        public Timer LineTimer;
 
         public void SetTimers(ProgressionState state)
         {
             SpawnTimer.Duration = state.SpawnDuration;
             DropTimer.Duration = state.DropDuration;
             LockTimer.Duration = state.LockDuration;
+            LineTimer.Duration = state.LineDuration;
         }
     }
 
@@ -85,6 +105,8 @@ namespace GM.Game
 
             _timers = new Timers();
             _timers.SetTimers(_progression.CurrentState);
+            _timers.SpawnTimer.Duration = 0;
+            _timers.SpawnTimer.Start();
         }
 
         public GameState LogicUpdate(IInput input)
@@ -94,10 +116,22 @@ namespace GM.Game
             {
                 _playfield.RenderBlocks(true);
 
-                if (_timers.SpawnTimer.HasExpired(out var spawnExcess))
+                if (_timers.LineTimer.HasStarted())
                 {
-                    _tetraBlock = _randomizer.GetNext();
+                    if (_timers.LineTimer.HasExpired(out var lineExcess))
+                    {
+                        _timers.SpawnTimer.Start(lineExcess);
+                        _timers.LineTimer.Stop();
+                        _grid.DropLines(_state.LinesCleared.ToArray());
+                        _playfield.Blocks = _grid.Blocks;
+                    }
+                }
+                else if (_timers.SpawnTimer.HasExpired(out var spawnExcess))
+                {
+                    _tetraBlock = _randomizer.GetNext(_grid);
                     _timers.DropTimer.Start(spawnExcess);
+                    _timers.LockTimer.Start(spawnExcess);
+                    _state.Reset();
                 }
 
                 if (_tetraBlock == null)
@@ -189,7 +223,13 @@ namespace GM.Game
 
         private void OnLock()
         {
-            _grid.LockTetraBlock(ref _tetraBlock);
+            _grid.LockTetraBlock(ref _tetraBlock, ref _state);
+
+            if (_state.LinesCleared.Count > 0)
+            {
+                _timers.LineTimer.Start();
+            }
+
             _tetraBlock = null;
             _playfield.Blocks = _grid.Blocks;
             _playfield.ResetFalling();

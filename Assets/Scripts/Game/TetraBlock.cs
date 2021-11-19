@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using GM.Data;
 using UnityEngine;
@@ -35,7 +34,7 @@ namespace GM.Game
         private Color _color;
         private bool _canFloorKick;
 
-        private int _gridSize;
+        private int _blockGridSize;
         private int _rotationIndex;
         private int _lowestPoint;
         private List<BlockSublist> _rotationStates;
@@ -43,13 +42,13 @@ namespace GM.Game
         public bool Landed { private set; get; }
         public bool IsAtLowestPoint { private set; get; }
 
-        public TetraBlock(BlockData tetraBlock, Vector4 textureST, Vector2Int gridSize)
+        public TetraBlock(BlockData tetraBlock, Vector4 textureST, BlockGrid grid)
         {
             _rotationStates = tetraBlock.RotationStates;
             _textureST = textureST;
             _color = tetraBlock.BlockColor;
             _canFloorKick = tetraBlock.CanFloorKick;
-            _gridSize = tetraBlock.GridSize;
+            _blockGridSize = tetraBlock.GridSize;
 
             var highestInitial = int.MinValue;
             var lowestInitial = int.MaxValue;
@@ -67,11 +66,13 @@ namespace GM.Game
             }
 
             IsAtLowestPoint = true;
-            var yPos = gridSize.y - highestInitial - 1;
-            var xPos = (gridSize.x >> 1) - Mathf.CeilToInt(tetraBlock.GridSize / 2f);
+            var yPos = grid.Size.y - highestInitial - 1;
+            var xPos = (grid.Size.x >> 1) - Mathf.CeilToInt(tetraBlock.GridSize / 2f);
 
-            _lowestPoint = gridSize.y - _gridSize - lowestInitial;
+            _lowestPoint = grid.Size.y - _blockGridSize - lowestInitial;
             _position = new Vector2Int(xPos, yPos);
+
+            PerformChecks(grid);
         }
 
         /// <summary>
@@ -182,9 +183,9 @@ namespace GM.Game
                 return false;
             }
 
-            if (_gridSize / 2 > 1)
+            if (_blockGridSize / 2 > 1)
             {
-                if (!Move(Direction.Left, grid, _gridSize / 2))
+                if (!Move(Direction.Left, grid, _blockGridSize / 2))
                 {
                     return false;
                 }
@@ -197,9 +198,9 @@ namespace GM.Game
                     return false;
                 }
 
-                if (_gridSize / 2 > 1)
+                if (_blockGridSize / 2 > 1)
                 {
-                    if (!Move(Direction.Up, grid, _gridSize / 2))
+                    if (!Move(Direction.Up, grid, _blockGridSize / 2))
                     {
                         return false;
                     }

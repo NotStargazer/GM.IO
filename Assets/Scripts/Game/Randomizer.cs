@@ -9,12 +9,12 @@ namespace GM.Game
         [SerializeField] private int _pieceHistoryCount;
         [SerializeField] private int _pieceRetryCount;
 
-        public TetraBlock GetNext()
+        public TetraBlock GetNext(BlockGrid grid)
         {
             return new TetraBlock(
                 _blockData.TetraBlocks[Random.Range(0, _blockData.TetraBlocks.Count)],
                 new Vector4(0.5f, 1),
-                GameData.GetInstance().GridSize);
+                grid);
         }
     }
 }

@@ -7,6 +7,7 @@ namespace GM.Game
         public float SpawnDuration;
         public float DropDuration;
         public float LockDuration;
+        public float LineDuration;
     }
 
     public class ProgressionController : MonoBehaviour
@@ -20,7 +21,8 @@ namespace GM.Game
             {
                 SpawnDuration = FRAME * 25,
                 DropDuration = FRAME * 64,
-                LockDuration = FRAME * 30
+                LockDuration = FRAME * 30,
+                LineDuration = FRAME * 32
             };
 
         public void Initialize()
