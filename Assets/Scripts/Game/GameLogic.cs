@@ -43,12 +43,6 @@ namespace GM.Game
             var remaining = _deadline - Time.time;
             _deadline = Time.time + remaining + Time.deltaTime;
         }
-
-        public void Extened(float amount)
-        {
-            var remaining = _deadline - Time.time;
-            _deadline = Time.time + remaining + amount;
-        }
     }
 
     public struct Timers
@@ -57,6 +51,8 @@ namespace GM.Game
         public Timer DropTimer;
         public Timer LockTimer;
         public Timer LineTimer;
+        public Timer AutoShiftTimer;
+        public Timer ShiftCooldownTimer;
 
         public void SetTimers(ProgressionState state)
         {
@@ -64,6 +60,8 @@ namespace GM.Game
             DropTimer.Duration = state.DropDuration;
             LockTimer.Duration = state.LockDuration;
             LineTimer.Duration = state.LineDuration;
+            AutoShiftTimer.Duration = state.AutoShiftDuration;
+            ShiftCooldownTimer.Duration = ProgressionController.SingleFrame;
         }
     }
 
@@ -160,11 +158,37 @@ namespace GM.Game
             {
                 _tetraBlock.Move(direction > 0 ? Direction.Right : Direction.Left, _grid);
                 _playfield.SetFallingPosition(_tetraBlock.GetPositions());
+                _timers.AutoShiftTimer.Start();
+            }
+
+            if (input.ButtonHold(Actions.Move, out float autoDirection))
+            {
+                if (input.ButtonUp(Actions.Move))
+                {
+                    _timers.AutoShiftTimer.Start();
+                }
+
+                if (_timers.AutoShiftTimer.HasExpired(out _))
+                {
+                    if (_timers.ShiftCooldownTimer.HasExpired(out var shiftExcess) && _timers.AutoShiftTimer.HasStarted())
+                    {
+                        if (_tetraBlock.Move(autoDirection > 0 ? Direction.Right : Direction.Left, _grid))
+                        {
+                            _timers.AutoShiftTimer.Stop();
+                        }
+                        _playfield.SetFallingPosition(_tetraBlock.GetPositions());
+                        _timers.ShiftCooldownTimer.Start(_timers.ShiftCooldownTimer.HasStarted() ? shiftExcess : 0);
+                    }
+                }
+                else
+                {
+                    _timers.ShiftCooldownTimer.Stop();
+                }
             }
 
             if (input.ButtonHold(Actions.DropLock))
             {
-                _timers.DropTimer.Duration = _progression.FastDropDuration;
+                _timers.DropTimer.Duration = ProgressionController.SingleFrame;
 
                 if (input.ButtonDown(Actions.DropLock))
                 {

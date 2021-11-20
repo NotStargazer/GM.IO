@@ -36,6 +36,7 @@ namespace GM
 
             private bool _previousFrame;
             private readonly InputAction _input;
+            private object _oldValue;
 
             public InputRead(InputAction action)
             {
@@ -45,6 +46,7 @@ namespace GM
 
                 _previousFrame = false;
                 _input = action;
+                _oldValue = null;
             }
 
             public void UpdateInput()
@@ -59,6 +61,8 @@ namespace GM
 
             public T ReadValue<T>() where T : struct
             {
+                IsPressed = _oldValue != _input.ReadValueAsObject();
+                _oldValue = _input.ReadValueAsObject();
                 return _input.ReadValue<T>();
             }
         }
@@ -88,48 +92,36 @@ namespace GM
 
         public bool ButtonDown(Actions action)
         {
-            var buttonAction = _actions[action];
-
-            return buttonAction.IsPressed;
+            return _actions[action].IsPressed;
         }
 
         public bool ButtonDown<T>(Actions action, out T outValue) where T : struct
         {
-            var buttonAction = _actions[action];
+            outValue = _actions[action].ReadValue<T>();
 
-            outValue = buttonAction.ReadValue<T>();
-
-            return buttonAction.IsPressed;
+            return _actions[action].IsPressed;
         }
 
         public bool ButtonHold(Actions action)
         {
-            var buttonAction = _actions[action];
-
-            return buttonAction.IsHeld;
+            return _actions[action].IsHeld;
         }
 
         public bool ButtonHold<T>(Actions action, out T outValue) where T : struct
         {
-            var buttonAction = _actions[action];
-
-            outValue = buttonAction.ReadValue<T>();
-            return buttonAction.IsHeld;
+            outValue = _actions[action].ReadValue<T>();
+            return _actions[action].IsHeld;
         }
 
         public bool ButtonUp(Actions action)
         {
-            var buttonAction = _actions[action];
-
-            return buttonAction.IsReleased;
+            return _actions[action].IsReleased;
         }
 
         public bool ButtonUp<T>(Actions action, out T outValue) where T : struct
         {
-            var buttonAction = _actions[action];
-
-            outValue = buttonAction.ReadValue<T>();
-            return buttonAction.IsReleased;
+            outValue = _actions[action].ReadValue<T>();
+            return _actions[action].IsReleased;
         }
     }
 

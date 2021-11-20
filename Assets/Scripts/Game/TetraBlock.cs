@@ -105,7 +105,7 @@ namespace GM.Game
 
             if (CheckCollisions(grid) && CheckKicks(grid))
             {
-                _rotationIndex -= previousIndex;
+                _rotationIndex = previousIndex;
             }
 
             PerformChecks(grid);
@@ -178,17 +178,17 @@ namespace GM.Game
                 return false;
             }
 
-            if (!Move(Direction.Left, grid))
-            {
-                return false;
-            }
-
             if (_blockGridSize / 2 > 1)
             {
-                if (!Move(Direction.Left, grid, _blockGridSize / 2))
+                if (!Move(Direction.Right, grid, _blockGridSize / 2))
                 {
                     return false;
                 }
+            }
+
+            if (!Move(Direction.Left, grid))
+            {
+                return false;
             }
 
             if (_canFloorKick)
