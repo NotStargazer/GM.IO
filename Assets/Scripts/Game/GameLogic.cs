@@ -67,7 +67,6 @@ namespace GM.Game
 
     /*
      * ==>
-     * => Set Timers
      * => Get new TetraBlock
      * => Update Main Input Logic
      * => [Wait for block lock]
@@ -88,7 +87,7 @@ namespace GM.Game
         private GameState _state;
         private TetraBlock _tetraBlock;
 
-        [SerializeField] private Randomizer _randomizer;
+        [SerializeField] private TetraBlockFactory _tetraBlockFactory;
         [SerializeField] private PlayfieldRenderer _playfield;
         [SerializeField] private ProgressionController _progression;
 
@@ -97,7 +96,7 @@ namespace GM.Game
             var instance = GameData.GetInstance();
             _grid = new BlockGrid(instance.GridSize, instance.ExcessHeight);
             _state = new GameState();
-            //_randomizer.Initialize();
+            _tetraBlockFactory.Initialize();
             _playfield.Initialize();
             _progression.Initialize();
 
@@ -126,7 +125,7 @@ namespace GM.Game
                 }
                 else if (_timers.SpawnTimer.HasExpired(out var spawnExcess))
                 {
-                    _tetraBlock = _randomizer.GetNext(_grid);
+                    _tetraBlock = _tetraBlockFactory.GetNext(_grid);
                     _timers.DropTimer.Start(spawnExcess);
                     _timers.LockTimer.Start(spawnExcess);
                     _state.Reset();
@@ -142,6 +141,19 @@ namespace GM.Game
             }
 
             // => Update Main Input Logic
+            if (input.ButtonDown(Actions.SonicDrop))
+            {
+                for (var i = 0; i < _grid.Size.y; i++)
+                {
+                    if (_tetraBlock.Move(Direction.Down, _grid))
+                    {
+                        break;
+                    }
+                }
+
+                _playfield.SetFallingPosition(_tetraBlock.GetPositions());
+            }
+
             if (input.ButtonDown(Actions.Rotation, out float rotation))
             {
                 _tetraBlock.Rotate(Mathf.RoundToInt(rotation), _grid);
@@ -264,9 +276,9 @@ namespace GM.Game
 
         private void Awake()
         {
-            if (!_randomizer)
+            if (!_tetraBlockFactory)
             {
-                throw new ArgumentNullException(nameof(_randomizer));
+                throw new ArgumentNullException(nameof(_tetraBlockFactory));
             }
 
             if (!_playfield)

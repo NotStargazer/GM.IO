@@ -133,7 +133,7 @@ public class @GMIO : IInputActionCollection, IDisposable
                     ""name"": """",
                     ""id"": ""0e9abd38-f91d-42af-bd62-3b0834b3a25b"",
                     ""path"": ""<Keyboard>/space"",
-                    ""interactions"": """",
+                    ""interactions"": ""Press"",
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
                     ""action"": ""Sonic Drop"",

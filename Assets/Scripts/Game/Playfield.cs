@@ -7,7 +7,7 @@ namespace GM.Game
     public class Playfield : MonoBehaviour
     {
         [SerializeField] private PlayfieldRenderer _renderer;
-        [SerializeField] private Randomizer _blockData;
+        [SerializeField] private TetraBlockFactory _blockData;
 
         public void OnReceiveInputs(IInput input)
         {

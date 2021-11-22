@@ -102,6 +102,7 @@ namespace GM.Editor
             blockData.GridSize = Mathf.Clamp(EditorGUILayout.IntField("Grid Size", blockData.GridSize), 2, 4);
             blockData.StateCount = Mathf.Clamp(EditorGUILayout.IntField("Rotation State Count", blockData.StateCount), 1, 4);
             blockData.CanFloorKick = EditorGUILayout.Toggle("Can Piece Floor Kick", blockData.CanFloorKick);
+            blockData.ExcludeFromGameStart = EditorGUILayout.Toggle("Excluded from game start", blockData.ExcludeFromGameStart);
 
             //State Editor
             if (blockData.RotationStates.Count != blockData.StateCount)

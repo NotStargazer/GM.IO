@@ -19,6 +19,7 @@ namespace GM.Data
         public List<BlockSublist> RotationStates;
         public Color BlockColor;
         public bool CanFloorKick;
+        public bool ExcludeFromGameStart;
     }
 
     [CreateAssetMenu(fileName = "TetraBlock", menuName = "GM/TetraBlock")]
