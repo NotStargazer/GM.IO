@@ -98,6 +98,7 @@ namespace GM.Editor
             emptyColor.Apply();
 
             //Value Editor
+            blockData.Name = EditorGUILayout.TextField("Name", blockData.Name);
             blockData.BlockColor = EditorGUILayout.ColorField("Block Color", blockData.BlockColor);
             blockData.GridSize = Mathf.Clamp(EditorGUILayout.IntField("Grid Size", blockData.GridSize), 2, 4);
             blockData.StateCount = Mathf.Clamp(EditorGUILayout.IntField("Rotation State Count", blockData.StateCount), 1, 4);
@@ -179,6 +180,8 @@ namespace GM.Editor
                 }
             }
             EditorGUILayout.EndHorizontal();
+
+            EditorUtility.SetDirty(data);
         }
     }
 }

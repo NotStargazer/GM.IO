@@ -13,17 +13,21 @@ MonoBehaviour:
   m_Name: TetraBlocks_Regular
   m_EditorClassIdentifier: 
   TetraBlocks:
-  - ID: 0
+  - Name: O
+    ID: 0
     StateCount: 1
     GridSize: 2
     RotationStates:
     - Blocks:
       - {x: 0, y: 0}
       - {x: 1, y: 0}
-      - {x: 0, y: 1}
       - {x: 1, y: 1}
+      - {x: 0, y: 1}
     BlockColor: {r: 1, g: 1, b: 0, a: 1}
-  - ID: 1
+    CanFloorKick: 0
+    ExcludeFromGameStart: 0
+  - Name: S
+    ID: 1
     StateCount: 2
     GridSize: 3
     RotationStates:
@@ -38,7 +42,10 @@ MonoBehaviour:
       - {x: 1, y: 1}
       - {x: 0, y: 2}
     BlockColor: {r: 1, g: 0, b: 1, a: 1}
-  - ID: 2
+    CanFloorKick: 0
+    ExcludeFromGameStart: 1
+  - Name: Z
+    ID: 2
     StateCount: 2
     GridSize: 3
     RotationStates:
@@ -53,7 +60,10 @@ MonoBehaviour:
       - {x: 2, y: 1}
       - {x: 1, y: 0}
     BlockColor: {r: 0, g: 1, b: 0, a: 1}
-  - ID: 3
+    CanFloorKick: 0
+    ExcludeFromGameStart: 1
+  - Name: L
+    ID: 3
     StateCount: 4
     GridSize: 3
     RotationStates:
@@ -78,7 +88,10 @@ MonoBehaviour:
       - {x: 2, y: 0}
       - {x: 1, y: 0}
     BlockColor: {r: 1, g: 0.5019608, b: 0.2509804, a: 1}
-  - ID: 4
+    CanFloorKick: 0
+    ExcludeFromGameStart: 0
+  - Name: J
+    ID: 4
     StateCount: 4
     GridSize: 3
     RotationStates:
@@ -103,7 +116,10 @@ MonoBehaviour:
       - {x: 2, y: 2}
       - {x: 1, y: 0}
     BlockColor: {r: 0, g: 0, b: 1, a: 1}
-  - ID: 5
+    CanFloorKick: 0
+    ExcludeFromGameStart: 0
+  - Name: T
+    ID: 5
     StateCount: 4
     GridSize: 3
     RotationStates:
@@ -128,7 +144,10 @@ MonoBehaviour:
       - {x: 2, y: 1}
       - {x: 1, y: 2}
     BlockColor: {r: 0, g: 1, b: 1, a: 1}
-  - ID: 6
+    CanFloorKick: 1
+    ExcludeFromGameStart: 0
+  - Name: I
+    ID: 6
     StateCount: 2
     GridSize: 4
     RotationStates:
@@ -143,3 +162,5 @@ MonoBehaviour:
       - {x: 2, y: 2}
       - {x: 2, y: 3}
     BlockColor: {r: 1, g: 0, b: 0, a: 1}
+    CanFloorKick: 1
+    ExcludeFromGameStart: 0

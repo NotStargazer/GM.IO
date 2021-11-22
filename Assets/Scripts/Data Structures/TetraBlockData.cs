@@ -13,6 +13,8 @@ namespace GM.Data
     [Serializable]
     public struct BlockData
     {
+        public string Name;
+
         public int ID;
         public int StateCount;
         public int GridSize;
@@ -20,6 +22,11 @@ namespace GM.Data
         public Color BlockColor;
         public bool CanFloorKick;
         public bool ExcludeFromGameStart;
+
+        public override string ToString()
+        {
+            return Name;
+        }
     }
 
     [CreateAssetMenu(fileName = "TetraBlock", menuName = "GM/TetraBlock")]
