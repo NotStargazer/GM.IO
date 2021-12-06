@@ -96,9 +96,9 @@ namespace GM.Game
             var instance = GameData.GetInstance();
             _grid = new BlockGrid(instance.GridSize, instance.ExcessHeight);
             _state = new GameState();
-            _tetraBlockFactory.Initialize();
-            _playfield.Initialize();
             _progression.Initialize();
+            _tetraBlockFactory.Initialize(new Vector4(0.5f, 1f));
+            _playfield.Initialize();
 
             _timers = new Timers();
             _timers.SetTimers(_progression.CurrentState);
@@ -112,6 +112,7 @@ namespace GM.Game
             if (_tetraBlock == null)
             {
                 _playfield.RenderBlocks(true);
+                _tetraBlockFactory.RenderQueue();
 
                 if (_timers.LineTimer.HasStarted())
                 {
@@ -213,6 +214,7 @@ namespace GM.Game
                     OnLock();
                     _timers.SpawnTimer.Start();
                     _playfield.RenderBlocks();
+                    _tetraBlockFactory.RenderQueue();
 
                     // => Return State
                     return _state;
@@ -251,6 +253,7 @@ namespace GM.Game
             }
 
             _playfield.RenderBlocks();
+            _tetraBlockFactory.RenderQueue();
 
             // => Return State
             return _state;

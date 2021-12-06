@@ -1,3 +1,4 @@
+using System;
 using GM.Game;
 using GM.UI;
 using UnityEngine;
@@ -20,17 +21,6 @@ namespace GM.Data
             GameLogic = GetComponent<GameLogic>();
         }
 
-        private void Awake()
-        {
-            if (INSTANCE)
-            {
-                Debug.Log("Multiple GameData objects detected, you don't want this, deleting.");
-                Destroy(gameObject);
-            }
-
-            INSTANCE = this;
-        }
-
         //Game Controllers
         public GameLogic GameLogic;
 
@@ -42,5 +32,28 @@ namespace GM.Data
         [Header("Playfield Data")]
         public Vector2Int GridSize;
         public int ExcessHeight;
+        public Mesh BlockMesh;
+        public Material BlockMaterial;
+
+        private void Awake()
+        {
+            if (INSTANCE)
+            {
+                Debug.Log("Multiple GameData objects detected, you don't want this, deleting.");
+                Destroy(gameObject);
+            }
+
+            INSTANCE = this;
+
+            if (!BlockMesh)
+            {
+                throw new ArgumentNullException(nameof(BlockMesh));
+            }
+
+            if (!BlockMaterial)
+            {
+                throw new ArgumentNullException(nameof(BlockMaterial));
+            }
+        }
     }
 }

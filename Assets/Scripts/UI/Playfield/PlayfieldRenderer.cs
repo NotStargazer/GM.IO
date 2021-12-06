@@ -20,9 +20,7 @@ namespace GM.UI
         
         [SerializeField] private MeshFilter _filter;
         [SerializeField] private MeshRenderer _renderer;
-        [SerializeField] private Mesh _cubeMesh;
         [SerializeField] private Material _borderMaterial;
-        [SerializeField] private Material _blockMaterial;
 
         //Border Properties
         private Mesh _borderMesh;
@@ -106,10 +104,6 @@ namespace GM.UI
             if (!_borderMaterial)
             {
                 throw new ArgumentNullException(nameof(_borderMaterial));
-            }
-            if (!_cubeMesh)
-            {
-                throw new ArgumentNullException(nameof(_cubeMesh));
             }
 
             //Initialize Variables
@@ -246,14 +240,16 @@ namespace GM.UI
             _fallingTransforms = null;
         }
 
-        public void RenderBlocks(bool excluseFalling = false)
+        public void RenderBlocks(bool excludeFalling = false)
         {
+            var gameData = GameData.GetInstance();
+
             if (_blockCount != 0)
             {
                 Graphics.DrawMeshInstanced(
-                    mesh: _cubeMesh,
+                    mesh: gameData.BlockMesh,
                     submeshIndex: 0,
-                    material: _blockMaterial,
+                    material: gameData.BlockMaterial,
                     matrices: _staticTransforms,
                     properties: _staticProperties,
                     castShadows: ShadowCastingMode.Off,
@@ -264,9 +260,9 @@ namespace GM.UI
             if (_fallingTransforms != null)
             {
                 Graphics.DrawMeshInstanced(
-                    mesh: _cubeMesh,
+                    mesh: gameData.BlockMesh,
                     submeshIndex: 0,
-                    material: _blockMaterial,
+                    material: gameData.BlockMaterial,
                     matrices: _fallingTransforms,
                     properties: _fallingProperties,
                     castShadows: ShadowCastingMode.Off,
