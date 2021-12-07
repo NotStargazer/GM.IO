@@ -9,7 +9,9 @@ Shader "Unlit/BlockShader"
 	}
 		SubShader
 		{
-			Tags { "RenderType" = "Opaque" }
+			Tags { "RenderType" = "Transparent" }
+			ZWrite Off
+			Blend SrcAlpha OneMinusSrcAlpha
 			LOD 100
 
 			Pass

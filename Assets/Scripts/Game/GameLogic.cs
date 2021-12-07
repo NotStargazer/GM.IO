@@ -142,10 +142,9 @@ namespace GM.Game
                     _state.Reset();
 
                     //Pre-Rotation
-                    if (input.ButtonHold(Actions.Move))
+                    if (input.ButtonHold(Actions.Rotation, out float preRotate))
                     {
-                        _timers.ShiftCooldownTimer.Start(spawnExcess);
-                        _timers.AutoShiftTimer.Start(10);
+                        _tetraBlock.Rotate(Mathf.RoundToInt(preRotate), _grid);
                     }
                 }
 
@@ -155,7 +154,7 @@ namespace GM.Game
                 }
 
                 _playfield.SetFallingProperties(_tetraBlock.GetBlock());
-                _playfield.SetFallingPosition(_tetraBlock.GetPositions());
+                _playfield.SetFallingPosition(_tetraBlock.GetPositions(), _grid);
             }
 
             // => Update Main Input Logic
@@ -169,7 +168,7 @@ namespace GM.Game
                     }
                 }
 
-                _playfield.SetFallingPosition(_tetraBlock.GetPositions());
+                _playfield.SetFallingPosition(_tetraBlock.GetPositions(), _grid);
             }
 
             if (input.ButtonDown(Actions.Rotation, out float rotation))
@@ -184,12 +183,12 @@ namespace GM.Game
                     _timers.AutoShiftTimer.Start(10);
                 }
 
-                _playfield.SetFallingPosition(_tetraBlock.GetPositions());
+                _playfield.SetFallingPosition(_tetraBlock.GetPositions(), _grid);
             }
             else if (input.ButtonDown(Actions.Move, out float direction))
             {
                 _tetraBlock.Move(direction > 0 ? Direction.Right : Direction.Left, _grid);
-                _playfield.SetFallingPosition(_tetraBlock.GetPositions());
+                _playfield.SetFallingPosition(_tetraBlock.GetPositions(), _grid);
                 _timers.AutoShiftTimer.Start();
             }
 
@@ -208,7 +207,7 @@ namespace GM.Game
                         {
                             _timers.AutoShiftTimer.Stop();
                         }
-                        _playfield.SetFallingPosition(_tetraBlock.GetPositions());
+                        _playfield.SetFallingPosition(_tetraBlock.GetPositions(), _grid);
                         _timers.ShiftCooldownTimer.Start(_timers.ShiftCooldownTimer.HasStarted() ? shiftExcess : 0);
                     }
                 }
@@ -267,7 +266,7 @@ namespace GM.Game
                         _timers.LockTimer.Start(dropExcess);
                         _timers.DropTimer.Start(dropExcess);
                     }
-                    _playfield.SetFallingPosition(_tetraBlock.GetPositions());
+                    _playfield.SetFallingPosition(_tetraBlock.GetPositions(), _grid);
                 }
             }
 

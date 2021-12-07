@@ -21,6 +21,7 @@ namespace GM.UI
         [SerializeField] private MeshFilter _filter;
         [SerializeField] private MeshRenderer _renderer;
         [SerializeField] private Material _borderMaterial;
+        [Range(0, 1)] [SerializeField] private float _ghostTransparency;
 
         //Border Properties
         private Mesh _borderMesh;
@@ -34,12 +35,14 @@ namespace GM.UI
         private int _blockCount;
         private Matrix4x4[] _staticTransforms;
         private Matrix4x4[] _fallingTransforms;
+        private Matrix4x4[] _ghostTransforms;
         private Vector4[] _colors;
         private Vector4[] _textureST;
         private Vector4[] _outlineLines;
         private Vector4[] _outlineCorners;
         private MaterialPropertyBlock _staticProperties;
         private MaterialPropertyBlock _fallingProperties;
+        private MaterialPropertyBlock _ghostProperties;
 
         public Block?[,] Blocks
         {
@@ -110,6 +113,7 @@ namespace GM.UI
             _basePosition = transform.position + new Vector3(0.5f, 0.5f);
             _staticProperties = new MaterialPropertyBlock();
             _fallingProperties = new MaterialPropertyBlock();
+            _ghostProperties = new MaterialPropertyBlock();
 
             var gameData = GameData.GetInstance();
             _gridSize = gameData.GridSize;
@@ -198,40 +202,75 @@ namespace GM.UI
 
         public void SetFallingProperties(Block block)
         {
-            _fallingProperties.SetVectorArray(INSTANCE_COLORS, new Vector4[]
-            {
-                block.Color.linear,
-                block.Color.linear,
-                block.Color.linear,
-                block.Color.linear
-            });
+            var blockColors = new Vector4[4];
+            var ghostColors = new Vector4[4];
+            var textureST = new Vector4[4];
+            var outlineL = new Vector4[4];
+            var outlineC = new Vector4[4];
 
-            _fallingProperties.SetVectorArray(INSTANCE_ST, new []
-            {
-                block.TextureST,
-                block.TextureST,
-                block.TextureST,
-                block.TextureST
-            });
+            _ghostProperties.SetVectorArray(INSTANCE_OUTLINEL, outlineL);
+            _ghostProperties.SetVectorArray(INSTANCE_OUTLINEC, outlineC);
 
-            _fallingProperties.SetVectorArray(INSTANCE_OUTLINEL, new Vector4[4]);
-            _fallingProperties.SetVectorArray(INSTANCE_OUTLINEC, new Vector4[4]);
+            for (var blockIndex = 0; blockIndex < 4; blockIndex++)
+            {
+                var col = block.Color.linear;
+                blockColors[blockIndex] = col;
+                col.a = 0.5f;
+                ghostColors[blockIndex] = col;
+                textureST[blockIndex] = block.TextureST;
+            }
+
+            _fallingProperties.SetVectorArray(INSTANCE_COLORS, blockColors);
+            _ghostProperties.SetVectorArray(INSTANCE_COLORS, ghostColors);
+
+            _fallingProperties.SetVectorArray(INSTANCE_ST, textureST);
+            _ghostProperties.SetVectorArray(INSTANCE_ST, textureST);
+
+            _fallingProperties.SetVectorArray(INSTANCE_OUTLINEL, outlineL);
+            _fallingProperties.SetVectorArray(INSTANCE_OUTLINEC, outlineC);
         }
 
-        public void SetFallingPosition(Vector2Int[] positions)
+        public void SetFallingPosition(Vector2Int[] positions, BlockGrid grid)
         {
             var newTransforms = new List<Matrix4x4>();
+            var ghostTransforms = new List<Matrix4x4>();
+
+            var offset = 1;
+            var didCollide = false;
+
+            while (!didCollide)
+            {
+                foreach (var position in positions)
+                {
+                    if (grid.CheckCollision(new Vector2Int(position.x, position.y - offset)))
+                    {
+                        didCollide = true;
+                        offset--;
+                        break;
+                    }
+                }
+
+                if (!didCollide)
+                {
+                    offset++;
+                }
+            }
 
             foreach (var position in positions)
             {
                 if (position.y < _gridSize.y)
-                { 
+                {
                     var matrix = new Matrix4x4();
                     matrix.SetTRS(new Vector3(position.x, position.y) + _basePosition, _baseRotation, Vector3.one);
                     newTransforms.Add(matrix);
                 }
+
+                var ghost = new Matrix4x4();
+                ghost.SetTRS(new Vector3(position.x, position.y - offset) + _basePosition, _baseRotation, Vector3.one);
+                ghostTransforms.Add(ghost);
             }
 
+            _ghostTransforms = ghostTransforms.ToArray();
             _fallingTransforms = newTransforms.ToArray();
         }
 
@@ -240,7 +279,7 @@ namespace GM.UI
             _fallingTransforms = null;
         }
 
-        public void RenderBlocks(bool excludeFalling = false)
+        public void RenderBlocks(bool renderGhost = true)
         {
             var gameData = GameData.GetInstance();
 
@@ -269,7 +308,23 @@ namespace GM.UI
                     receiveShadows: false,
                     count: _fallingTransforms.Length);
             }
+            else
+            {
+                return;
+            }
 
+            if (renderGhost && _ghostTransforms != null)
+            {
+                Graphics.DrawMeshInstanced(
+                    mesh: gameData.BlockMesh,
+                    submeshIndex: 0,
+                    material: gameData.BlockMaterial,
+                    matrices: _ghostTransforms,
+                    properties: _ghostProperties,
+                    castShadows: ShadowCastingMode.Off,
+                    receiveShadows: false,
+                    count: _ghostTransforms.Length);
+            }
         }
 
         private void OnValidate()
