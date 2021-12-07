@@ -215,7 +215,7 @@ namespace GM.UI
             {
                 var col = block.Color.linear;
                 blockColors[blockIndex] = col;
-                col.a = 0.5f;
+                col.a = _ghostTransparency;
                 ghostColors[blockIndex] = col;
                 textureST[blockIndex] = block.TextureST;
             }

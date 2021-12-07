@@ -114,16 +114,6 @@ namespace GM.Game
                 _playfield.RenderBlocks();
                 _tetraBlockFactory.RenderQueue();
 
-                if (input.ButtonDown(Actions.Move))
-                {
-                    _timers.AutoShiftTimer.Start();
-                }
-
-                if (input.ButtonUp(Actions.Move))
-                {
-                    _timers.AutoShiftTimer.Stop();
-                }
-
                 if (_timers.LineTimer.HasStarted())
                 {
                     if (_timers.LineTimer.HasExpired(out var lineExcess))
@@ -139,6 +129,7 @@ namespace GM.Game
                     _tetraBlock = _tetraBlockFactory.GetNext(_grid);
                     _timers.DropTimer.Start(spawnExcess);
                     _timers.LockTimer.Start(spawnExcess);
+                    _timers.ShiftCooldownTimer.Start();
                     _state.Reset();
 
                     //Pre-Rotation
@@ -146,6 +137,16 @@ namespace GM.Game
                     {
                         _tetraBlock.Rotate(Mathf.RoundToInt(preRotate), _grid);
                     }
+                }
+
+                if (input.ButtonDown(Actions.Move))
+                {
+                    _timers.AutoShiftTimer.Start();
+                }
+
+                if (input.ButtonUp(Actions.Move))
+                {
+                    _timers.AutoShiftTimer.Stop();
                 }
 
                 if (_tetraBlock == null)
@@ -179,8 +180,6 @@ namespace GM.Game
                 if (input.ButtonHold(Actions.Move, out float direction))
                 {
                     _tetraBlock.Move(direction > 0 ? Direction.Right : Direction.Left, _grid);
-                    _timers.ShiftCooldownTimer.Start();
-                    _timers.AutoShiftTimer.Start(10);
                 }
 
                 _playfield.SetFallingPosition(_tetraBlock.GetPositions(), _grid);
@@ -192,6 +191,7 @@ namespace GM.Game
                 _timers.AutoShiftTimer.Start();
             }
 
+            //Delayed Auto Shift
             if (input.ButtonHold(Actions.Move, out float autoDirection))
             {
                 if (input.ButtonUp(Actions.Move))

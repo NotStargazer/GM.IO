@@ -262,6 +262,7 @@ MonoBehaviour:
   _filter: {fileID: 1318293840}
   _renderer: {fileID: 1318293839}
   _borderMaterial: {fileID: 2100000, guid: 6f63c7fdc3a511149bbd866b727ceba7, type: 2}
+  _ghostTransparency: 0.25
 --- !u!23 &1318293839
 MeshRenderer:
   m_ObjectHideFlags: 0
