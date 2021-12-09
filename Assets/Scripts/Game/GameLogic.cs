@@ -38,6 +38,11 @@ namespace GM.Game
             _running = false;
         }
 
+        public void Enable()
+        {
+            _running = true;
+        }
+
         public void ExtendThisFrame()
         {
             var remaining = _deadline - Time.time;
@@ -112,7 +117,7 @@ namespace GM.Game
             if (_tetraBlock == null)
             {
                 _playfield.RenderBlocks();
-                _tetraBlockFactory.RenderQueue();
+                _tetraBlockFactory.Render();
 
                 if (_timers.LineTimer.HasStarted())
                 {
@@ -131,6 +136,12 @@ namespace GM.Game
                     _timers.LockTimer.Start(spawnExcess);
                     _timers.ShiftCooldownTimer.Start();
                     _state.Reset();
+
+                    //Pre-Hold
+                    if (input.ButtonHold(Actions.Hold))
+                    {
+                        _tetraBlockFactory.GetHold(ref _tetraBlock, _grid);
+                    }
 
                     //Pre-Rotation
                     if (input.ButtonHold(Actions.Rotation, out float preRotate))
@@ -159,6 +170,25 @@ namespace GM.Game
             }
 
             // => Update Main Input Logic
+            if (input.ButtonDown(Actions.Hold))
+            {
+                _tetraBlockFactory.GetHold(ref _tetraBlock, _grid);
+
+                _timers.DropTimer.Start(Time.deltaTime);
+                _timers.LockTimer.Start(Time.deltaTime);
+                _timers.ShiftCooldownTimer.Start();
+                _timers.AutoShiftTimer.Enable();
+
+                //Pre-Rotation
+                if (input.ButtonHold(Actions.Rotation, out float preRotate))
+                {
+                    _tetraBlock.Rotate(Mathf.RoundToInt(preRotate), _grid);
+                }
+
+                _playfield.SetFallingProperties(_tetraBlock.GetBlock());
+                _playfield.SetFallingPosition(_tetraBlock.GetPositions(), _grid);
+            }
+
             if (input.ButtonDown(Actions.SonicDrop))
             {
                 for (var i = 0; i < _grid.Size.y; i++)
@@ -174,12 +204,14 @@ namespace GM.Game
 
             if (input.ButtonDown(Actions.Rotation, out float rotation))
             {
+                var isLanded = _tetraBlock.Landed;
                 _tetraBlock.Rotate(Mathf.RoundToInt(rotation), _grid);
+                _timers.AutoShiftTimer.Enable();
 
                 //Syncro
-                if (input.ButtonHold(Actions.Move, out float direction))
+                if (input.ButtonHold(Actions.Move, out float direction) && isLanded)
                 {
-                    _tetraBlock.Move(direction > 0 ? Direction.Right : Direction.Left, _grid);
+                    _tetraBlock.Move(direction > 0 ? Direction.Right : Direction.Left, _grid);  
                 }
 
                 _playfield.SetFallingPosition(_tetraBlock.GetPositions(), _grid);
@@ -232,7 +264,7 @@ namespace GM.Game
                     OnLock();
                     _timers.SpawnTimer.Start();
                     _playfield.RenderBlocks();
-                    _tetraBlockFactory.RenderQueue();
+                    _tetraBlockFactory.Render();
 
                     // => Return State
                     return _state;
@@ -271,7 +303,7 @@ namespace GM.Game
             }
 
             _playfield.RenderBlocks();
-            _tetraBlockFactory.RenderQueue();
+            _tetraBlockFactory.Render();
 
             // => Return State
             return _state;

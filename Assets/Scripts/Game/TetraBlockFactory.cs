@@ -17,16 +17,22 @@ namespace GM.Game
         [SerializeField] private int _pieceRetryCount;
         [SerializeField] private int _queueSize;
         [Range(0f, 1f)] [SerializeField] private float _queueSecondarySize;
+        [SerializeField] private Color _holdLockColor;
 
         private Queue<BlockData> _queue;
         private Queue<BlockData> _history;
         private List<BlockData> _pool;
         private List<BlockData> _order;
 
-        private Matrix4x4[] _transforms;
+        private Matrix4x4[] _queueTransforms;
+        private Matrix4x4[] _holdTransforms;
         private Vector4[] _colors;
         private Vector4[] _textureST;
-        private MaterialPropertyBlock _properties;
+        private MaterialPropertyBlock _queueProperties;
+        private MaterialPropertyBlock _holdProperties;
+
+        private bool _holdLocked;
+        private TetraBlock _holdBlock;
 
         private readonly Quaternion _baseRotation = new Quaternion(0, 0, 1, 0);
         private Vector3 _basePosition;
@@ -37,7 +43,8 @@ namespace GM.Game
 
             _colors = new Vector4[_queueSize * 4];
             _textureST = new Vector4[_queueSize * 4];
-            _properties = new MaterialPropertyBlock();
+            _queueProperties = new MaterialPropertyBlock();
+            _holdProperties = new MaterialPropertyBlock();
 
             _queue = new Queue<BlockData>(_queueSize);
             _history = new Queue<BlockData>(_pieceHistoryCount);
@@ -91,28 +98,97 @@ namespace GM.Game
             UpdateQueue(textureST);
         }
 
-        
-
-        public TetraBlock GetNext(BlockGrid grid)
+        public TetraBlock GetNext(BlockGrid grid, bool holdLock = false)
         {
+            var oldLock = _holdLocked;
+            _holdLocked = holdLock;
+
+            if (_holdBlock != null && _holdLocked != oldLock)
+            {
+                UpdateHold(_holdBlock);
+            }
+
             var newPiece = new TetraBlock(_queue.Dequeue(), new Vector4(0.5f, 1f), grid);
             EnqueueNew();
             UpdateQueue(new Vector4(0.5f, 1f));
             return newPiece;
         }
 
-        public void RenderQueue()
+        public bool GetHold(ref TetraBlock tetraBlock, BlockGrid grid)
+        {
+            if (_holdLocked)
+            {
+                return false;
+            }
+
+            tetraBlock.Reset();
+
+            if (_holdBlock == null)
+            {
+                _holdBlock = tetraBlock;
+                tetraBlock = GetNext(grid, holdLock: true);
+                return true;
+            }
+
+            _holdLocked = true;
+            (_holdBlock, tetraBlock) = (tetraBlock, _holdBlock);
+            UpdateHold(_holdBlock);
+            return true;
+        }
+
+        public void Render()
         {
             var gameData = GameData.GetInstance();
             Graphics.DrawMeshInstanced(
                 mesh: gameData.BlockMesh,
                 submeshIndex: 0,
                 material: gameData.BlockMaterial,
-                matrices: _transforms,
-                properties: _properties,
+                matrices: _queueTransforms,
+                properties: _queueProperties,
                 castShadows: ShadowCastingMode.Off,
                 receiveShadows: false,
                 count: 4 * _queueSize);
+
+            if (_holdTransforms != null)
+            {
+                Graphics.DrawMeshInstanced(
+                    mesh: gameData.BlockMesh,
+                    submeshIndex: 0,
+                    material: gameData.BlockMaterial,
+                    matrices: _holdTransforms,
+                    properties: _holdProperties,
+                    castShadows: ShadowCastingMode.Off,
+                    receiveShadows: false,
+                    count: 4);
+            }
+        }
+
+        private void UpdateHold(TetraBlock tetraBlock)
+        {
+            var size = Vector3.one * _queueSecondarySize;
+            var colors = new Vector4[4];
+            var textureSTs = new Vector4[4];
+            _holdTransforms = new Matrix4x4[4];
+
+            var block = tetraBlock.GetBlock();
+            var defaultState = tetraBlock.DefaultState;
+
+            for (var holdIndex = 0; holdIndex < 4; holdIndex++)
+            {
+                colors[holdIndex] = _holdLocked ? _holdLockColor : block.Color.linear;
+                textureSTs[holdIndex] = block.TextureST;
+
+                var blockPos = defaultState[holdIndex];
+                var matrix = Matrix4x4.identity;
+                matrix.SetTRS(_basePosition - new Vector3(4, 0) + new Vector3(blockPos.x, blockPos.y + 0.5f) * _queueSecondarySize, _baseRotation, size);
+
+                _holdTransforms[holdIndex] = matrix;
+            }
+
+            _holdProperties.SetVectorArray(INSTANCE_COLORS, colors);
+            _holdProperties.SetVectorArray(INSTANCE_ST, textureSTs);
+            _holdProperties.SetVectorArray(INSTANCE_OUTLINEL, new Vector4[4]);
+            _holdProperties.SetVectorArray(INSTANCE_OUTLINEC, new Vector4[4]);
         }
 
         private void UpdateQueue(Vector4 textureST)
@@ -154,12 +230,12 @@ namespace GM.Game
                 prevSize = _queueSecondarySize;
             }
 
-            _transforms = transforms.ToArray();
+            _queueTransforms = transforms.ToArray();
 
-            _properties.SetVectorArray(INSTANCE_COLORS, _colors);
-            _properties.SetVectorArray(INSTANCE_ST, _textureST);
-            _properties.SetVectorArray(INSTANCE_OUTLINEL, new Vector4[4 * _queueSize]);
-            _properties.SetVectorArray(INSTANCE_OUTLINEC, new Vector4[4 * _queueSize]);
+            _queueProperties.SetVectorArray(INSTANCE_COLORS, _colors);
+            _queueProperties.SetVectorArray(INSTANCE_ST, _textureST);
+            _queueProperties.SetVectorArray(INSTANCE_OUTLINEL, new Vector4[4 * _queueSize]);
+            _queueProperties.SetVectorArray(INSTANCE_OUTLINEC, new Vector4[4 * _queueSize]);
         }
 
         private void EnqueueNew()

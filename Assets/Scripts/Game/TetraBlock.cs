@@ -29,6 +29,7 @@ namespace GM.Game
         };
 
         private Vector2Int _position;
+        private Vector2Int _startPosition;
 
         private Vector4 _textureST;
         private Color _color;
@@ -41,6 +42,7 @@ namespace GM.Game
 
         public bool Landed { private set; get; }
         public bool IsAtLowestPoint { private set; get; }
+        public List<Vector2Int> DefaultState => _rotationStates[0].Blocks;
 
         public TetraBlock(BlockData tetraBlock, Vector4 textureST, BlockGrid grid)
         {
@@ -70,9 +72,15 @@ namespace GM.Game
             var xPos = (grid.Size.x >> 1) - Mathf.CeilToInt(tetraBlock.GridSize / 2f);
 
             _lowestPoint = grid.Size.y - _blockGridSize - lowestInitial;
-            _position = new Vector2Int(xPos, yPos);
+            _startPosition = _position = new Vector2Int(xPos, yPos);
 
             PerformChecks(grid);
+        }
+
+        public void Reset()
+        {
+            _position = _startPosition;
+            _rotationIndex = 0;
         }
 
         /// <summary>

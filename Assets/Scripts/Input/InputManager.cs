@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -11,7 +10,8 @@ namespace GM
         Move = 0,
         Rotation = 1,
         DropLock = 2,
-        SonicDrop = 3
+        SonicDrop = 3,
+        Hold = 4,
     }
 
     public interface IInput

@@ -49,6 +49,14 @@ public class @GMIO : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Hold"",
+                    ""type"": ""Button"",
+                    ""id"": ""e58821be-5d2d-47ab-b182-5033db311f14"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -139,6 +147,17 @@ public class @GMIO : IInputActionCollection, IDisposable
                     ""action"": ""Sonic Drop"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""aed82f74-717c-4f8f-9bce-dbf2f962d5fa"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": ""Press"",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""Hold"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -212,6 +231,7 @@ public class @GMIO : IInputActionCollection, IDisposable
         m_Player_Rotate = m_Player.FindAction("Rotate", throwIfNotFound: true);
         m_Player_DropLock = m_Player.FindAction("Drop Lock", throwIfNotFound: true);
         m_Player_SonicDrop = m_Player.FindAction("Sonic Drop", throwIfNotFound: true);
+        m_Player_Hold = m_Player.FindAction("Hold", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -265,6 +285,7 @@ public class @GMIO : IInputActionCollection, IDisposable
     private readonly InputAction m_Player_Rotate;
     private readonly InputAction m_Player_DropLock;
     private readonly InputAction m_Player_SonicDrop;
+    private readonly InputAction m_Player_Hold;
     public struct PlayerActions
     {
         private @GMIO m_Wrapper;
@@ -273,6 +294,7 @@ public class @GMIO : IInputActionCollection, IDisposable
         public InputAction @Rotate => m_Wrapper.m_Player_Rotate;
         public InputAction @DropLock => m_Wrapper.m_Player_DropLock;
         public InputAction @SonicDrop => m_Wrapper.m_Player_SonicDrop;
+        public InputAction @Hold => m_Wrapper.m_Player_Hold;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -294,6 +316,9 @@ public class @GMIO : IInputActionCollection, IDisposable
                 @SonicDrop.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSonicDrop;
                 @SonicDrop.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSonicDrop;
                 @SonicDrop.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSonicDrop;
+                @Hold.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnHold;
+                @Hold.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnHold;
+                @Hold.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnHold;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -310,6 +335,9 @@ public class @GMIO : IInputActionCollection, IDisposable
                 @SonicDrop.started += instance.OnSonicDrop;
                 @SonicDrop.performed += instance.OnSonicDrop;
                 @SonicDrop.canceled += instance.OnSonicDrop;
+                @Hold.started += instance.OnHold;
+                @Hold.performed += instance.OnHold;
+                @Hold.canceled += instance.OnHold;
             }
         }
     }
@@ -365,5 +393,6 @@ public class @GMIO : IInputActionCollection, IDisposable
         void OnRotate(InputAction.CallbackContext context);
         void OnDropLock(InputAction.CallbackContext context);
         void OnSonicDrop(InputAction.CallbackContext context);
+        void OnHold(InputAction.CallbackContext context);
     }
 }
