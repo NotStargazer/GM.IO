@@ -1,0 +1,314 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6dbddfab7d6d521449a4f45828dc9be8, type: 3}
+  m_Name: ProgressionData_Standard
+  m_EditorClassIdentifier: 
+  _progressionLevel:
+  - ArrayName: 'Level: 0'
+    Level: 0
+    ProgressionTimers:
+      DropFrames: 64
+      Gravity: 0
+      SpawnFrames: 25
+      LineClearSpawnFrames: 25
+      LockFrames: 30
+      LineFrame: 40
+      AutoShiftFrames: 14
+    ProgressionAssets:
+      Background: {fileID: 0}
+      Music: {fileID: 0}
+  - ArrayName: 'Level: 30'
+    Level: 30
+    ProgressionTimers:
+      DropFrames: 42.666668
+      Gravity: 0
+      SpawnFrames: 25
+      LineClearSpawnFrames: 25
+      LockFrames: 30
+      LineFrame: 40
+      AutoShiftFrames: 14
+    ProgressionAssets:
+      Background: {fileID: 0}
+      Music: {fileID: 0}
+  - ArrayName: 'Level: 35'
+    Level: 35
+    ProgressionTimers:
+      DropFrames: 32
+      Gravity: 0
+      SpawnFrames: 25
+      LineClearSpawnFrames: 25
+      LockFrames: 30
+      LineFrame: 40
+      AutoShiftFrames: 14
+    ProgressionAssets:
+      Background: {fileID: 0}
+      Music: {fileID: 0}
+  - ArrayName: 'Level: 40'
+    Level: 40
+    ProgressionTimers:
+      DropFrames: 25.6
+      Gravity: 0
+      SpawnFrames: 25
+      LineClearSpawnFrames: 25
+      LockFrames: 30
+      LineFrame: 40
+      AutoShiftFrames: 14
+    ProgressionAssets:
+      Background: {fileID: 0}
+      Music: {fileID: 0}
+  - ArrayName: 'Level: 50'
+    Level: 50
+    ProgressionTimers:
+      DropFrames: 21.333334
+      Gravity: 0
+      SpawnFrames: 25
+      LineClearSpawnFrames: 25
+      LockFrames: 30
+      LineFrame: 40
+      AutoShiftFrames: 14
+    ProgressionAssets:
+      Background: {fileID: 0}
+      Music: {fileID: 0}
+  - ArrayName: 'Level: 60'
+    Level: 60
+    ProgressionTimers:
+      DropFrames: 16
+      Gravity: 0
+      SpawnFrames: 25
+      LineClearSpawnFrames: 25
+      LockFrames: 30
+      LineFrame: 40
+      AutoShiftFrames: 14
+    ProgressionAssets:
+      Background: {fileID: 0}
+      Music: {fileID: 0}
+  - ArrayName: 'Level: 70'
+    Level: 70
+    ProgressionTimers:
+      DropFrames: 8
+      Gravity: 0
+      SpawnFrames: 25
+      LineClearSpawnFrames: 25
+      LockFrames: 30
+      LineFrame: 40
+      AutoShiftFrames: 14
+    ProgressionAssets:
+      Background: {fileID: 0}
+      Music: {fileID: 0}
+  - ArrayName: 'Level: 80'
+    Level: 80
+    ProgressionTimers:
+      DropFrames: 5.3333335
+      Gravity: 0
+      SpawnFrames: 25
+      LineClearSpawnFrames: 25
+      LockFrames: 30
+      LineFrame: 40
+      AutoShiftFrames: 14
+    ProgressionAssets:
+      Background: {fileID: 0}
+      Music: {fileID: 0}
+  - ArrayName: 'Level: 90'
+    Level: 90
+    ProgressionTimers:
+      DropFrames: 4
+      Gravity: 0
+      SpawnFrames: 25
+      LineClearSpawnFrames: 25
+      LockFrames: 30
+      LineFrame: 40
+      AutoShiftFrames: 14
+    ProgressionAssets:
+      Background: {fileID: 0}
+      Music: {fileID: 0}
+  - ArrayName: 'Level: 100'
+    Level: 100
+    ProgressionTimers:
+      DropFrames: 3.2
+      Gravity: 0
+      SpawnFrames: 25
+      LineClearSpawnFrames: 25
+      LockFrames: 30
+      LineFrame: 40
+      AutoShiftFrames: 14
+    ProgressionAssets:
+      Background: {fileID: 0}
+      Music: {fileID: 0}
+  - ArrayName: 'Level: 120'
+    Level: 120
+    ProgressionTimers:
+      DropFrames: 2.6666667
+      Gravity: 0
+      SpawnFrames: 25
+      LineClearSpawnFrames: 25
+      LockFrames: 30
+      LineFrame: 40
+      AutoShiftFrames: 14
+    ProgressionAssets:
+      Background: {fileID: 0}
+      Music: {fileID: 0}
+  - ArrayName: 'Level: 140'
+    Level: 140
+    ProgressionTimers:
+      DropFrames: 2.2857144
+      Gravity: 0
+      SpawnFrames: 25
+      LineClearSpawnFrames: 25
+      LockFrames: 30
+      LineFrame: 40
+      AutoShiftFrames: 14
+    ProgressionAssets:
+      Background: {fileID: 0}
+      Music: {fileID: 0}
+  - ArrayName: 'Level: 160'
+    Level: 160
+    ProgressionTimers:
+      DropFrames: 2
+      Gravity: 0
+      SpawnFrames: 25
+      LineClearSpawnFrames: 25
+      LockFrames: 30
+      LineFrame: 40
+      AutoShiftFrames: 14
+    ProgressionAssets:
+      Background: {fileID: 0}
+      Music: {fileID: 0}
+  - ArrayName: 'Level: 170'
+    Level: 170
+    ProgressionTimers:
+      DropFrames: 1.7777778
+      Gravity: 0
+      SpawnFrames: 25
+      LineClearSpawnFrames: 25
+      LockFrames: 30
+      LineFrame: 40
+      AutoShiftFrames: 14
+    ProgressionAssets:
+      Background: {fileID: 0}
+      Music: {fileID: 0}
+  - ArrayName: 'Level: 200'
+    Level: 200
+    ProgressionTimers:
+      DropFrames: 64
+      Gravity: 0
+      SpawnFrames: 25
+      LineClearSpawnFrames: 25
+      LockFrames: 30
+      LineFrame: 40
+      AutoShiftFrames: 14
+    ProgressionAssets:
+      Background: {fileID: 0}
+      Music: {fileID: 0}
+  - ArrayName: 'Level: 220'
+    Level: 220
+    ProgressionTimers:
+      DropFrames: 8
+      Gravity: 0
+      SpawnFrames: 25
+      LineClearSpawnFrames: 25
+      LockFrames: 30
+      LineFrame: 40
+      AutoShiftFrames: 14
+    ProgressionAssets:
+      Background: {fileID: 0}
+      Music: {fileID: 0}
+  - ArrayName: 'Level: 230'
+    Level: 230
+    ProgressionTimers:
+      DropFrames: 4
+      Gravity: 0
+      SpawnFrames: 25
+      LineClearSpawnFrames: 25
+      LockFrames: 30
+      LineFrame: 40
+      AutoShiftFrames: 14
+    ProgressionAssets:
+      Background: {fileID: 0}
+      Music: {fileID: 0}
+  - ArrayName: 'Level: 233'
+    Level: 233
+    ProgressionTimers:
+      DropFrames: 2.6666667
+      Gravity: 0
+      SpawnFrames: 25
+      LineClearSpawnFrames: 25
+      LockFrames: 30
+      LineFrame: 40
+      AutoShiftFrames: 14
+    ProgressionAssets:
+      Background: {fileID: 0}
+      Music: {fileID: 0}
+  - ArrayName: 'Level: 236'
+    Level: 236
+    ProgressionTimers:
+      DropFrames: 2
+      Gravity: 0
+      SpawnFrames: 25
+      LineClearSpawnFrames: 25
+      LockFrames: 30
+      LineFrame: 40
+      AutoShiftFrames: 14
+    ProgressionAssets:
+      Background: {fileID: 0}
+      Music: {fileID: 0}
+  - ArrayName: 'Level: 239'
+    Level: 239
+    ProgressionTimers:
+      DropFrames: 1.6
+      Gravity: 0
+      SpawnFrames: 25
+      LineClearSpawnFrames: 25
+      LockFrames: 30
+      LineFrame: 40
+      AutoShiftFrames: 14
+    ProgressionAssets:
+      Background: {fileID: 0}
+      Music: {fileID: 0}
+  - ArrayName: 'Level: 243'
+    Level: 243
+    ProgressionTimers:
+      DropFrames: 1.3333334
+      Gravity: 0
+      SpawnFrames: 25
+      LineClearSpawnFrames: 25
+      LockFrames: 30
+      LineFrame: 40
+      AutoShiftFrames: 14
+    ProgressionAssets:
+      Background: {fileID: 0}
+      Music: {fileID: 0}
+  - ArrayName: 'Level: 247'
+    Level: 247
+    ProgressionTimers:
+      DropFrames: 1.1428572
+      Gravity: 0
+      SpawnFrames: 25
+      LineClearSpawnFrames: 25
+      LockFrames: 30
+      LineFrame: 40
+      AutoShiftFrames: 14
+    ProgressionAssets:
+      Background: {fileID: 0}
+      Music: {fileID: 0}
+  - ArrayName: 'Level: 251'
+    Level: 251
+    ProgressionTimers:
+      DropFrames: 1
+      Gravity: 1
+      SpawnFrames: 25
+      LineClearSpawnFrames: 25
+      LockFrames: 30
+      LineFrame: 40
+      AutoShiftFrames: 14
+    ProgressionAssets:
+      Background: {fileID: 0}
+      Music: {fileID: 0}

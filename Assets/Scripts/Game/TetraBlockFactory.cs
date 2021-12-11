@@ -180,7 +180,7 @@ namespace GM.Game
 
                 var blockPos = defaultState[holdIndex];
                 var matrix = Matrix4x4.identity;
-                matrix.SetTRS(_basePosition - new Vector3(4, 0) + new Vector3(blockPos.x, blockPos.y + 0.5f) * _queueSecondarySize, _baseRotation, size);
+                matrix.SetTRS(_basePosition - new Vector3(3, 0) + new Vector3(blockPos.x, blockPos.y + 0.5f) * _queueSecondarySize, _baseRotation, size);
 
                 _holdTransforms[holdIndex] = matrix;
             }

@@ -1,40 +1,110 @@
+using System;
+using GM.Data;
 using UnityEngine;
 
 namespace GM.Game
 {
-    public struct ProgressionState
+    [Serializable]
+    public struct ProgressionDebug
     {
-        public float SpawnDuration;
-        public float DropDuration;
-        public float LockDuration;
-        public float LineDuration;
-        public float AutoShiftDuration;
+        public int LevelMultiplier;
+        public bool AlwaysClearSection;
     }
 
     public class ProgressionController : MonoBehaviour
     {
-        private const float FRAME = 0.0166666667f;
+        public static float SingleFrame => ProgressionData.FRAME;
 
-        public static float SingleFrame => FRAME;
+        [SerializeField] private ProgressionData _progressionData;
+        [SerializeField] private ProgressionDebug _progressionDebug;
 
-        public ProgressionState CurrentState =>
-            new ProgressionState
-            {
-                SpawnDuration = FRAME * 25,
-                DropDuration = FRAME * 64,
-                LockDuration = FRAME * 30,
-                LineDuration = FRAME * 32,
-                AutoShiftDuration = FRAME * 14
-            };
+        public ProgressionState CurrentState => _progressionData.GetState(_level + _internalLevel);
+
+        private int _internalLevel;
+        private int _level;
+        private float _startTime;
+
+        private int _section;
+        private int _sectionClears;
+        private float _sectionStartTime;
 
         public void Initialize()
         {
-
+            _startTime = _sectionStartTime = Time.time;
+            _level = _internalLevel = 0;
+            _section = _sectionClears = 0;
+            _progressionData.Reset();
         }
 
-        public void IncrementLevel()
+        public void IncrementLevel(int? lines = null)
         {
+            int bonusLevels;
 
+            switch (lines)
+            {
+                case 3:
+                    bonusLevels = 1;
+                    break;
+                case 4:
+                    bonusLevels = 2;
+                    break;
+                default:
+                    bonusLevels = 0;
+                    break;
+            }
+
+            var levels = 1;
+
+            if (lines.HasValue)
+            {
+                levels = lines.Value + bonusLevels;
+            }
+
+            var oldSectionLevel = _level % 100;
+#if UNITY_EDITOR
+            levels *= _progressionDebug.LevelMultiplier;
+#endif
+            _level += levels;
+
+            if (oldSectionLevel > _level % 100)
+            {
+                if (lines > 0)
+                {
+                    _section++;
+                    CheckSectionClear();
+                    _sectionStartTime = Time.time;
+                }
+                else
+                {
+                    _level = _section * 100 + 99;
+                }
+            }
+
+            Debug.Log($"Level: {_level + _internalLevel}, Section {_section}");
+        }
+
+        private void CheckSectionClear()
+        {
+            //TODO: Section Requirements
+            var sectionClear = Time.time - _sectionStartTime < 60;
+
+#if UNITY_EDITOR
+            sectionClear = sectionClear || _progressionDebug.AlwaysClearSection;
+#endif
+
+            if (sectionClear)
+            {
+                _sectionClears++;
+                _internalLevel += 100;
+            }
+        }
+
+        private void Awake()
+        {
+            if (!_progressionData)
+            {
+                throw new ArgumentNullException(nameof(_progressionData));
+            }
         }
     }
 }

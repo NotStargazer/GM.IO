@@ -155,7 +155,7 @@ namespace GM.Game
             return false;
         }
 
-        private void PerformChecks(BlockGrid grid)
+        public void PerformChecks(BlockGrid grid)
         {
             var positions = GetPositions();
             var landed = false;
@@ -163,7 +163,7 @@ namespace GM.Game
 
             foreach (var position in positions)
             {
-                if (position.y <= _lowestPoint)
+                if (position.y < _lowestPoint)
                 {
                     _lowestPoint = position.y;
                     lowestPoint = true;
@@ -186,7 +186,7 @@ namespace GM.Game
                 return false;
             }
 
-            if (_blockGridSize / 2 > 1)
+            if (_blockGridSize / 2 > 1 && _rotationIndex == 0)
             {
                 if (!Move(Direction.Right, grid, _blockGridSize / 2))
                 {

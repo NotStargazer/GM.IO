@@ -59,9 +59,9 @@ namespace GM.Game
         public Timer AutoShiftTimer;
         public Timer ShiftCooldownTimer;
 
-        public void SetTimers(ProgressionState state)
+        public void SetTimers(ProgressionState state, bool lineClear = false)
         {
-            SpawnTimer.Duration = state.SpawnDuration;
+            SpawnTimer.Duration = lineClear ? state.LineClearSpawnDuration : state.SpawnDuration;
             DropTimer.Duration = state.DropDuration;
             LockTimer.Duration = state.LockDuration;
             LineTimer.Duration = state.LineDuration;
@@ -132,9 +132,10 @@ namespace GM.Game
                 else if (_timers.SpawnTimer.HasExpired(out var spawnExcess))
                 {
                     _tetraBlock = _tetraBlockFactory.GetNext(_grid);
-                    _timers.DropTimer.Start(spawnExcess);
+                    _timers.DropTimer.Start(spawnExcess + ProgressionData.FRAME);
                     _timers.LockTimer.Start(spawnExcess);
                     _timers.ShiftCooldownTimer.Start();
+                    _progression.IncrementLevel();
                     _state.Reset();
 
                     //Pre-Hold
@@ -148,6 +149,8 @@ namespace GM.Game
                     {
                         _tetraBlock.Rotate(Mathf.RoundToInt(preRotate), _grid);
                     }
+
+                    _tetraBlock.PerformChecks(_grid);
                 }
 
                 if (input.ButtonDown(Actions.Move))
@@ -184,6 +187,8 @@ namespace GM.Game
                 {
                     _tetraBlock.Rotate(Mathf.RoundToInt(preRotate), _grid);
                 }
+
+                _tetraBlock.PerformChecks(_grid);
 
                 _playfield.SetFallingProperties(_tetraBlock.GetBlock());
                 _playfield.SetFallingPosition(_tetraBlock.GetPositions(), _grid);
@@ -291,11 +296,16 @@ namespace GM.Game
             {
                 _timers.LockTimer.ExtendThisFrame();
 
+                // => [Wait for block lock]
                 if (_timers.DropTimer.HasExpired(out var dropExcess))
                 {
                     if (!_tetraBlock.Move(Direction.Down, _grid))
                     {
-                        _timers.LockTimer.Start(dropExcess);
+                        if (_tetraBlock.IsAtLowestPoint)
+                        {
+                            _timers.LockTimer.Start(dropExcess);
+                        }
+
                         _timers.DropTimer.Start(dropExcess);
                     }
                     _playfield.SetFallingPosition(_tetraBlock.GetPositions(), _grid);
@@ -313,9 +323,11 @@ namespace GM.Game
         private void OnLock()
         {
             _grid.LockTetraBlock(ref _tetraBlock, ref _state);
+            var lineCount = _state.LinesCleared.Count;
 
-            if (_state.LinesCleared.Count > 0)
+            if (lineCount > 0)
             {
+                _progression.IncrementLevel(lineCount);
                 _timers.LineTimer.Start();
             }
 
@@ -324,7 +336,7 @@ namespace GM.Game
             _playfield.ResetFalling();
 
             // ====> Progression Controller
-            _timers.SetTimers(_progression.CurrentState);
+            _timers.SetTimers(_progression.CurrentState, lineCount > 0);
         }
 
         private void Awake()

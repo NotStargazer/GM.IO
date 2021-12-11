@@ -152,6 +152,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 858eb395bd3dde14995044d1645b26e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _progressionData: {fileID: 11400000, guid: 5733c8aa6c33d7a46891c1b8ed533e05, type: 2}
+  _progressionDebug:
+    LevelMultiplier: 1
+    AlwaysClearSection: 1
 --- !u!4 &512171449
 Transform:
   m_ObjectHideFlags: 0
