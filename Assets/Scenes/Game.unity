@@ -152,7 +152,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 858eb395bd3dde14995044d1645b26e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _progressionData: {fileID: 11400000, guid: 5733c8aa6c33d7a46891c1b8ed533e05, type: 2}
+  _progressionData: {fileID: 11400000, guid: eaf56ab090b6b13419fe2e4b21f8fd76, type: 2}
   _progressionDebug:
     LevelMultiplier: 1
     AlwaysClearSection: 1

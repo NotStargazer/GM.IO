@@ -19,7 +19,7 @@ namespace GM.Game
         public bool HasExpired(out float excess)
         {
             excess = Mathf.Clamp01(Time.time - _deadline);
-            return Time.time > _deadline;
+            return Time.time >= _deadline;
         }
 
         public bool HasStarted()
@@ -113,6 +113,8 @@ namespace GM.Game
 
         public GameState LogicUpdate(IInput input)
         {
+            var currentFrameDropDuration = _progression.CurrentState.DropDuration;
+
             // => Get new TetraBlock
             if (_tetraBlock == null)
             {
@@ -132,7 +134,7 @@ namespace GM.Game
                 else if (_timers.SpawnTimer.HasExpired(out var spawnExcess))
                 {
                     _tetraBlock = _tetraBlockFactory.GetNext(_grid);
-                    _timers.DropTimer.Start(spawnExcess + ProgressionData.FRAME);
+                    _timers.DropTimer.Start(spawnExcess + ProgressionController.SingleFrame);
                     _timers.LockTimer.Start(spawnExcess);
                     _timers.ShiftCooldownTimer.Start();
                     _progression.IncrementLevel();
@@ -177,7 +179,7 @@ namespace GM.Game
             {
                 _tetraBlockFactory.GetHold(ref _tetraBlock, _grid);
 
-                _timers.DropTimer.Start(Time.deltaTime);
+                _timers.DropTimer.Start(Time.deltaTime + ProgressionController.SingleFrame);
                 _timers.LockTimer.Start(Time.deltaTime);
                 _timers.ShiftCooldownTimer.Start();
                 _timers.AutoShiftTimer.Enable();
@@ -209,23 +211,36 @@ namespace GM.Game
 
             if (input.ButtonDown(Actions.Rotation, out float rotation))
             {
-                var isLanded = _tetraBlock.Landed;
+                var wasLanded = _tetraBlock.Landed;
                 _tetraBlock.Rotate(Mathf.RoundToInt(rotation), _grid);
                 _timers.AutoShiftTimer.Enable();
 
                 //Syncro
-                if (input.ButtonHold(Actions.Move, out float direction) && isLanded)
+                if (input.ButtonHold(Actions.Move, out float direction) && wasLanded)
                 {
                     _tetraBlock.Move(direction > 0 ? Direction.Right : Direction.Left, _grid);  
                 }
 
                 _playfield.SetFallingPosition(_tetraBlock.GetPositions(), _grid);
+
+                if (_tetraBlock.Landed != wasLanded)
+                {
+                    _timers.DropTimer.Duration = currentFrameDropDuration - ProgressionController.SingleFrame - Time.deltaTime;
+                    _timers.DropTimer.Start();
+                }
             }
             else if (input.ButtonDown(Actions.Move, out float direction))
             {
+                var wasLanded = _tetraBlock.Landed;
                 _tetraBlock.Move(direction > 0 ? Direction.Right : Direction.Left, _grid);
                 _playfield.SetFallingPosition(_tetraBlock.GetPositions(), _grid);
                 _timers.AutoShiftTimer.Start();
+
+                if (_tetraBlock.Landed != wasLanded)
+                {
+                    _timers.DropTimer.Duration = currentFrameDropDuration - ProgressionController.SingleFrame - Time.deltaTime;
+                    _timers.DropTimer.Start();
+                }
             }
 
             //Delayed Auto Shift
@@ -240,12 +255,20 @@ namespace GM.Game
                 {
                     if (_timers.ShiftCooldownTimer.HasExpired(out var shiftExcess) && _timers.AutoShiftTimer.HasStarted())
                     {
+                        var wasLanded = _tetraBlock.Landed;
+
                         if (_tetraBlock.Move(autoDirection > 0 ? Direction.Right : Direction.Left, _grid))
                         {
                             _timers.AutoShiftTimer.Stop();
                         }
                         _playfield.SetFallingPosition(_tetraBlock.GetPositions(), _grid);
                         _timers.ShiftCooldownTimer.Start(_timers.ShiftCooldownTimer.HasStarted() ? shiftExcess : 0);
+
+                        if (_tetraBlock.Landed != wasLanded)
+                        {
+                            _timers.DropTimer.Duration = currentFrameDropDuration - ProgressionController.SingleFrame - Time.deltaTime;
+                            _timers.DropTimer.Start();
+                        }
                     }
                 }
                 else
@@ -260,7 +283,7 @@ namespace GM.Game
 
                 if (input.ButtonDown(Actions.DropLock))
                 {
-                    _timers.DropTimer.Start();
+                    _timers.DropTimer.Start(Time.deltaTime + ProgressionController.SingleFrame);
                 }
 
                 // => [Wait for block lock]
@@ -278,7 +301,7 @@ namespace GM.Game
             }
             else
             {
-                _timers.DropTimer.Duration = _progression.CurrentState.DropDuration;
+                _timers.DropTimer.Duration = currentFrameDropDuration;
             }
 
             // => Update Blocks
@@ -299,7 +322,18 @@ namespace GM.Game
                 // => [Wait for block lock]
                 if (_timers.DropTimer.HasExpired(out var dropExcess))
                 {
-                    if (!_tetraBlock.Move(Direction.Down, _grid))
+                    _timers.DropTimer.Duration = currentFrameDropDuration;
+                    var didDrop = false;
+
+                    for (var i = 0; i < _progression.CurrentState.Gravity; i++)
+                    {
+                        if (!_tetraBlock.Move(Direction.Down, _grid))
+                        {
+                            didDrop = true;
+                        }
+                    }
+
+                    if (didDrop)
                     {
                         if (_tetraBlock.IsAtLowestPoint)
                         {

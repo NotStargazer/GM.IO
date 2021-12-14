@@ -127,10 +127,6 @@ namespace GM.Data
                 var currentTimers = _progressionLevel[i].ProgressionTimers;
                 var prevTimers = _progressionLevel[i - 1].ProgressionTimers;
 
-                if (currentTimers.Gravity <= prevTimers.Gravity)
-                {
-                    currentTimers.Gravity = prevTimers.Gravity;
-                }
                 if (currentTimers.SpawnFrames >= prevTimers.SpawnFrames)
                 {
                     currentTimers.SpawnFrames = prevTimers.SpawnFrames;
