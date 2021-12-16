@@ -174,7 +174,7 @@ MonoBehaviour:
     Level: 160
     ProgressionTimers:
       DropFrames: 2
-      Gravity: 0
+      Gravity: 1
       SpawnFrames: 25
       LineClearSpawnFrames: 25
       LockFrames: 30
@@ -187,7 +187,7 @@ MonoBehaviour:
     Level: 170
     ProgressionTimers:
       DropFrames: 1.7777778
-      Gravity: 0
+      Gravity: 1
       SpawnFrames: 25
       LineClearSpawnFrames: 25
       LockFrames: 30
@@ -200,7 +200,7 @@ MonoBehaviour:
     Level: 200
     ProgressionTimers:
       DropFrames: 64
-      Gravity: 0
+      Gravity: 1
       SpawnFrames: 25
       LineClearSpawnFrames: 25
       LockFrames: 30
@@ -213,7 +213,7 @@ MonoBehaviour:
     Level: 220
     ProgressionTimers:
       DropFrames: 8
-      Gravity: 0
+      Gravity: 1
       SpawnFrames: 25
       LineClearSpawnFrames: 25
       LockFrames: 30
@@ -226,7 +226,7 @@ MonoBehaviour:
     Level: 230
     ProgressionTimers:
       DropFrames: 4
-      Gravity: 0
+      Gravity: 1
       SpawnFrames: 25
       LineClearSpawnFrames: 25
       LockFrames: 30
@@ -239,7 +239,7 @@ MonoBehaviour:
     Level: 233
     ProgressionTimers:
       DropFrames: 2.6666667
-      Gravity: 0
+      Gravity: 1
       SpawnFrames: 25
       LineClearSpawnFrames: 25
       LockFrames: 30
@@ -252,7 +252,7 @@ MonoBehaviour:
     Level: 236
     ProgressionTimers:
       DropFrames: 2
-      Gravity: 0
+      Gravity: 1
       SpawnFrames: 25
       LineClearSpawnFrames: 25
       LockFrames: 30
@@ -265,7 +265,7 @@ MonoBehaviour:
     Level: 239
     ProgressionTimers:
       DropFrames: 1.6
-      Gravity: 0
+      Gravity: 1
       SpawnFrames: 25
       LineClearSpawnFrames: 25
       LockFrames: 30
@@ -278,7 +278,7 @@ MonoBehaviour:
     Level: 243
     ProgressionTimers:
       DropFrames: 1.3333334
-      Gravity: 0
+      Gravity: 1
       SpawnFrames: 25
       LineClearSpawnFrames: 25
       LockFrames: 30
@@ -291,7 +291,7 @@ MonoBehaviour:
     Level: 247
     ProgressionTimers:
       DropFrames: 1.1428572
-      Gravity: 0
+      Gravity: 1
       SpawnFrames: 25
       LineClearSpawnFrames: 25
       LockFrames: 30
