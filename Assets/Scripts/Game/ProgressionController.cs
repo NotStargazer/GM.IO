@@ -14,11 +14,9 @@ namespace GM.Game
     public class ProgressionController : MonoBehaviour
     {
         public static float SingleFrame => ProgressionData.FRAME;
-
-        [SerializeField] private ProgressionData _progressionData;
         [SerializeField] private ProgressionDebug _progressionDebug;
 
-        public ProgressionState CurrentState => _progressionData.GetState(_level + _internalLevel);
+        public ProgressionState CurrentState => GameData.GetInstance().ProgressionData.GetState(_level + _internalLevel);
 
         private int _internalLevel;
         private int _level;
@@ -33,10 +31,10 @@ namespace GM.Game
             _startTime = _sectionStartTime = Time.time;
             _level = _internalLevel = 0;
             _section = _sectionClears = 0;
-            _progressionData.Reset();
+            GameData.GetInstance().ProgressionData.Reset();
         }
 
-        public void IncrementLevel(int? lines = null)
+        public void IncrementLevel(ref GameState state, int? lines = null)
         {
             int bonusLevels;
 
@@ -80,7 +78,15 @@ namespace GM.Game
                 }
             }
 
-            Debug.Log($"Level: {_level + _internalLevel}, Section {_section}");
+            var currentState = CurrentState;
+
+            state.LevelState = new LevelState
+            {
+                Level = _level,
+                Gravity = SingleFrame / currentState.DropDuration * currentState.Gravity / 20
+            };
+
+            //Debug.Log($"Level: {_level + _internalLevel}, Section {_section}");
         }
 
         private void CheckSectionClear()
@@ -96,14 +102,6 @@ namespace GM.Game
             {
                 _sectionClears++;
                 _internalLevel += 100;
-            }
-        }
-
-        private void Awake()
-        {
-            if (!_progressionData)
-            {
-                throw new ArgumentNullException(nameof(_progressionData));
             }
         }
     }

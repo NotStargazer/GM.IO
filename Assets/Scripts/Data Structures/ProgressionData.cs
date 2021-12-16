@@ -47,6 +47,7 @@ namespace GM.Data
     public class ProgressionData : ScriptableObject
     {
         public static float FRAME = 0.0166666667f;
+        public int EndLevel;
         [SerializeField] private ProgressionLevel[] _progressionLevel;
 
         private int? _level;

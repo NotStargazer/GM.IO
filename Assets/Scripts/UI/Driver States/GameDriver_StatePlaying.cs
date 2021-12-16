@@ -1,7 +1,5 @@
-using System;
 using GM.Data;
 using GM.Game;
-using UnityEngine;
 
 namespace GM.UI
 {
@@ -21,7 +19,12 @@ namespace GM.UI
 
         public DriverState? OnReceiveInputsWithUI(IUIRoot ui, IInput input)
         {
-            _gameLogic.LogicUpdate(input);
+            var gameState = _gameLogic.LogicUpdate(input);
+
+            if (gameState != null)
+            {
+                GameData.GetInstance().PlayfieldUI.Set(gameState);
+            }
 
             return null;
         }

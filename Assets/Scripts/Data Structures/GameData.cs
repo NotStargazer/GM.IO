@@ -1,6 +1,7 @@
 using System;
 using GM.Game;
 using GM.UI;
+using GM.UI.Playfield;
 using UnityEngine;
 
 namespace GM.Data
@@ -26,7 +27,10 @@ namespace GM.Data
 
         //Game Settings
         public DriverState InitialState;
+
         //Progression Data
+        public ProgressionData ProgressionData;
+
         //TetraBlock Data
 
         [Header("Playfield Data")]
@@ -34,6 +38,7 @@ namespace GM.Data
         public int ExcessHeight;
         public Mesh BlockMesh;
         public Material BlockMaterial;
+        public PlayfieldUI PlayfieldUI;
 
         private void Awake()
         {
@@ -53,6 +58,16 @@ namespace GM.Data
             if (!BlockMaterial)
             {
                 throw new ArgumentNullException(nameof(BlockMaterial));
+            }
+
+            if (!PlayfieldUI)
+            {
+                throw new ArgumentNullException(nameof(PlayfieldUI));
+            }
+
+            if (!ProgressionData)
+            {
+                throw new ArgumentNullException(nameof(ProgressionData));
             }
         }
     }

@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6dbddfab7d6d521449a4f45828dc9be8, type: 3}
   m_Name: ProgressionData_Standard
   m_EditorClassIdentifier: 
+  EndLevel: 999
   _progressionLevel:
   - ArrayName: 'Level: 0'
     Level: 0

@@ -137,7 +137,7 @@ namespace GM.Game
                     _timers.DropTimer.Start(spawnExcess + ProgressionController.SingleFrame);
                     _timers.LockTimer.Start(spawnExcess);
                     _timers.ShiftCooldownTimer.Start();
-                    _progression.IncrementLevel();
+                    _progression.IncrementLevel(ref _state);
                     _state.Reset();
 
                     //Pre-Hold
@@ -361,7 +361,7 @@ namespace GM.Game
 
             if (lineCount > 0)
             {
-                _progression.IncrementLevel(lineCount);
+                _progression.IncrementLevel(ref _state, lineCount);
                 _timers.LineTimer.Start();
             }
 
