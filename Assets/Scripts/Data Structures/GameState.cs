@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using GM.UI.Playfield;
 
 namespace GM.Data
 {
@@ -13,6 +14,7 @@ namespace GM.Data
     {
         public List<int> LinesCleared;
         public LevelState LevelState;
+        public AlertType? Alert;
 
         public GameState()
         {
@@ -22,6 +24,7 @@ namespace GM.Data
         public void Reset()
         {
             LinesCleared.Clear();
+            Alert = null;
         }
     }
 }

@@ -1,5 +1,6 @@
 using System;
 using GM.Data;
+using GM.UI.Playfield;
 using UnityEngine;
 
 namespace GM.Game
@@ -69,7 +70,7 @@ namespace GM.Game
                 if (lines > 0)
                 {
                     _section++;
-                    CheckSectionClear();
+                    CheckSectionClear(ref state);
                     _sectionStartTime = Time.time;
                 }
                 else
@@ -89,7 +90,7 @@ namespace GM.Game
             //Debug.Log($"Level: {_level + _internalLevel}, Section {_section}");
         }
 
-        private void CheckSectionClear()
+        private void CheckSectionClear(ref GameState state)
         {
             //TODO: Section Requirements
             var sectionClear = Time.time - _sectionStartTime < 60;
@@ -100,6 +101,7 @@ namespace GM.Game
 
             if (sectionClear)
             {
+                state.Alert = AlertType.SectionClear;
                 _sectionClears++;
                 _internalLevel += 100;
             }

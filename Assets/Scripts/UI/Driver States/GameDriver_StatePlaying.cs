@@ -11,6 +11,8 @@ namespace GM.UI
         {
             _gameLogic = GameData.GetInstance().GameLogic;
             _gameLogic.OnGameStart();
+
+            GameData.GetInstance().PlayfieldUI.StartGame();
         }
 
         public void OnStateExit(DriverState to)

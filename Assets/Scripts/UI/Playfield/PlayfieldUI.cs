@@ -8,11 +8,22 @@ namespace GM.UI.Playfield
     {
         [SerializeField] private LevelCounter _levelCounter;
         [SerializeField] private GameTimer _gameTimer;
+        [SerializeField] private GameAlert _gameAlert;
+
+        public void StartGame()
+        {
+            _gameTimer.StartTimer();
+        }
 
         public void Set(GameState state)
         {
             var levelState = state.LevelState;
             _levelCounter.Set(levelState.Level, levelState.Gravity);
+
+            if (state.Alert.HasValue)
+            {
+                _gameAlert.Alert(state.Alert.Value);
+            }
         }
 
         private void Awake()
@@ -25,6 +36,11 @@ namespace GM.UI.Playfield
             if (!_gameTimer)
             {
                 throw new ArgumentNullException(nameof(_gameTimer));
+            }
+
+            if (!_gameAlert)
+            {
+                throw new ArgumentNullException(nameof(_gameAlert));
             }
         }
     }

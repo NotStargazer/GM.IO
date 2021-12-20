@@ -61,7 +61,7 @@ namespace GM
 
             public T ReadValue<T>() where T : struct
             {
-                IsPressed = _oldValue != _input.ReadValueAsObject();
+                IsPressed = _oldValue != _input.ReadValueAsObject() && _input.phase == InputActionPhase.Performed;
                 _oldValue = _input.ReadValueAsObject();
                 return _input.ReadValue<T>();
             }
