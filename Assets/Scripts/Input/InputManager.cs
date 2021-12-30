@@ -61,7 +61,16 @@ namespace GM
 
             public T ReadValue<T>() where T : struct
             {
-                IsPressed = _oldValue != _input.ReadValueAsObject() && _input.phase == InputActionPhase.Performed;
+                var value = _input.ReadValueAsObject();
+
+                bool aboveDeadZone = true;
+
+                if (typeof(T) == typeof(float) && value != null)
+                {
+                    aboveDeadZone = (float)value > 0.1f;
+                }
+
+                IsPressed = _oldValue != value && _input.phase == InputActionPhase.Performed && aboveDeadZone;
                 _oldValue = _input.ReadValueAsObject();
                 return _input.ReadValue<T>();
             }

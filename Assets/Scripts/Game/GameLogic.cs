@@ -115,7 +115,6 @@ namespace GM.Game
                     }
 
                     var isGameOver = false;
-                    var center = Vector2.zero;
                     var blocks = _tetraBlock.GetPositions();
 
                     foreach (var position in blocks)
