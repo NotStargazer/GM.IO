@@ -37,6 +37,7 @@ namespace GM.UI
             _states = new Dictionary<DriverState, IDriverState>
             {
                 {DriverState.Playing, new GameDriver_StatePlaying()},
+                {DriverState.Gameover, new GameDriver_StateGameOver()}
             };
             /*
              * State Results

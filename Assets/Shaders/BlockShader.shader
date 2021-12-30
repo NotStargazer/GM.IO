@@ -36,6 +36,7 @@ Shader "Unlit/BlockShader"
 					float4 vertex : SV_POSITION;
 					float4 color : COLOR;
 					float2 uv : TEXCOORD0;
+					float2 screenUv : SCREENCOORD;
 					float2 oluv : OUTLINE;
 					float4 oll : OUTLINELINE;
 					float4 olc : OUTLINECORNER;
@@ -63,7 +64,24 @@ Shader "Unlit/BlockShader"
 					o.oll = _OutlinesL[instanceID];
 					o.olc = _OutlinesC[instanceID];
 
+					o.screenUv = ComputeScreenPos(o.vertex);
+
 					return o;
+				}
+
+				uniform float2 _FocalPoint;
+				uniform float _RippleSize;
+				uniform float _RippleProgress;
+				uniform float _ScreenRatio;
+
+				float ComputeRippleAlpha(float2 screenPos)
+				{
+					float2 offset = screenPos - _FocalPoint;
+					offset.r *= _ScreenRatio;
+
+					const float distanceFromFocal = length(offset);
+
+					return smoothstep(_RippleProgress - _RippleSize, _RippleProgress + _RippleSize, distanceFromFocal);
 				}
 
 				fixed4 frag(v2f i) : SV_Target
@@ -104,10 +122,11 @@ Shader "Unlit/BlockShader"
 					fixed4 neo = tex2D(_MainTex, i.uv);
 					neo *= i.color;
 
-					neo = fixed4(lerp(neo.rgb, _OutlineColor.rgb, ol * _OutlineColor.a), neo.a);
+					neo = fixed4(lerp(neo.rgb, _OutlineColor.rgb, ol * _OutlineColor.a), neo.a * ComputeRippleAlpha(i.screenUv));
 
 					return neo;
 				}
+
 				ENDCG
 			}
 		}

@@ -102,7 +102,7 @@ namespace GM.Game
             return false;
         }
 
-        public void Rotate(int direction, BlockGrid grid)
+        public void Rotate(int direction, BlockGrid grid, bool noKick = false)
         {
             var previousIndex = _rotationIndex;
             _rotationIndex += direction;
@@ -111,7 +111,9 @@ namespace GM.Game
                 ? _rotationStates.Count - 1
                 : _rotationIndex % _rotationStates.Count;
 
-            if (CheckCollisions(grid) && CheckKicks(grid))
+            var collision = CheckCollisions(grid);
+
+            if (noKick && collision || collision && CheckKicks(grid))
             {
                 _rotationIndex = previousIndex;
             }

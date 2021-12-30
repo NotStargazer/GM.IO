@@ -15,6 +15,11 @@ namespace GM.UI.Playfield
             _gameTimer.StartTimer();
         }
 
+        public void StopGame()
+        {
+            _gameTimer.StopTimer();
+        }
+
         public void Set(GameState state)
         {
             var levelState = state.LevelState;

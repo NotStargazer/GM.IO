@@ -1,12 +1,12 @@
 using GM.Data;
-using GM.Game;
+using GM.UI.Rendering;
 using UnityEngine;
 
 namespace GM.UI
 {
     public interface IUIRoot
     {
-
+        public void StartRippleEffect(Vector2 focalPoint);
     }
 
     public class UIRoot : MonoBehaviour, IUIRoot
@@ -18,6 +18,8 @@ namespace GM.UI
         {
             _gameDriver = new GameDriver(this);
         }
+
+        [SerializeField] private RippleEffectController _rippleEffectController;
 
         public void OnReceiveInputs(IInput input)
         {
@@ -34,6 +36,11 @@ namespace GM.UI
             }
 
             _gameDriver.OnReceiveInputsWithUI(input);
+        }
+
+        public void StartRippleEffect(Vector2 focalPoint)
+        {
+            _rippleEffectController.StartRipple(focalPoint);
         }
     }
 }

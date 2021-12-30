@@ -327,6 +327,18 @@ namespace GM.UI
             }
         }
 
+        public Vector2 GetTetraBlockCenter(Vector2Int[] blocks)
+        {
+            var center = Vector3.zero;
+
+            foreach (var block in blocks)
+            {
+                center += _basePosition + new Vector3(block.x, block.y);
+            }
+
+            return center /= blocks.Length;
+        }
+
         private void OnValidate()
         {
             _filter = GetComponent<MeshFilter>();

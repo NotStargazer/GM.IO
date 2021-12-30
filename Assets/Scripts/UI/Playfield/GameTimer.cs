@@ -20,6 +20,11 @@ namespace GM.UI.Playfield
             _startTime = Time.time;
         }
 
+        public void StopTimer()
+        {
+            _startTime = null;
+        }
+
         public void NewSection(float sectionTime)
         {
             //TODO: Player Best Time

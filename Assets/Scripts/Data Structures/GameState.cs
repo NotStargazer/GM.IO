@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using GM.UI.Playfield;
+using UnityEngine;
 
 namespace GM.Data
 {
@@ -14,12 +15,14 @@ namespace GM.Data
     {
         public List<int> LinesCleared;
         public LevelState LevelState;
+        public Vector2? GameOverCenter;
         public AlertType? Alert;
 
         public GameState()
         {
             LinesCleared = new List<int>();
         }
+
 
         public void Reset()
         {

@@ -68,6 +68,11 @@ namespace GM.Game
 
         public GameState LogicUpdate(IInput input)
         {
+            if (_state.GameOverCenter.HasValue)
+            {
+                _playfield.RenderBlocks(false);
+            }
+
             var currentFrameDropDuration = _progression.CurrentState.DropDuration;
             var rotationConsumed = false;
 
@@ -105,8 +110,27 @@ namespace GM.Game
                     //Pre-Rotation
                     if (input.ButtonHold(Actions.Rotation, out float preRotate))
                     {
-                        _tetraBlock.Rotate(Mathf.RoundToInt(preRotate), _grid);
+                        _tetraBlock.Rotate(Mathf.RoundToInt(preRotate), _grid, noKick: true);
                         rotationConsumed = true;
+                    }
+
+                    var isGameOver = false;
+                    var center = Vector2.zero;
+                    var blocks = _tetraBlock.GetPositions();
+
+                    foreach (var position in blocks)
+                    {
+                        if (_grid.CheckCollision(position))
+                        {
+                            isGameOver = true;
+                            break;
+                        }
+                    }
+
+                    if (isGameOver)
+                    {
+                        _state.GameOverCenter = _playfield.GetTetraBlockCenter(blocks);
+                        return _state;
                     }
 
                     _tetraBlock.PerformChecks(_grid);
@@ -259,7 +283,7 @@ namespace GM.Game
             }
             else
             {
-                _timers.DropTimer.Duration = currentFrameDropDuration;
+                    _timers.DropTimer.Duration = currentFrameDropDuration;
             }
 
             // => Update Blocks
@@ -280,7 +304,6 @@ namespace GM.Game
                 // => [Wait for block lock]
                 if (_timers.DropTimer.HasExpired(out var dropExcess))
                 {
-                    _timers.DropTimer.Duration = currentFrameDropDuration;
                     var didDrop = false;
 
                     for (var i = 0; i < _progression.CurrentState.Gravity; i++)
@@ -329,6 +352,11 @@ namespace GM.Game
 
             // ====> Progression Controller
             _timers.SetTimers(_progression.CurrentState, lineCount > 0);
+        }
+
+        public void Render()
+        {
+            _playfield.RenderBlocks(false);
         }
 
         private void Awake()

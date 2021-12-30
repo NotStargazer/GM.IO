@@ -17,6 +17,7 @@ namespace GM.UI
 
         public void OnStateExit(DriverState to)
         {
+            GameData.GetInstance().PlayfieldUI.StopGame();
         }
 
         public DriverState? OnReceiveInputsWithUI(IUIRoot ui, IInput input)
@@ -26,6 +27,12 @@ namespace GM.UI
             if (gameState != null)
             {
                 GameData.GetInstance().PlayfieldUI.Set(gameState);
+
+                if (gameState.GameOverCenter.HasValue)
+                {
+                    ui.StartRippleEffect(gameState.GameOverCenter.Value);
+                    return DriverState.Gameover;
+                }
             }
 
             return null;
