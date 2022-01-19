@@ -177,6 +177,11 @@ namespace GM.Game
                 }
             }
 
+            if (Landed == false && landed)
+            {
+                GlobalResources.GetInstance().SoundController.PlaySFX(SFX.Land);
+            }
+
             Landed = landed;
             IsAtLowestPoint = lowestPoint;
         }

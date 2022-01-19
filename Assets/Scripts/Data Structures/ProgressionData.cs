@@ -23,6 +23,7 @@ namespace GM.Data
         [Min(1)] public int LockFrames;
         [Min(1)] public int LineFrame;
         [Min(1)] public int AutoShiftFrames;
+        public bool EnablePieceGhost;
     }
 
     [Serializable]

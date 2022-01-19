@@ -68,6 +68,8 @@ namespace GM.Game
 
         public GameState LogicUpdate(IInput input)
         {
+            var sfxController = GlobalResources.GetInstance().SoundController;
+
             if (_state.GameOverCenter.HasValue)
             {
                 _playfield.RenderBlocks(false);
@@ -88,6 +90,7 @@ namespace GM.Game
                     {
                         _timers.SpawnTimer.Start(lineExcess);
                         _timers.LineTimer.SetEnabled(false);
+                        sfxController.PlaySFX(SFX.LineFall);
                         _grid.DropLines(_state.LinesCleared.ToArray());
                         _playfield.Blocks = _grid.Blocks;
                     }
@@ -336,11 +339,14 @@ namespace GM.Game
 
         private void OnLock()
         {
+            var sfxController = GlobalResources.GetInstance().SoundController;
+            sfxController.PlaySFX(SFX.Lock);
             _grid.LockTetraBlock(ref _tetraBlock, ref _state);
             var lineCount = _state.LinesCleared.Count;
 
             if (lineCount > 0)
             {
+                sfxController.PlaySFX(SFX.LineClear);
                 _progression.IncrementLevel(ref _state, lineCount);
                 _timers.LineTimer.Start();
             }

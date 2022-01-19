@@ -7,9 +7,7 @@ namespace GM
     public class MainEntryPoint : MonoBehaviour
     {
         private static MainEntryPoint INSTANCE;
-
         public static bool HasInstance => INSTANCE;
-
         public static MainEntryPoint GetInstance()
         {
             if (!INSTANCE)
@@ -22,6 +20,7 @@ namespace GM
 
         [SerializeField] private InputManager _inputManager;
         [SerializeField] private UIRoot _uiRootPrefab;
+        [SerializeField] private GlobalResources _globalResources;
 
         private UIRoot _uiRootInstance;
 
@@ -37,7 +36,6 @@ namespace GM
 
             DontDestroyOnLoad(gameObject);
 
-
             if (!_inputManager)
             {
                 throw new ArgumentNullException(nameof(_inputManager));
@@ -48,10 +46,19 @@ namespace GM
                 throw new ArgumentNullException(nameof(_uiRootPrefab));
             }
 
+            if (!_globalResources)
+            {
+                throw new ArgumentNullException(nameof(_globalResources));
+            }
+
             _uiRootInstance = Instantiate(_uiRootPrefab);
             var uiGameObject = _uiRootInstance.gameObject;
             uiGameObject.name = "[Game UI Root]";
             DontDestroyOnLoad(uiGameObject);
+
+            var globalResources = Instantiate(_globalResources);
+            globalResources.name = "[Global Resources]";
+            DontDestroyOnLoad(globalResources);
 
             _uiRootInstance.OnStartForGame();
         }

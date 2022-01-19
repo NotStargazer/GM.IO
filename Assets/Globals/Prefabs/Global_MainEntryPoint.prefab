@@ -157,3 +157,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _inputManager: {fileID: 7697361153221728441}
   _uiRootPrefab: {fileID: 1939343474941644860, guid: 2b8b99a7315cc79489e9b7f4e36490f4, type: 3}
+  _globalResources: {fileID: 4288920903283888852, guid: 052923770ab008047ad773c3c76ee58b, type: 3}

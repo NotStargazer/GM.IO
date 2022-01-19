@@ -69,6 +69,7 @@ namespace GM.Game
             {
                 if (lines > 0)
                 {
+                    GlobalResources.GetInstance().SoundController.PlaySFX(SFX.Section);
                     _section++;
                     CheckSectionClear(ref state);
                     _sectionStartTime = Time.time;
