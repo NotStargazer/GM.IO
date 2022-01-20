@@ -27,6 +27,8 @@ namespace GM.Game
         private int _sectionClears;
         private float _sectionStartTime;
 
+        private bool _bell;
+
         public void Initialize()
         {
             _startTime = _sectionStartTime = Time.time;
@@ -69,13 +71,20 @@ namespace GM.Game
             {
                 if (lines > 0)
                 {
-                    GlobalResources.GetInstance().SoundController.PlaySFX(SFX.Section);
+                    GlobalResources.GetInstance().SoundController.PlaySFX(SFX.SectionPass);
+                    _bell = false;
                     _section++;
                     CheckSectionClear(ref state);
                     _sectionStartTime = Time.time;
                 }
                 else
                 {
+                    if (!_bell)
+                    {
+                        GlobalResources.GetInstance().SoundController.PlaySFX(SFX.SectionBell);
+                        _bell = true;
+                    }
+
                     _level = _section * 100 + 99;
                 }
             }

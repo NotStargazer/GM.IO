@@ -107,12 +107,16 @@ namespace GM.Game
                     //Pre-Hold
                     if (input.ButtonHold(Actions.Hold))
                     {
+                        sfxController.PlaySFX(SFX.PreHold);
                         _tetraBlockFactory.GetHold(ref _tetraBlock, _grid);
                     }
+
+                    _tetraBlockFactory.PlayPieceSound();
 
                     //Pre-Rotation
                     if (input.ButtonHold(Actions.Rotation, out float preRotate))
                     {
+                        sfxController.PlaySFX(SFX.PreRotate);
                         _tetraBlock.Rotate(Mathf.RoundToInt(preRotate), _grid, noKick: true);
                         rotationConsumed = true;
                     }
@@ -161,6 +165,7 @@ namespace GM.Game
             if (input.ButtonDown(Actions.Hold))
             {
                 _tetraBlockFactory.GetHold(ref _tetraBlock, _grid);
+                _tetraBlockFactory.PlayPieceSound();
 
                 _timers.DropTimer.Start(Time.deltaTime + ProgressionController.SingleFrame);
                 _timers.LockTimer.Start(Time.deltaTime);
@@ -170,6 +175,7 @@ namespace GM.Game
                 //Pre-Rotation
                 if (input.ButtonHold(Actions.Rotation, out float preRotate))
                 {
+                    sfxController.PlaySFX(SFX.PreRotate);
                     _tetraBlock.Rotate(Mathf.RoundToInt(preRotate), _grid);
                     rotationConsumed = true;
                 }

@@ -16,7 +16,22 @@ namespace GM
         Land,
         LineClear,
         LineFall,
-        Section
+        SectionPass,
+        SectionBell,
+        SectionClear,
+        SectionFail,
+        PreRotate,
+        PreHold,
+        TSpin,
+        Ready,
+        Go,
+        BlockO,
+        BlockJ,
+        BlockL,
+        BlockZ,
+        BlockS,
+        BlockT,
+        BlockI
     }
 
     public class SoundController : MonoBehaviour

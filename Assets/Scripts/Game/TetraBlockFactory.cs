@@ -111,6 +111,7 @@ namespace GM.Game
             var newPiece = new TetraBlock(_queue.Dequeue(), new Vector4(0.5f, 1f), grid);
             EnqueueNew();
             UpdateQueue(new Vector4(0.5f, 1f));
+
             return newPiece;
         }
 
@@ -134,6 +135,36 @@ namespace GM.Game
             (_holdBlock, tetraBlock) = (tetraBlock, _holdBlock);
             UpdateHold(_holdBlock);
             return true;
+        }
+
+        public void PlayPieceSound()
+        {
+            var soundController = GlobalResources.GetInstance().SoundController;
+
+            switch (_queue.Peek().Name)
+            {
+                case "O":
+                    soundController.PlaySFX(SFX.BlockO);
+                    break;
+                case "J":
+                    soundController.PlaySFX(SFX.BlockJ);
+                    break;
+                case "L":
+                    soundController.PlaySFX(SFX.BlockL);
+                    break;
+                case "Z":
+                    soundController.PlaySFX(SFX.BlockZ);
+                    break;
+                case "S":
+                    soundController.PlaySFX(SFX.BlockS);
+                    break;
+                case "T":
+                    soundController.PlaySFX(SFX.BlockT);
+                    break;
+                case "I":
+                    soundController.PlaySFX(SFX.BlockI);
+                    break;
+            }
         }
 
         public void Render()
