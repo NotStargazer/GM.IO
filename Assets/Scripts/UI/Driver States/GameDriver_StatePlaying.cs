@@ -5,19 +5,23 @@ namespace GM.UI
 {
     public class GameDriver_StatePlaying : IDriverState
     {
+        private BGM _currentBGM;
+
         private GameLogic _gameLogic;
 
         public void OnStateEnter(DriverState from)
         {
             _gameLogic = GameData.GetInstance().GameLogic;
-            _gameLogic.OnGameStart();
+            var state = _gameLogic.OnGameStart();
 
             GameData.GetInstance().PlayfieldUI.StartGame();
+            GlobalResources.GetInstance().SoundController.StartMusic(state.ProgressionAssets.Value.Music);
         }
 
         public void OnStateExit(DriverState to)
         {
             GameData.GetInstance().PlayfieldUI.StopGame();
+            GlobalResources.GetInstance().SoundController.StopMusic();
         }
 
         public DriverState? OnReceiveInputsWithUI(IUIRoot ui, IInput input)
@@ -32,6 +36,16 @@ namespace GM.UI
                 {
                     ui.StartRippleEffect(gameState.GameOverCenter.Value);
                     return DriverState.Gameover;
+                }
+
+                if (gameState.ProgressionAssets.HasValue)
+                {
+                    var assets = gameState.ProgressionAssets.Value;
+                    if (assets.Music != _currentBGM)
+                    {
+                        _currentBGM = assets.Music;
+                        GlobalResources.GetInstance().SoundController.SwitchMusic(assets.Music);
+                    }
                 }
             }
 

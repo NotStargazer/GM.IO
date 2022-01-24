@@ -1,0 +1,58 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6dbddfab7d6d521449a4f45828dc9be8, type: 3}
+  m_Name: ProgressionData_MusicTest
+  m_EditorClassIdentifier: 
+  EndLevel: 400
+  _progressionLevel:
+  - ArrayName: 'Level: 0'
+    Level: 0
+    EnablePieceGhost: 1
+    ProgressionTimers:
+      DropFrames: 64
+      Gravity: 1
+      SpawnFrames: 25
+      LineClearSpawnFrames: 25
+      LockFrames: 30
+      LineFrame: 40
+      AutoShiftFrames: 14
+    ProgressionAssets:
+      Background: {fileID: 0}
+      Music: 0
+  - ArrayName: 'Level: 100'
+    Level: 100
+    EnablePieceGhost: 1
+    ProgressionTimers:
+      DropFrames: 64
+      Gravity: 1
+      SpawnFrames: 25
+      LineClearSpawnFrames: 25
+      LockFrames: 30
+      LineFrame: 40
+      AutoShiftFrames: 14
+    ProgressionAssets:
+      Background: {fileID: 0}
+      Music: 1
+  - ArrayName: 'Level: 200'
+    Level: 200
+    EnablePieceGhost: 1
+    ProgressionTimers:
+      DropFrames: 64
+      Gravity: 1
+      SpawnFrames: 25
+      LineClearSpawnFrames: 25
+      LockFrames: 30
+      LineFrame: 40
+      AutoShiftFrames: 14
+    ProgressionAssets:
+      Background: {fileID: 0}
+      Music: 2

@@ -29,12 +29,15 @@ namespace GM.Game
 
         private bool _bell;
 
-        public void Initialize()
+        public void Initialize(ref GameState state)
         {
+            var progressionData = GameData.GetInstance().ProgressionData;
+
             _startTime = _sectionStartTime = Time.time;
             _level = _internalLevel = 0;
             _section = _sectionClears = 0;
-            GameData.GetInstance().ProgressionData.Reset();
+            progressionData.Reset();
+            state.ProgressionAssets = progressionData.GetAssets(_level + _internalLevel);
         }
 
         public void IncrementLevel(ref GameState state, int? lines = null)
@@ -71,7 +74,10 @@ namespace GM.Game
             {
                 if (lines > 0)
                 {
-                    GlobalResources.GetInstance().SoundController.PlaySFX(SFX.SectionPass);
+                    var soundController = GlobalResources.GetInstance().SoundController;
+                    soundController.PlaySFX(SFX.SectionPass);
+                    state.ProgressionAssets = GameData.GetInstance().ProgressionData.GetAssets(_level + _internalLevel);
+
                     _bell = false;
                     _section++;
                     CheckSectionClear(ref state);

@@ -90,6 +90,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _source: {fileID: 1536223128511329674}
+  _bgmKeys:
+  - Key: 0
+    LeadIn: {fileID: 8300000, guid: 35e82db7b33209048a69e2143a6d558f, type: 3}
+    Music: {fileID: 8300000, guid: 7e9412b5ce20c5e408d0eb01a6eec487, type: 3}
+    Tempo: 142
+  - Key: 1
+    LeadIn: {fileID: 8300000, guid: 508daecfc52a0834e920446ec1f6a69b, type: 3}
+    Music: {fileID: 8300000, guid: 8048da24526331041950c1b303805bd8, type: 3}
+    Tempo: 142
+  - Key: 2
+    LeadIn: {fileID: 8300000, guid: ba71c4d2a4575914bb07b722618c562e, type: 3}
+    Music: {fileID: 8300000, guid: 4418d25599c4ac9409f68133df5c37b0, type: 3}
+    Tempo: 142
   _sfxKeys:
   - Key: 0
     Clip: {fileID: 8300000, guid: b44bd5e80f6dab44e900fa3649e24524, type: 3}

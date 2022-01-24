@@ -8,6 +8,7 @@ namespace GM.Data
     {
         [HideInInspector] public string ArrayName;
         public int Level;
+        public bool EnablePieceGhost;
         public ProgressionTimers ProgressionTimers;
         public ProgressionAssets ProgressionAssets;
     }
@@ -23,14 +24,13 @@ namespace GM.Data
         [Min(1)] public int LockFrames;
         [Min(1)] public int LineFrame;
         [Min(1)] public int AutoShiftFrames;
-        public bool EnablePieceGhost;
     }
 
     [Serializable]
     public struct ProgressionAssets
     {
         public Texture Background;
-        public AudioClip Music;
+        public BGM Music;
     }
 
     public struct ProgressionState
@@ -42,6 +42,7 @@ namespace GM.Data
         public float LockDuration;
         public float LineDuration;
         public float AutoShiftDuration;
+        public bool GhostPiece;
     }
 
     [CreateAssetMenu(fileName = "ProgressionData", menuName = "GM/Progression Data")]
@@ -94,20 +95,27 @@ namespace GM.Data
                 LineClearSpawnDuration = progression.LineClearSpawnFrames * FRAME,
                 LockDuration = progression.LockFrames * FRAME,
                 LineDuration = progression.LineFrame * FRAME,
-                AutoShiftDuration = progression.AutoShiftFrames * FRAME
+                AutoShiftDuration = progression.AutoShiftFrames * FRAME,
+                GhostPiece = _progressionLevel[_index].EnablePieceGhost
             };
 
             return _state;
         }
 
-        public ProgressionAssets? GetNextAssets()
+        public ProgressionAssets GetAssets(int level)
         {
-            if (_index + 1 >= _progressionLevel.Length)
+            for (var index = 0; index < _progressionLevel.Length; index++)
             {
-                return _progressionLevel[_index + 1].ProgressionAssets;
+                var progressionLevel = _progressionLevel[index];
+                if (level >= progressionLevel.Level)
+                {
+                    continue;
+                }
+
+                return _progressionLevel[index - 1].ProgressionAssets;
             }
 
-            return null;
+            return _progressionLevel[_progressionLevel.Length - 1].ProgressionAssets;
         }
 
         private void OnValidate()
@@ -155,6 +163,22 @@ namespace GM.Data
                 }
 
                 _progressionLevel[i].ProgressionTimers = currentTimers;
+
+                if (i + 1 < _progressionLevel.Length)
+                {
+                    if (_progressionLevel[i + 1].EnablePieceGhost)
+                    {
+                        _progressionLevel[i].EnablePieceGhost = true;
+                    }
+                }
+
+                if (i > 0)
+                {
+                    if (_progressionLevel[i].ProgressionAssets.Music < _progressionLevel[i - 1].ProgressionAssets.Music)
+                    {
+                        _progressionLevel[i].ProgressionAssets.Music = _progressionLevel[i - 1].ProgressionAssets.Music;
+                    }
+                }
             }
         }
 

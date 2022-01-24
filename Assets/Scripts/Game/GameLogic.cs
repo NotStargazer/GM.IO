@@ -51,12 +51,12 @@ namespace GM.Game
         [SerializeField] private PlayfieldRenderer _playfield;
         [SerializeField] private ProgressionController _progression;
 
-        public void OnGameStart()
+        public GameState OnGameStart()
         {
             var instance = GameData.GetInstance();
             _grid = new BlockGrid(instance.GridSize, instance.ExcessHeight);
             _state = new GameState();
-            _progression.Initialize();
+            _progression.Initialize(ref _state);
             _tetraBlockFactory.Initialize(new Vector4(0.5f, 1f));
             _playfield.Initialize();
 
@@ -64,6 +64,8 @@ namespace GM.Game
             _timers.SetTimers(_progression.CurrentState);
             _timers.SpawnTimer.Duration = 0;
             _timers.SpawnTimer.Start();
+
+            return _state;
         }
 
         public GameState LogicUpdate(IInput input)
@@ -75,13 +77,14 @@ namespace GM.Game
                 _playfield.RenderBlocks(false);
             }
 
-            var currentFrameDropDuration = _progression.CurrentState.DropDuration;
+            var progressionState = _progression.CurrentState;
+            var currentFrameDropDuration = progressionState.DropDuration;
             var rotationConsumed = false;
 
             // => Get new TetraBlock
             if (_tetraBlock == null)
             {
-                _playfield.RenderBlocks();
+                _playfield.RenderBlocks(progressionState.GhostPiece);
                 _tetraBlockFactory.Render();
 
                 if (_timers.LineTimer.HasStarted)
@@ -173,7 +176,7 @@ namespace GM.Game
                 _timers.AutoShiftTimer.SetEnabled(true);
 
                 //Pre-Rotation
-                if (input.ButtonHold(Actions.Rotation, out float preRotate))
+                if (input.ButtonHold(Actions.Rotation, out float preRotate) && !rotationConsumed)
                 {
                     sfxController.PlaySFX(SFX.PreRotate);
                     _tetraBlock.Rotate(Mathf.RoundToInt(preRotate), _grid);
@@ -281,7 +284,7 @@ namespace GM.Game
                 {
                     OnLock();
                     _timers.SpawnTimer.Start();
-                    _playfield.RenderBlocks();
+                    _playfield.RenderBlocks(progressionState.GhostPiece);
                     _tetraBlockFactory.Render();
 
                     // => Return State
@@ -335,7 +338,7 @@ namespace GM.Game
                 }
             }
 
-            _playfield.RenderBlocks();
+            _playfield.RenderBlocks(progressionState.GhostPiece);
             _tetraBlockFactory.Render();
 
             // => Return State

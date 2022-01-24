@@ -16,6 +16,7 @@ MonoBehaviour:
   _progressionLevel:
   - ArrayName: 'Level: 0'
     Level: 0
+    EnablePieceGhost: 1
     ProgressionTimers:
       DropFrames: 64
       Gravity: 1
@@ -26,9 +27,10 @@ MonoBehaviour:
       AutoShiftFrames: 14
     ProgressionAssets:
       Background: {fileID: 0}
-      Music: {fileID: 0}
+      Music: 0
   - ArrayName: 'Level: 30'
     Level: 30
+    EnablePieceGhost: 1
     ProgressionTimers:
       DropFrames: 42.666668
       Gravity: 1
@@ -39,9 +41,10 @@ MonoBehaviour:
       AutoShiftFrames: 14
     ProgressionAssets:
       Background: {fileID: 0}
-      Music: {fileID: 0}
+      Music: 0
   - ArrayName: 'Level: 35'
     Level: 35
+    EnablePieceGhost: 1
     ProgressionTimers:
       DropFrames: 32
       Gravity: 1
@@ -52,9 +55,10 @@ MonoBehaviour:
       AutoShiftFrames: 14
     ProgressionAssets:
       Background: {fileID: 0}
-      Music: {fileID: 0}
+      Music: 0
   - ArrayName: 'Level: 40'
     Level: 40
+    EnablePieceGhost: 1
     ProgressionTimers:
       DropFrames: 25.6
       Gravity: 1
@@ -65,9 +69,10 @@ MonoBehaviour:
       AutoShiftFrames: 14
     ProgressionAssets:
       Background: {fileID: 0}
-      Music: {fileID: 0}
+      Music: 0
   - ArrayName: 'Level: 50'
     Level: 50
+    EnablePieceGhost: 1
     ProgressionTimers:
       DropFrames: 21.333334
       Gravity: 1
@@ -78,9 +83,10 @@ MonoBehaviour:
       AutoShiftFrames: 14
     ProgressionAssets:
       Background: {fileID: 0}
-      Music: {fileID: 0}
+      Music: 0
   - ArrayName: 'Level: 60'
     Level: 60
+    EnablePieceGhost: 1
     ProgressionTimers:
       DropFrames: 16
       Gravity: 1
@@ -91,9 +97,10 @@ MonoBehaviour:
       AutoShiftFrames: 14
     ProgressionAssets:
       Background: {fileID: 0}
-      Music: {fileID: 0}
+      Music: 0
   - ArrayName: 'Level: 70'
     Level: 70
+    EnablePieceGhost: 1
     ProgressionTimers:
       DropFrames: 8
       Gravity: 1
@@ -104,9 +111,10 @@ MonoBehaviour:
       AutoShiftFrames: 14
     ProgressionAssets:
       Background: {fileID: 0}
-      Music: {fileID: 0}
+      Music: 0
   - ArrayName: 'Level: 80'
     Level: 80
+    EnablePieceGhost: 1
     ProgressionTimers:
       DropFrames: 5.3333335
       Gravity: 1
@@ -117,9 +125,10 @@ MonoBehaviour:
       AutoShiftFrames: 14
     ProgressionAssets:
       Background: {fileID: 0}
-      Music: {fileID: 0}
+      Music: 0
   - ArrayName: 'Level: 90'
     Level: 90
+    EnablePieceGhost: 1
     ProgressionTimers:
       DropFrames: 4
       Gravity: 1
@@ -130,9 +139,10 @@ MonoBehaviour:
       AutoShiftFrames: 14
     ProgressionAssets:
       Background: {fileID: 0}
-      Music: {fileID: 0}
+      Music: 0
   - ArrayName: 'Level: 100'
     Level: 100
+    EnablePieceGhost: 1
     ProgressionTimers:
       DropFrames: 3.2
       Gravity: 1
@@ -143,9 +153,10 @@ MonoBehaviour:
       AutoShiftFrames: 14
     ProgressionAssets:
       Background: {fileID: 0}
-      Music: {fileID: 0}
+      Music: 0
   - ArrayName: 'Level: 120'
     Level: 120
+    EnablePieceGhost: 1
     ProgressionTimers:
       DropFrames: 2.6666667
       Gravity: 1
@@ -156,9 +167,10 @@ MonoBehaviour:
       AutoShiftFrames: 14
     ProgressionAssets:
       Background: {fileID: 0}
-      Music: {fileID: 0}
+      Music: 0
   - ArrayName: 'Level: 140'
     Level: 140
+    EnablePieceGhost: 1
     ProgressionTimers:
       DropFrames: 2.2857144
       Gravity: 1
@@ -169,9 +181,10 @@ MonoBehaviour:
       AutoShiftFrames: 14
     ProgressionAssets:
       Background: {fileID: 0}
-      Music: {fileID: 0}
+      Music: 0
   - ArrayName: 'Level: 160'
     Level: 160
+    EnablePieceGhost: 1
     ProgressionTimers:
       DropFrames: 2
       Gravity: 1
@@ -182,9 +195,10 @@ MonoBehaviour:
       AutoShiftFrames: 14
     ProgressionAssets:
       Background: {fileID: 0}
-      Music: {fileID: 0}
+      Music: 0
   - ArrayName: 'Level: 170'
     Level: 170
+    EnablePieceGhost: 1
     ProgressionTimers:
       DropFrames: 1.7777778
       Gravity: 1
@@ -195,9 +209,10 @@ MonoBehaviour:
       AutoShiftFrames: 14
     ProgressionAssets:
       Background: {fileID: 0}
-      Music: {fileID: 0}
+      Music: 0
   - ArrayName: 'Level: 200'
     Level: 200
+    EnablePieceGhost: 0
     ProgressionTimers:
       DropFrames: 64
       Gravity: 1
@@ -208,9 +223,10 @@ MonoBehaviour:
       AutoShiftFrames: 14
     ProgressionAssets:
       Background: {fileID: 0}
-      Music: {fileID: 0}
+      Music: 0
   - ArrayName: 'Level: 220'
     Level: 220
+    EnablePieceGhost: 0
     ProgressionTimers:
       DropFrames: 8
       Gravity: 1
@@ -221,9 +237,10 @@ MonoBehaviour:
       AutoShiftFrames: 14
     ProgressionAssets:
       Background: {fileID: 0}
-      Music: {fileID: 0}
+      Music: 0
   - ArrayName: 'Level: 230'
     Level: 230
+    EnablePieceGhost: 0
     ProgressionTimers:
       DropFrames: 4
       Gravity: 1
@@ -234,9 +251,10 @@ MonoBehaviour:
       AutoShiftFrames: 14
     ProgressionAssets:
       Background: {fileID: 0}
-      Music: {fileID: 0}
+      Music: 0
   - ArrayName: 'Level: 233'
     Level: 233
+    EnablePieceGhost: 0
     ProgressionTimers:
       DropFrames: 2.6666667
       Gravity: 1
@@ -247,9 +265,10 @@ MonoBehaviour:
       AutoShiftFrames: 14
     ProgressionAssets:
       Background: {fileID: 0}
-      Music: {fileID: 0}
+      Music: 0
   - ArrayName: 'Level: 236'
     Level: 236
+    EnablePieceGhost: 0
     ProgressionTimers:
       DropFrames: 2
       Gravity: 1
@@ -260,9 +279,10 @@ MonoBehaviour:
       AutoShiftFrames: 14
     ProgressionAssets:
       Background: {fileID: 0}
-      Music: {fileID: 0}
+      Music: 0
   - ArrayName: 'Level: 239'
     Level: 239
+    EnablePieceGhost: 0
     ProgressionTimers:
       DropFrames: 1.6
       Gravity: 1
@@ -273,9 +293,10 @@ MonoBehaviour:
       AutoShiftFrames: 14
     ProgressionAssets:
       Background: {fileID: 0}
-      Music: {fileID: 0}
+      Music: 0
   - ArrayName: 'Level: 243'
     Level: 243
+    EnablePieceGhost: 0
     ProgressionTimers:
       DropFrames: 1.3333334
       Gravity: 1
@@ -286,9 +307,10 @@ MonoBehaviour:
       AutoShiftFrames: 14
     ProgressionAssets:
       Background: {fileID: 0}
-      Music: {fileID: 0}
+      Music: 0
   - ArrayName: 'Level: 247'
     Level: 247
+    EnablePieceGhost: 0
     ProgressionTimers:
       DropFrames: 1.1428572
       Gravity: 1
@@ -299,9 +321,10 @@ MonoBehaviour:
       AutoShiftFrames: 14
     ProgressionAssets:
       Background: {fileID: 0}
-      Music: {fileID: 0}
+      Music: 0
   - ArrayName: 'Level: 251'
     Level: 251
+    EnablePieceGhost: 0
     ProgressionTimers:
       DropFrames: 1
       Gravity: 1
@@ -312,9 +335,10 @@ MonoBehaviour:
       AutoShiftFrames: 14
     ProgressionAssets:
       Background: {fileID: 0}
-      Music: {fileID: 0}
+      Music: 0
   - ArrayName: 'Level: 300'
     Level: 300
+    EnablePieceGhost: 0
     ProgressionTimers:
       DropFrames: 1
       Gravity: 2
@@ -325,9 +349,10 @@ MonoBehaviour:
       AutoShiftFrames: 14
     ProgressionAssets:
       Background: {fileID: 0}
-      Music: {fileID: 0}
+      Music: 0
   - ArrayName: 'Level: 330'
     Level: 330
+    EnablePieceGhost: 0
     ProgressionTimers:
       DropFrames: 1
       Gravity: 3
@@ -338,9 +363,10 @@ MonoBehaviour:
       AutoShiftFrames: 14
     ProgressionAssets:
       Background: {fileID: 0}
-      Music: {fileID: 0}
+      Music: 0
   - ArrayName: 'Level: 360'
     Level: 360
+    EnablePieceGhost: 0
     ProgressionTimers:
       DropFrames: 1
       Gravity: 4
@@ -351,9 +377,10 @@ MonoBehaviour:
       AutoShiftFrames: 14
     ProgressionAssets:
       Background: {fileID: 0}
-      Music: {fileID: 0}
+      Music: 0
   - ArrayName: 'Level: 400'
     Level: 400
+    EnablePieceGhost: 0
     ProgressionTimers:
       DropFrames: 1
       Gravity: 5
@@ -364,9 +391,10 @@ MonoBehaviour:
       AutoShiftFrames: 14
     ProgressionAssets:
       Background: {fileID: 0}
-      Music: {fileID: 0}
+      Music: 0
   - ArrayName: 'Level: 420'
     Level: 420
+    EnablePieceGhost: 0
     ProgressionTimers:
       DropFrames: 1
       Gravity: 4
@@ -377,9 +405,10 @@ MonoBehaviour:
       AutoShiftFrames: 14
     ProgressionAssets:
       Background: {fileID: 0}
-      Music: {fileID: 0}
+      Music: 0
   - ArrayName: 'Level: 450'
     Level: 450
+    EnablePieceGhost: 0
     ProgressionTimers:
       DropFrames: 1
       Gravity: 3
@@ -390,9 +419,10 @@ MonoBehaviour:
       AutoShiftFrames: 14
     ProgressionAssets:
       Background: {fileID: 0}
-      Music: {fileID: 0}
+      Music: 0
   - ArrayName: 'Level: 500'
     Level: 500
+    EnablePieceGhost: 0
     ProgressionTimers:
       DropFrames: 1
       Gravity: 20
@@ -403,9 +433,10 @@ MonoBehaviour:
       AutoShiftFrames: 8
     ProgressionAssets:
       Background: {fileID: 0}
-      Music: {fileID: 0}
+      Music: 1
   - ArrayName: 'Level: 600'
     Level: 600
+    EnablePieceGhost: 0
     ProgressionTimers:
       DropFrames: 1
       Gravity: 20
@@ -416,9 +447,10 @@ MonoBehaviour:
       AutoShiftFrames: 8
     ProgressionAssets:
       Background: {fileID: 0}
-      Music: {fileID: 0}
+      Music: 1
   - ArrayName: 'Level: 700'
     Level: 700
+    EnablePieceGhost: 0
     ProgressionTimers:
       DropFrames: 1
       Gravity: 20
@@ -429,9 +461,10 @@ MonoBehaviour:
       AutoShiftFrames: 8
     ProgressionAssets:
       Background: {fileID: 0}
-      Music: {fileID: 0}
+      Music: 1
   - ArrayName: 'Level: 800'
     Level: 800
+    EnablePieceGhost: 0
     ProgressionTimers:
       DropFrames: 1
       Gravity: 20
@@ -442,9 +475,10 @@ MonoBehaviour:
       AutoShiftFrames: 8
     ProgressionAssets:
       Background: {fileID: 0}
-      Music: {fileID: 0}
+      Music: 1
   - ArrayName: 'Level: 900'
     Level: 900
+    EnablePieceGhost: 0
     ProgressionTimers:
       DropFrames: 1
       Gravity: 20
@@ -455,9 +489,10 @@ MonoBehaviour:
       AutoShiftFrames: 6
     ProgressionAssets:
       Background: {fileID: 0}
-      Music: {fileID: 0}
+      Music: 2
   - ArrayName: 'Level: 1000'
     Level: 1000
+    EnablePieceGhost: 0
     ProgressionTimers:
       DropFrames: 1
       Gravity: 20
@@ -468,9 +503,10 @@ MonoBehaviour:
       AutoShiftFrames: 6
     ProgressionAssets:
       Background: {fileID: 0}
-      Music: {fileID: 0}
+      Music: 2
   - ArrayName: 'Level: 1100'
     Level: 1100
+    EnablePieceGhost: 0
     ProgressionTimers:
       DropFrames: 1
       Gravity: 20
@@ -481,9 +517,10 @@ MonoBehaviour:
       AutoShiftFrames: 6
     ProgressionAssets:
       Background: {fileID: 0}
-      Music: {fileID: 0}
+      Music: 2
   - ArrayName: 'Level: 1200'
     Level: 1200
+    EnablePieceGhost: 0
     ProgressionTimers:
       DropFrames: 1
       Gravity: 20
@@ -494,4 +531,4 @@ MonoBehaviour:
       AutoShiftFrames: 6
     ProgressionAssets:
       Background: {fileID: 0}
-      Music: {fileID: 0}
+      Music: 2

@@ -17,6 +17,7 @@ namespace GM.Data
         public LevelState LevelState;
         public Vector2? GameOverCenter;
         public AlertType? Alert;
+        public ProgressionAssets? ProgressionAssets;
 
         public GameState()
         {
@@ -28,6 +29,7 @@ namespace GM.Data
         {
             LinesCleared.Clear();
             Alert = null;
+            ProgressionAssets = null;
         }
     }
 }
