@@ -37,6 +37,8 @@ namespace GM.Game
         private readonly Quaternion _baseRotation = new Quaternion(0, 0, 1, 0);
         private Vector3 _basePosition;
 
+        public bool IsHoldLocked => _holdLocked;
+
         public void Initialize(Vector4 textureST)
         {
             _basePosition = transform.position;

@@ -9,6 +9,9 @@ namespace GM.UI.Playfield
         [SerializeField] private LevelCounter _levelCounter;
         [SerializeField] private GameTimer _gameTimer;
         [SerializeField] private GameAlert _gameAlert;
+        [SerializeField] private VFXController _visualEffectController;
+
+        public IVFXController VisualEffectController => _visualEffectController;
 
         public void StartGame()
         {

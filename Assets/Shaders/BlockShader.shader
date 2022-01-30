@@ -50,6 +50,7 @@ Shader "Unlit/BlockShader"
 				float4 _OutlineColor;
 				float4 _TestValueC;
 				float _OutlineThickness;
+				float _PieceLightness;
 
 				v2f vert(appdata v, uint instanceID: SV_InstanceID)
 				{

@@ -100,7 +100,7 @@ namespace GM.Game
             state.LevelState = new LevelState
             {
                 Level = _level,
-                Gravity = SingleFrame / currentState.DropDuration * currentState.Gravity / 20
+                Gravity = SingleFrame / currentState.DropDuration * (currentState.Gravity / 20f)
             };
 
             //Debug.Log($"Level: {_level + _internalLevel}, Section {_section}");

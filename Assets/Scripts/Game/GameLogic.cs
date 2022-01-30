@@ -108,7 +108,7 @@ namespace GM.Game
                     _state.Reset();
 
                     //Pre-Hold
-                    if (input.ButtonHold(Actions.Hold))
+                    if (!_tetraBlockFactory.IsHoldLocked && input.ButtonHold(Actions.Hold))
                     {
                         sfxController.PlaySFX(SFX.PreHold);
                         _tetraBlockFactory.GetHold(ref _tetraBlock, _grid);
@@ -160,12 +160,12 @@ namespace GM.Game
                     return null;
                 }
 
-                _playfield.SetFallingProperties(_tetraBlock.GetBlock());
+                _playfield.SetFallingProperties(_tetraBlock);
                 _playfield.SetFallingPosition(_tetraBlock.GetPositions(), _grid);
             }
 
             // => Update Main Input Logic
-            if (input.ButtonDown(Actions.Hold))
+            if (!_tetraBlockFactory.IsHoldLocked && input.ButtonDown(Actions.Hold))
             {
                 _tetraBlockFactory.GetHold(ref _tetraBlock, _grid);
                 _tetraBlockFactory.PlayPieceSound();
@@ -185,7 +185,7 @@ namespace GM.Game
 
                 _tetraBlock.PerformChecks(_grid);
 
-                _playfield.SetFallingProperties(_tetraBlock.GetBlock());
+                _playfield.SetFallingProperties(_tetraBlock);
                 _playfield.SetFallingPosition(_tetraBlock.GetPositions(), _grid);
             }
 

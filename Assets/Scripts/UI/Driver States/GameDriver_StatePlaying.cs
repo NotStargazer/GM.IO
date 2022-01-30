@@ -30,7 +30,8 @@ namespace GM.UI
 
             if (gameState != null)
             {
-                GameData.GetInstance().PlayfieldUI.Set(gameState);
+                var playfieldUI = GameData.GetInstance().PlayfieldUI;
+                playfieldUI.Set(gameState);
 
                 if (gameState.GameOverCenter.HasValue)
                 {
@@ -46,6 +47,11 @@ namespace GM.UI
                         _currentBGM = assets.Music;
                         GlobalResources.GetInstance().SoundController.SwitchMusic(assets.Music);
                     }
+                }
+
+                if (gameState.LinesCleared.Count > 0)
+                {
+                    playfieldUI.VisualEffectController.PlayLineBreakVFX(gameState.LinesCleared);
                 }
             }
 

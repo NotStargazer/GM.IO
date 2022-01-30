@@ -15,6 +15,7 @@ namespace GM.UI
         private static readonly int INSTANCE_ST = Shader.PropertyToID("_MainTex_ST");
         private static readonly int INSTANCE_OUTLINEL = Shader.PropertyToID("_OutlinesL");
         private static readonly int INSTANCE_OUTLINEC = Shader.PropertyToID("_OutlinesC");
+        private static readonly int INSTANCE_OUTLINECOL = Shader.PropertyToID("_OutlineColor");
 
         private const int BORDER_VERT_COUNT = 16;
         
@@ -200,8 +201,10 @@ namespace GM.UI
             }
         }
 
-        public void SetFallingProperties(Block block)
+        public void SetFallingProperties(TetraBlock blocks, bool isHoldBlock = false)
         {
+            var block = blocks.GetBlock();
+
             var blockColors = new Vector4[4];
             var ghostColors = new Vector4[4];
             var textureST = new Vector4[4];
