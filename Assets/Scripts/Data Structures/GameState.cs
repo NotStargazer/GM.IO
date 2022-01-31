@@ -1,9 +1,16 @@
 using System.Collections.Generic;
+using GM.Game;
 using GM.UI.Playfield;
 using UnityEngine;
 
 namespace GM.Data
 {
+    public struct DestroyedLine
+    {
+        public int LineNumber;
+        public Block[] Blocks;
+    }
+
     public struct LevelState
     {
         public int Level;
@@ -13,7 +20,7 @@ namespace GM.Data
     //Used as reference point for UI.
     public class GameState
     {
-        public List<int> LinesCleared;
+        public List<DestroyedLine> LinesCleared;
         public LevelState LevelState;
         public Vector2? GameOverCenter;
         public AlertType? Alert;
@@ -21,7 +28,7 @@ namespace GM.Data
 
         public GameState()
         {
-            LinesCleared = new List<int>();
+            LinesCleared = new List<DestroyedLine>();
         }
 
 

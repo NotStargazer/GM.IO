@@ -23,7 +23,8 @@ MonoBehaviour:
       - {x: 1, y: 0}
       - {x: 1, y: 1}
       - {x: 0, y: 1}
-    BlockColor: {r: 0.89019614, g: 0.85098046, b: 0.098039225, a: 1}
+    TopBlockColor: {r: 0.89019614, g: 0.85098046, b: 0.098039225, a: 1}
+    BotBlockColor: {r: 0.89, g: 0.6718064, b: 0.114838704, a: 1}
     CanFloorKick: 0
     ExcludeFromGameStart: 0
   - Name: S
@@ -41,7 +42,8 @@ MonoBehaviour:
       - {x: 0, y: 1}
       - {x: 1, y: 1}
       - {x: 0, y: 2}
-    BlockColor: {r: 0.9568628, g: 0.06666667, b: 1, a: 1}
+    TopBlockColor: {r: 0.9568628, g: 0.06666667, b: 1, a: 1}
+    BotBlockColor: {r: 0.93292665, g: 0, b: 1, a: 1}
     CanFloorKick: 0
     ExcludeFromGameStart: 1
   - Name: Z
@@ -59,7 +61,8 @@ MonoBehaviour:
       - {x: 2, y: 2}
       - {x: 2, y: 1}
       - {x: 1, y: 0}
-    BlockColor: {r: 0.4431373, g: 0.8862746, b: 0.09411766, a: 1}
+    TopBlockColor: {r: 0.4431373, g: 0.8862746, b: 0.09411766, a: 1}
+    BotBlockColor: {r: 0.41906255, g: 0.894, b: 0.055875, a: 1}
     CanFloorKick: 0
     ExcludeFromGameStart: 1
   - Name: L
@@ -87,7 +90,8 @@ MonoBehaviour:
       - {x: 1, y: 2}
       - {x: 2, y: 0}
       - {x: 1, y: 0}
-    BlockColor: {r: 1, g: 0.6431373, b: 0.078431375, a: 1}
+    TopBlockColor: {r: 1, g: 0.6431373, b: 0.078431375, a: 1}
+    BotBlockColor: {r: 1, g: 0.47524753, b: 0.009900987, a: 1}
     CanFloorKick: 0
     ExcludeFromGameStart: 0
   - Name: J
@@ -115,7 +119,8 @@ MonoBehaviour:
       - {x: 1, y: 2}
       - {x: 2, y: 2}
       - {x: 1, y: 0}
-    BlockColor: {r: 0.054901965, g: 0.28627452, b: 0.9294118, a: 1}
+    TopBlockColor: {r: 0.15686275, g: 0.5803922, b: 0.9921569, a: 1}
+    BotBlockColor: {r: 0.10766674, g: 0.02266666, b: 0.986, a: 1}
     CanFloorKick: 0
     ExcludeFromGameStart: 0
   - Name: T
@@ -143,7 +148,8 @@ MonoBehaviour:
       - {x: 1, y: 1}
       - {x: 2, y: 1}
       - {x: 1, y: 2}
-    BlockColor: {r: 0.10196079, g: 0.8078432, b: 0.8941177, a: 1}
+    TopBlockColor: {r: 0.10196079, g: 0.8078432, b: 0.8941177, a: 1}
+    BotBlockColor: {r: 0.015745541, g: 0.63507074, b: 0.88699996, a: 1}
     CanFloorKick: 1
     ExcludeFromGameStart: 0
   - Name: I
@@ -161,6 +167,7 @@ MonoBehaviour:
       - {x: 2, y: 1}
       - {x: 2, y: 2}
       - {x: 2, y: 3}
-    BlockColor: {r: 0.854902, g: 0.12941177, b: 0.007843138, a: 1}
+    TopBlockColor: {r: 1, g: 0.30500126, b: 0.06666666, a: 1}
+    BotBlockColor: {r: 1, g: 0.013824885, b: 0, a: 1}
     CanFloorKick: 1
     ExcludeFromGameStart: 0

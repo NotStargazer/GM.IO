@@ -11,7 +11,8 @@ namespace GM.UI
     [RequireComponent(typeof(MeshFilter))]
     public class PlayfieldRenderer : MonoBehaviour
     {
-        private static readonly int INSTANCE_COLORS = Shader.PropertyToID("_Colors");
+        private static readonly int INSTANCE_COLORS_TOP = Shader.PropertyToID("_TopColors");
+        private static readonly int INSTANCE_COLORS_BOT = Shader.PropertyToID("_BotColors");
         private static readonly int INSTANCE_ST = Shader.PropertyToID("_MainTex_ST");
         private static readonly int INSTANCE_OUTLINEL = Shader.PropertyToID("_OutlinesL");
         private static readonly int INSTANCE_OUTLINEC = Shader.PropertyToID("_OutlinesC");
@@ -23,6 +24,7 @@ namespace GM.UI
         [SerializeField] private MeshRenderer _renderer;
         [SerializeField] private Material _borderMaterial;
         [Range(0, 1)] [SerializeField] private float _ghostTransparency;
+        [Range(0, 1)] [SerializeField] private float _lockedBlockLightness;
 
         //Border Properties
         private Mesh _borderMesh;
@@ -37,7 +39,8 @@ namespace GM.UI
         private Matrix4x4[] _staticTransforms;
         private Matrix4x4[] _fallingTransforms;
         private Matrix4x4[] _ghostTransforms;
-        private Vector4[] _colors;
+        private Vector4[] _topColors;
+        private Vector4[] _botColors;
         private Vector4[] _textureST;
         private Vector4[] _outlineLines;
         private Vector4[] _outlineCorners;
@@ -53,7 +56,8 @@ namespace GM.UI
                 
                 _blockCount = _gridSize.x * _gridSize.y;
                 _staticTransforms = new Matrix4x4[_blockCount];
-                _colors = new Vector4[_blockCount];
+                _topColors = new Vector4[_blockCount];
+                _botColors = new Vector4[_blockCount];
                 _textureST = new Vector4[_blockCount];
                 _outlineLines = new Vector4[_blockCount];
                 _outlineCorners = new Vector4[_blockCount];
@@ -71,7 +75,8 @@ namespace GM.UI
                             Matrix4x4 matrix = Matrix4x4.zero;
                             matrix.SetTRS(position, _baseRotation, Vector3.one);
                             _staticTransforms[currentIndex] = matrix;
-                            _colors[currentIndex] = block.Color.linear;
+                            _topColors[currentIndex] = block.TopColor.linear - Color.white * (1 - _lockedBlockLightness);
+                            _botColors[currentIndex] = block.BotColor.linear - Color.white * (1 - _lockedBlockLightness);
                             _textureST[currentIndex] = block.TextureST;
 
                             var xg = x > 0;
@@ -96,7 +101,8 @@ namespace GM.UI
                     }
                 }
                 
-                _staticProperties.SetVectorArray(INSTANCE_COLORS, _colors);
+                _staticProperties.SetVectorArray(INSTANCE_COLORS_TOP, _topColors);
+                _staticProperties.SetVectorArray(INSTANCE_COLORS_BOT, _botColors);
                 _staticProperties.SetVectorArray(INSTANCE_ST, _textureST);
                 _staticProperties.SetVectorArray(INSTANCE_OUTLINEL, _outlineLines);
                 _staticProperties.SetVectorArray(INSTANCE_OUTLINEC, _outlineCorners);
@@ -205,8 +211,10 @@ namespace GM.UI
         {
             var block = blocks.GetBlock();
 
-            var blockColors = new Vector4[4];
-            var ghostColors = new Vector4[4];
+            var blockTopColors = new Vector4[4];
+            var blockBotColors = new Vector4[4];
+            var ghostTopColors = new Vector4[4];
+            var ghostBotColors = new Vector4[4];
             var textureST = new Vector4[4];
             var outlineL = new Vector4[4];
             var outlineC = new Vector4[4];
@@ -216,15 +224,21 @@ namespace GM.UI
 
             for (var blockIndex = 0; blockIndex < 4; blockIndex++)
             {
-                var col = block.Color.linear;
-                blockColors[blockIndex] = col;
+                var col = block.TopColor.linear;
+                blockTopColors[blockIndex] = col;
                 col.a = _ghostTransparency;
-                ghostColors[blockIndex] = col;
+                ghostTopColors[blockIndex] = col;
+                col = block.BotColor.linear;
+                blockBotColors[blockIndex] = col;
+                col.a = _ghostTransparency;
+                ghostBotColors[blockIndex] = col;
                 textureST[blockIndex] = block.TextureST;
             }
 
-            _fallingProperties.SetVectorArray(INSTANCE_COLORS, blockColors);
-            _ghostProperties.SetVectorArray(INSTANCE_COLORS, ghostColors);
+            _fallingProperties.SetVectorArray(INSTANCE_COLORS_TOP, blockTopColors);
+            _fallingProperties.SetVectorArray(INSTANCE_COLORS_BOT, blockBotColors);
+            _ghostProperties.SetVectorArray(INSTANCE_COLORS_TOP, ghostTopColors);
+            _ghostProperties.SetVectorArray(INSTANCE_COLORS_BOT, ghostBotColors);
 
             _fallingProperties.SetVectorArray(INSTANCE_ST, textureST);
             _ghostProperties.SetVectorArray(INSTANCE_ST, textureST);

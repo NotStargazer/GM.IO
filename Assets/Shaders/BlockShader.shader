@@ -44,13 +44,13 @@ Shader "Unlit/BlockShader"
 
 				sampler2D _MainTex;
 				float4 _MainTex_ST;
-				float4 _Colors[1023];
-				float4 _OutlinesL[1023];
-				float4 _OutlinesC[1023];
+				float4 _TopColors[512];
+				float4 _BotColors[512];
+				float4 _OutlinesL[512];
+				float4 _OutlinesC[512];
 				float4 _OutlineColor;
 				float4 _TestValueC;
 				float _OutlineThickness;
-				float _PieceLightness;
 
 				v2f vert(appdata v, uint instanceID: SV_InstanceID)
 				{
@@ -61,7 +61,7 @@ Shader "Unlit/BlockShader"
 					o.oluv = v.uv;
 					o.uv = TRANSFORM_TEX(v.uv, _MainTex);
 
-					o.color = _Colors[instanceID];
+					o.color = lerp(_BotColors[instanceID], _TopColors[instanceID], v.uv.y);
 					o.oll = _OutlinesL[instanceID];
 					o.olc = _OutlinesC[instanceID];
 

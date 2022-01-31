@@ -57,7 +57,18 @@ namespace GM.Game
             {
                 if (CheckLine(uniqueLine))
                 {
-                    gameState.LinesCleared.Add(uniqueLine);
+                    var lineBlocks = new Block[_gridSize.x];
+
+                    for (var x = 0; x < _gridSize.x; x++)
+                    {
+                        lineBlocks[x] = _grid[x, uniqueLine].Value;
+                    }
+
+                    gameState.LinesCleared.Add(new DestroyedLine
+                    {
+                        LineNumber = uniqueLine,
+                        Blocks = lineBlocks
+                    });
                     ClearLine(uniqueLine);
                 }
             }
@@ -86,11 +97,11 @@ namespace GM.Game
             }
         }
 
-        public void DropLines(int[] lines)
+        public void DropLines(DestroyedLine[] lines)
         {
             foreach (var line in lines)
             {
-                for (var y = line; y < _gridSize.y - 1; y++)
+                for (var y = line.LineNumber; y < _gridSize.y - 1; y++)
                 {
                     for (var x = 0; x < _gridSize.x; x++)
                     {

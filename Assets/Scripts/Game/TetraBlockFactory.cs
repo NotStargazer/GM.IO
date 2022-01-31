@@ -7,7 +7,8 @@ namespace GM.Game
 {
     public class TetraBlockFactory : MonoBehaviour
     {
-        private static readonly int INSTANCE_COLORS = Shader.PropertyToID("_Colors");
+        private static readonly int INSTANCE_COLORS_TOP = Shader.PropertyToID("_TopColors");
+        private static readonly int INSTANCE_COLORS_BOT = Shader.PropertyToID("_BotColors");
         private static readonly int INSTANCE_ST = Shader.PropertyToID("_MainTex_ST");
         private static readonly int INSTANCE_OUTLINEL = Shader.PropertyToID("_OutlinesL");
         private static readonly int INSTANCE_OUTLINEC = Shader.PropertyToID("_OutlinesC");
@@ -26,7 +27,8 @@ namespace GM.Game
 
         private Matrix4x4[] _queueTransforms;
         private Matrix4x4[] _holdTransforms;
-        private Vector4[] _colors;
+        private Vector4[] _topColors;
+        private Vector4[] _botColors;
         private Vector4[] _textureST;
         private MaterialPropertyBlock _queueProperties;
         private MaterialPropertyBlock _holdProperties;
@@ -43,7 +45,8 @@ namespace GM.Game
         {
             _basePosition = transform.position;
 
-            _colors = new Vector4[_queueSize * 4];
+            _topColors = new Vector4[_queueSize * 4];
+            _botColors = new Vector4[_queueSize * 4];
             _textureST = new Vector4[_queueSize * 4];
             _queueProperties = new MaterialPropertyBlock();
             _holdProperties = new MaterialPropertyBlock();
@@ -199,7 +202,8 @@ namespace GM.Game
         private void UpdateHold(TetraBlock tetraBlock)
         {
             var size = Vector3.one * _queueSecondarySize;
-            var colors = new Vector4[4];
+            var topColors = new Vector4[4];
+            var botColors = new Vector4[4];
             var textureSTs = new Vector4[4];
             _holdTransforms = new Matrix4x4[4];
 
@@ -208,7 +212,8 @@ namespace GM.Game
 
             for (var holdIndex = 0; holdIndex < 4; holdIndex++)
             {
-                colors[holdIndex] = _holdLocked ? _holdLockColor : block.Color.linear;
+                topColors[holdIndex] = _holdLocked ? _holdLockColor : block.TopColor.linear;
+                botColors[holdIndex] = _holdLocked ? _holdLockColor : block.BotColor.linear;
                 textureSTs[holdIndex] = block.TextureST;
 
                 var blockPos = defaultState[holdIndex];
@@ -218,7 +223,8 @@ namespace GM.Game
                 _holdTransforms[holdIndex] = matrix;
             }
 
-            _holdProperties.SetVectorArray(INSTANCE_COLORS, colors);
+            _holdProperties.SetVectorArray(INSTANCE_COLORS_TOP, topColors);
+            _holdProperties.SetVectorArray(INSTANCE_COLORS_BOT, botColors);
             _holdProperties.SetVectorArray(INSTANCE_ST, textureSTs);
             _holdProperties.SetVectorArray(INSTANCE_OUTLINEL, new Vector4[4]);
             _holdProperties.SetVectorArray(INSTANCE_OUTLINEC, new Vector4[4]);
@@ -253,7 +259,8 @@ namespace GM.Game
                         _baseRotation,
                         Vector3.one * prevSize);
                     transforms.Add(matrix);
-                    _colors[blockIndex] = blockData.BlockColor.linear;
+                    _topColors[blockIndex] = blockData.TopBlockColor.linear;
+                    _botColors[blockIndex] = blockData.BotBlockColor.linear;
                     _textureST[blockIndex] = textureST;
                     blockIndex++;
                 }
@@ -265,7 +272,8 @@ namespace GM.Game
 
             _queueTransforms = transforms.ToArray();
 
-            _queueProperties.SetVectorArray(INSTANCE_COLORS, _colors);
+            _queueProperties.SetVectorArray(INSTANCE_COLORS_TOP, _topColors);
+            _queueProperties.SetVectorArray(INSTANCE_COLORS_BOT, _botColors);
             _queueProperties.SetVectorArray(INSTANCE_ST, _textureST);
             _queueProperties.SetVectorArray(INSTANCE_OUTLINEL, new Vector4[4 * _queueSize]);
             _queueProperties.SetVectorArray(INSTANCE_OUTLINEC, new Vector4[4 * _queueSize]);

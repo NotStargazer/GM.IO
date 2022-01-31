@@ -19,7 +19,8 @@ namespace GM.Data
         public int StateCount;
         public int GridSize;
         public List<BlockSublist> RotationStates;
-        public Color BlockColor;
+        public Color TopBlockColor;
+        public Color BotBlockColor;
         public bool CanFloorKick;
         public bool ExcludeFromGameStart;
 

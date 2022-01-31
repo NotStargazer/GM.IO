@@ -30,7 +30,8 @@ namespace GM.UI
 
             if (gameState != null)
             {
-                var playfieldUI = GameData.GetInstance().PlayfieldUI;
+                var gameData = GameData.GetInstance();
+                var playfieldUI = gameData.PlayfieldUI;
                 playfieldUI.Set(gameState);
 
                 if (gameState.GameOverCenter.HasValue)
@@ -51,7 +52,13 @@ namespace GM.UI
 
                 if (gameState.LinesCleared.Count > 0)
                 {
-                    playfieldUI.VisualEffectController.PlayLineBreakVFX(gameState.LinesCleared);
+                    playfieldUI.VisualEffectController.CreateNewVFXInstance(
+                        new LineBreakVFXInstance(
+                            gameState.LinesCleared,
+                            gameData.GridSize.x,
+                            playfieldUI.transform.position,
+                            playfieldUI.VisualEffectController.Properties.LineBreak)
+                        );
                 }
             }
 

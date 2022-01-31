@@ -925,7 +925,7 @@ GameObject:
   - component: {fileID: 895982171}
   - component: {fileID: 895982172}
   m_Layer: 0
-  m_Name: Particale Controller
+  m_Name: VFX Controller
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -957,8 +957,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 433ef07429907eb4ea684aaafdbb2ad1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _playfieldTransform: {fileID: 422821336}
-  _lineBreakVFXPrefab: {fileID: 1053575315850408923, guid: f15eca8fccf053a4dbb00f492d5e0202, type: 3}
+  _properties:
+    LineBreak:
+      QuadMesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
+      Material: {fileID: 2100000, guid: 62c248cda41cd7241808c6fb44a06939, type: 2}
+      Animation:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 1
+          inSlope: -2.592925
+          outSlope: -2.592925
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 1
+          value: 0
+          inSlope: -0.20733029
+          outSlope: -0.20733029
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      ParticlesGridSize: 3
+      ParticlesSpeedMult: 2
+      Duration: 0.75
 --- !u!1 &930021214
 GameObject:
   m_ObjectHideFlags: 0
@@ -1038,6 +1067,7 @@ MonoBehaviour:
   _renderer: {fileID: 1318293839}
   _borderMaterial: {fileID: 2100000, guid: 6f63c7fdc3a511149bbd866b727ceba7, type: 2}
   _ghostTransparency: 0.25
+  _lockedBlockLightness: 0.95
 --- !u!23 &1318293839
 MeshRenderer:
   m_ObjectHideFlags: 0

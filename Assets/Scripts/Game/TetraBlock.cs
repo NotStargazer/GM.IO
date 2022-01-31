@@ -7,7 +7,8 @@ namespace GM.Game
     public struct Block
     {
         public Vector4 TextureST;
-        public Color Color;
+        public Color TopColor;
+        public Color BotColor;
     }
 
     public enum Direction
@@ -32,7 +33,8 @@ namespace GM.Game
         private Vector2Int _startPosition;
 
         private Vector4 _textureST;
-        private Color _color;
+        private Color _topColor;
+        private Color _botColor;
         private bool _canFloorKick;
 
         private int _blockGridSize;
@@ -48,7 +50,8 @@ namespace GM.Game
         {
             _rotationStates = tetraBlock.RotationStates;
             _textureST = textureST;
-            _color = tetraBlock.BlockColor;
+            _topColor = tetraBlock.TopBlockColor;
+            _botColor = tetraBlock.BotBlockColor;
             _canFloorKick = tetraBlock.CanFloorKick;
             _blockGridSize = tetraBlock.GridSize;
 
@@ -125,7 +128,8 @@ namespace GM.Game
         {
             return new Block
             {
-                Color = _color,
+                TopColor = _topColor,
+                BotColor = _botColor,
                 TextureST = _textureST
             };
         }

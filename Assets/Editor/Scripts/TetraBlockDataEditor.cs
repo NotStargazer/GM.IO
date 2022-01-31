@@ -51,7 +51,8 @@ namespace GM.Editor
                     {
                         ID = data.TetraBlocks.Count,
                         RotationStates = new List<BlockSublist>(),
-                        BlockColor = Color.red,
+                        TopBlockColor = Color.yellow,
+                        BotBlockColor = Color.red,
                         GridSize = 2,
                         StateCount = 1
                     });
@@ -86,10 +87,13 @@ namespace GM.Editor
             var bcol = new Color[50 * 50];
             Texture2D emptyColor = new Texture2D(50, 50);
             var ecol = new Color[50 * 50];
-            for (int i = 0; i < bcol.Length; i++)
+            for (var pixel = 0; pixel < bcol.Length; pixel++)
             {
-                bcol[i] = blockData.BlockColor;
-                ecol[i] = Color.black;
+                var y = pixel / 50;
+                var yuv = y / 50f;
+
+                bcol[pixel] = Color.Lerp(blockData.BotBlockColor.linear, blockData.TopBlockColor, yuv);
+                ecol[pixel] = Color.black;
             }
 
             blockColor.SetPixels(bcol);
@@ -99,7 +103,8 @@ namespace GM.Editor
 
             //Value Editor
             blockData.Name = EditorGUILayout.TextField("Name", blockData.Name);
-            blockData.BlockColor = EditorGUILayout.ColorField("Block Color", blockData.BlockColor);
+            blockData.TopBlockColor = EditorGUILayout.ColorField("Top Block Color", blockData.TopBlockColor);
+            blockData.BotBlockColor = EditorGUILayout.ColorField("Bot Block Color", blockData.BotBlockColor);
             blockData.GridSize = Mathf.Clamp(EditorGUILayout.IntField("Grid Size", blockData.GridSize), 2, 4);
             blockData.StateCount = Mathf.Clamp(EditorGUILayout.IntField("Rotation State Count", blockData.StateCount), 1, 4);
             blockData.CanFloorKick = EditorGUILayout.Toggle("Can Piece Floor Kick", blockData.CanFloorKick);

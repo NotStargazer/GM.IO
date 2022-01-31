@@ -2,68 +2,74 @@ using System;
 using System.Collections.Generic;
 using GM.Data;
 using UnityEngine;
-using UnityEngine.VFX;
 
 namespace GM.UI
 {
-    public interface IVFXController
+    [Serializable]
+    public struct VFXProperties
     {
-        public void PlayLineBreakVFX(List<int> linesCleared);
+        public LineBreakVFXProperties LineBreak;
     }
 
-    public struct VisualEffectInstance
+    [Serializable]
+    public struct LineBreakVFXProperties
     {
-        public VisualEffect VFX;
-        public Transform Transform;
+        public Mesh QuadMesh;
+        public Material Material;
+        public AnimationCurve Animation;
+        public int ParticlesGridSize;
+        public float ParticlesSpeedMult;
+        public float Duration;
+    }
+
+    public interface IVFXController
+    {
+        public void CreateNewVFXInstance(VFXInstance instance);
+        public VFXProperties Properties { get; }
     }
 
     public class VFXController : MonoBehaviour, IVFXController
     {
-        [SerializeField] private Transform _playfieldTransform;
+        [SerializeField] private VFXProperties _properties;
+        private List<VFXInstance> _instances;
 
-        [SerializeField] private VisualEffect _lineBreakVFXPrefab;
+        public VFXProperties Properties => _properties;
 
-        private VisualEffectInstance[] _lineBreakVFXInstances;
-
-        public void PlayLineBreakVFX(List<int> linesCleared)
+        public void CreateNewVFXInstance(VFXInstance instance)
         {
-            var width = GameData.GetInstance().GridSize.x;
-            var loops = 0;
+            instance.Properties = _properties;
+            _instances.Add(instance);
+        }
 
-            foreach (var y in linesCleared)
+        private void Update()
+        {
+            for (var index = 0; index < _instances.Count; index++)
             {
-                for (var x = 0; x < width; x++)
+                var vfxInstance = _instances[index];
+                if (vfxInstance.Expired)
                 {
-                    var instance = _lineBreakVFXInstances[x + width * loops];
-                    instance.Transform.position =
-                        new Vector3(x + 0.5f, y + 0.5f) + _playfieldTransform.position;
-                    instance.VFX.Play();
+                    index--;
+                    _instances.Remove(vfxInstance);
                 }
-
-                loops++;
+                else
+                {
+                    vfxInstance.Draw();
+                }
             }
         }
 
         private void Awake()
         {
-            if (!_playfieldTransform)
-            {
-                throw new ArgumentNullException(nameof(_playfieldTransform));
-            }
-            if (!_lineBreakVFXPrefab)
-            {
-                throw new ArgumentNullException(nameof(_lineBreakVFXPrefab));
-            }
-
-            var totalInstances = GameData.GetInstance().GridSize.x * 4;
-            _lineBreakVFXInstances = new VisualEffectInstance[totalInstances];
-
-            for (var i = 0; i < totalInstances; i++)
-            {
-                var vfx = Instantiate(_lineBreakVFXPrefab, transform);
-                _lineBreakVFXInstances[i].Transform = vfx.transform;
-                _lineBreakVFXInstances[i].VFX = vfx;
-            }
+            _instances = new List<VFXInstance>();
         }
+    }
+
+    public abstract class VFXInstance
+    {
+        public VFXProperties Properties { protected get; set; }
+
+        protected Timer _timer;
+        public bool Expired => _timer.HasExpired(out _);
+        public abstract void Draw();
     }
 }
